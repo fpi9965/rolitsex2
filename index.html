@@ -27,13 +27,12 @@
 
         /* floating particles */
         .particle {
-            position: fixed;
-            pointer-events: none; z-index: 0;
+            position: fixed; pointer-events: none; z-index: 0;
             font-size: 1.4rem; opacity: 0;
             animation: floatUp 8s ease-in infinite;
         }
         @keyframes floatUp {
-            0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
             10%  { opacity: 0.5; }
             90%  { opacity: 0.3; }
             100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
@@ -54,8 +53,7 @@
 
         /* ===== Inputs ===== */
         .fancy-input {
-            width: 100%;
-            padding: 1rem 1.2rem;
+            width: 100%; padding: 1rem 1.2rem;
             background: rgba(255,255,255,0.06);
             border: 1.5px solid rgba(236,72,153,0.25);
             border-radius: 16px; color: #fff; font-size: 1.05rem;
@@ -70,13 +68,11 @@
 
         /* ===== Primary button ===== */
         .btn-primary {
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
             background: linear-gradient(135deg, #be185d, #ec4899, #a855f7);
             background-size: 200% 200%;
             animation: gradientShift 4s ease infinite;
-            border: none; border-radius: 20px;
-            cursor: pointer;
+            border: none; border-radius: 20px; cursor: pointer;
             font-weight: 800; letter-spacing: .5px;
             transition: transform .2s, box-shadow .2s;
             box-shadow: 0 4px 30px rgba(236,72,153,0.35);
@@ -84,8 +80,7 @@
         .btn-primary:hover  { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(236,72,153,0.5); }
         .btn-primary:active { transform: translateY(0); }
         .btn-primary::after {
-            content: '';
-            position: absolute; inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
             pointer-events: none;
         }
@@ -96,8 +91,7 @@
 
         /* ===== Small action buttons ===== */
         .btn-action {
-            border-radius: 14px;
-            font-weight: 700; font-size: .82rem;
+            border-radius: 14px; font-weight: 700; font-size: .82rem;
             padding: .9rem .4rem; cursor: pointer; transition: transform .2s, filter .2s;
             border: none;
         }
@@ -106,12 +100,10 @@
 
         /* ===== Roulette wheel ===== */
         .wheel-wrapper {
-            position: relative;
-            width: 220px; height: 220px; margin: 0 auto;
+            position: relative; width: 220px; height: 220px; margin: 0 auto;
         }
         .wheel-ring {
-            position: absolute;
-            inset: 0; border-radius: 50%;
+            position: absolute; inset: 0; border-radius: 50%;
             background: conic-gradient(
                 #ec4899 0deg 60deg,  #a855f7 60deg 120deg,
                 #f43f5e 120deg 180deg, #ec4899 180deg 240deg,
@@ -120,8 +112,7 @@
             box-shadow: 0 0 40px rgba(236,72,153,0.5), inset 0 0 20px rgba(0,0,0,0.3);
         }
         .wheel-center {
-            position: absolute;
-            inset: 25px; border-radius: 50%;
+            position: absolute; inset: 25px; border-radius: 50%;
             background: radial-gradient(circle, #1a0a1e, #0d0010);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border: 2px solid rgba(236,72,153,0.3);
@@ -129,8 +120,7 @@
             z-index: 5;
         }
         .wheel-arrow {
-            position: absolute;
-            top: -14px; left: 50%; transform: translateX(-50%);
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
             font-size: 2rem; filter: drop-shadow(0 0 8px #ec4899);
             animation: bounce 1s ease-in-out infinite;
             z-index: 10;
@@ -150,8 +140,7 @@
         }
 
         .pulse-ring {
-            position: absolute;
-            inset: -8px; border-radius: inherit;
+            position: absolute; inset: -8px; border-radius: inherit;
             border: 2px solid rgba(236,72,153,0.4);
             animation: pulseRing 2s ease-out infinite;
         }
@@ -162,15 +151,13 @@
 
         /* ===== Stage pill ===== */
         .stage-pill {
-            display: inline-flex;
-            align-items: center; gap: 6px;
+            display: inline-flex; align-items: center; gap: 6px;
             padding: 6px 14px; border-radius: 50px; font-size: .8rem; font-weight: 700;
             background: rgba(236,72,153,0.15); border: 1px solid rgba(236,72,153,0.3);
             color: #f9a8d4;
         }
         .stage-badge {
-            background: #ec4899;
-            color: #fff; border-radius: 50px;
+            background: #ec4899; color: #fff; border-radius: 50px;
             padding: 2px 8px; font-size: .7rem;
         }
 
@@ -186,8 +173,7 @@
         }
 
         .command-text {
-            font-size: 1.15rem;
-            line-height: 2;
+            font-size: 1.15rem; line-height: 2;
             background: rgba(0,0,0,0.4); border-radius: 16px;
             padding: 1.5rem; text-align: center; color: #f3f4f6;
             border: 1px solid rgba(255,255,255,0.06);
@@ -198,13 +184,12 @@
         .dot.active { background: #ec4899; box-shadow: 0 0 10px #ec4899; transform: scale(1.2); }
 
         .confetti-piece {
-            position: fixed;
-            pointer-events: none; z-index: 999;
+            position: fixed; pointer-events: none; z-index: 999;
             width: 10px; height: 10px; border-radius: 2px;
             animation: confettiFall 2.5s ease-in forwards;
         }
         @keyframes confettiFall {
-            0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
@@ -243,6 +228,7 @@
 
     <div class="relative z-10 max-w-md mx-auto p-4 pb-12">
 
+        <!-- ===== HEADER ===== -->
         <div class="text-center py-8">
             <div class="text-5xl mb-3">
                 <span class="logo-emoji">🔥</span>
@@ -251,6 +237,7 @@
             <p class="text-pink-400 text-sm font-medium tracking-wide">باقة جنسية صريحة · ليلة مثيرة جداً</p>
         </div>
 
+        <!-- ===== SETUP ===== -->
         <div id="setup">
             <div class="glass rounded-3xl p-7 mb-6">
                 <h2 class="text-xl font-bold text-center mb-7 text-pink-300">✨ أدخل معلوماتكما</h2>
@@ -286,6 +273,7 @@
             </button>
         </div>
 
+        <!-- ===== GAME ===== -->
         <div id="game" class="hidden">
             <div class="flex justify-between items-center mb-5">
                 <button onclick="showSetup()" class="glass px-4 py-2 rounded-xl text-sm text-pink-300 font-semibold hover:bg-white/10 transition-colors">
@@ -343,9 +331,9 @@
         const masterStages = {
             1: [
                 "ما هو أكثر خيال جنسي يراودك عندما تفكر في كسي/قضيبي؟", "ما هي الوضعية الجنسية التي تجعل قضيبي يدخل لأعمق نقطة بداخل كسِك؟", "هل تفضل نيك الكس العنيف والسرير أم نيكاً هادئاً ورومانسياً؟",
-                "ما هي أكثر منطقة تثير شهوتك جنسياً حول كسِك/قضيبك؟", "هل تفضل مص القضيب ولحس الكس في الظلام التام أم تحت إضاءة خفيفة؟", "ما هي الكلمات القذرة المثيرة التي تحب سماعها أثناء نكاح الكس؟",
+                "ما هي أكثر منطقة تثير شهوتك جنسياً حول كسِك/قضيبك؟", "هل تفضل مص القضيب ولحس الكس في الظلام التام أم تحت إضاءة خفيفة؟", "ما هي الكلمات القذرة المثيرة التي تحب سماعها أثناء نكاح الكس Mug؟",
                 "هل مداعبة المؤخرة والشرج يثير شهوتك بشكل كبير؟", "كم مرة تحب الوصول إلى الأورجازم (النشوة وتنزيل الشهوة) في ليلة واحدة؟", "ما رأيك في دهن المزلق على البظر والكس بنكهات مثيرة للمص؟",
-                "هل تحب الحديث القذر (Dirty Talk) عن كسّي وقضيبي أثناء الجماع؟", "ما هي الحركة الجنسية التي لو فعلتها لقضيبك/كسِك تجعلك تذوب فوراً؟", "هل تفضل أن يسيطر شريكك على نيك الكس والنهدين أم تحب السيطرة? ",
+                "هل تحب الحديث القذر (Dirty Talk) عن كسّي وقضيبي أثناء الجماع؟", "ما هي الحركة الجنسية التي لو فعلتها لقضيبك/كسِك تجعلك تذوب فوراً؟", "هل تفضل أن يسيطر شريكك على نيك الكس والنهدين أم تحب السيطرة؟",
                 "ما هو اللباس الساخن أو اللانجري العاري الذي يثير شهوتك عندما يكشف نهدي وكس شريكك؟", "هل تفضل نيك الكس الصباحي السريع أم النيك الليلي الطويل؟", "ما هو الجزء الذي تحب مصه ولحسه في كسّي/قضيبي؟",
                 "هل سبق لك وأن تخيلت نيك كسّي/قضيبي بعنف في مكان مضاء؟", "ما هي المدة المثالية التي تفضلها لمص القضيب ولحس الكس قبل الإدخال؟", "هل تحب أن يقوم شريكك بابتلاع المني أو سوائل الكس الخاصة بك؟",
                 "ما هو المكان الأكثر جنوناً في المنزل الذي ترغب بنكاح الكس ومص القضيب فيه؟", "هل يثيرك أن ترى شريكك يفرك كسه/يقبض على قضيبه ويمارس العادة السرية أمامك؟", "ما هو شعورك عندما أعض نهودك أو قضيبك/كسك بلطف أثناء الشبق؟",
@@ -358,7 +346,7 @@
                 "هل تفضل أن تمزق ملابسك الداخلية وتعرية كسك/قضيبك بعنف في السرير؟", "ما هي أكثر لحظة نكنا فيها الكس بعنف ولا يمكنك نسيانها أبداً؟", "هل يثيرك أن يطلب منك شريكك مص قضيبه أو لحس بظرها فوراً؟",
                 "ما هي الحركة التي تجعل كسك/قضيبك يرتعش من شدة اللذة الجنسية؟", "هل تفضل نيك الكس في السرير أم تفضل التنويع (الكنبة، الأرض، المطبخ)؟", "هل تحب المص المفاجئ في الرقبة والنهود أثناء انشغالك بامر آخر؟",
                 "ما هو التصرف الذي لو فعلته الآن لقضيبك/كسِك ستفقد السيطرة وتطلب النيك فوراً؟", "هل تحب رؤية قضيبك وهو يدخل ويخرج من كسي في المرآة؟", "ما هو رأيك في مص ولعق أصابع والنهود؟",
-                "هل تفضل علاقة نيك سريعة ومفاجئة (Spontaneous) أم مخططة؟", "هل تريد تصوير ليلتكم الجنسيه","أوصف بصراحة: ما الذي يميز كسي/قضيبي في الفراش ويجعلك تذوب شهوة؟"
+                "هل تفضل علاقة نيك سريعة ومفاجئة (Spontaneous) أم مخططة؟", "هل تريد تصوير ليلتكم الجنسيه", "أوصف بصراحة: ما الذي يميز كسي/قضيبي في الفراش ويجعلك تذوب شهوة؟"
             ],
             2: [
                 "قبل شريكك بعمق وبطء شديد مع دفع أنفاس ساخنة في فمه لمدة دقيقة", "عض شفتي شريكك السفلى برفق شديد ومصها أثناء التقبيل الساخن", "قبل رقبة شريكك بعمق واصنع علامة مص حمراء واضحة",
@@ -370,7 +358,7 @@
                 "امشِ بأصابعك ببطء من قدم شريكك وصعوداً حتى تداعب عانته وكسه/قضيبه", "قم بتقبيل بطن شريكك ومنطقة السرة بلطف ومصها بنهم", "اجعل شريكك يغمض عينيه، ثم قبل ٣ أماكن جنسية في جسده واجعله يحزرها",
                 "اربط يدي شريكك، وقبّل نهوده وكسه/قضيبه وهو مستسلم تماماً لك", "قم بمص أصابع يد شريكك واحداً تلو الآخر ببطء وإثارة جنسية كأنك تمص قضيبه", "اجلس خلف شريكك وقم بمداعبة نهودها وصدره بيديك وشفاهك مص رقبه بقوة",
                 "امسك مؤخرة شريكك واضغط عليها بعنف وقم بتقبيل شق استه", "قم بلعق ومص عظام الترقوة لشريكك (المنطقة أسفل الرقبة) لإثارته", "تحدث بصوت مليء بالشهوة وأخبر شريكك كيف تريد أن تنيك كسه/تمصي قضيبه الآن",
-                "قم بتقبيل الفخذين من الداخل لشريكك صعوداً وهبوطاً واقترب من كسه/قضيبه", "اجعل شريكك يستلقي على بطنه وقم بتقبيل مؤخرته وشقها من فوق الملابس الداخلية", "ارفع رأس شريكك للخلف وقبّل حنجرته ورقبتها مع إصدار تأوهات دافئة",
+                "قم بتقبيل الفخذين من الداخل لشريكك صعوداً وهبوطاً واقترب من كسه/قضيبه", "اجعل شريكك يستلقي على بعد قم بتقبيل مؤخرته وشقها من فوق الملابس الداخلية", "ارفع رأس شريكك للخلف وقبّل حنجرته ورقبتها مع إصدار تأوهات دافئة",
                 "قم بنزع جوارب وملابس شريكك بأسنانك وقبّل قدمه وساقه برغبة", "مرر يدك أو لسانك برقة متناهية على نهود شريكك وحلماته المفتونة", "قم بامتصاص الشفة العليا لشريكك بينما هو يمتص ويلعق شفتك السفلى بجوع",
                 "اجلس أمام شريكك وقم بملامسة قدميك بقضيبه/كسها وتحريكهما بشكل جنسي ومثير", "قم بإصدار صوت تأوه جنسي دافئ في أذن شريكك مباشرة مع قبلة عنيفة في الرقبة", "امسك خصر شريكك وقربه إليك بقوة حتى يلتصق قضيبك بكسها تماماً",
                 "قم بتقبيل الساعدين والذراعين لشريكك ببطء وبقبلات متتالية حارة", "انظر إلى شريكك بنظرة مليئة بالشهوة واطلب منه التعرية والاستسلام الكامل لك والاضائه شغاله", "قم بوضع لعابك على إصبعك ومرره على بظر زوجتك/رأس قضيب زوجك ببطء",
@@ -396,8 +384,8 @@
                 { مذكر: "قم بنزع ملابس زوجتك الداخلية بأسنانك بالكامل والقفز لكسها بلحمك وقضيبك", مؤنث: "انزعي الملابس الداخلية لزوجك بأسنانك والتهام قضيبه بفمك فوراً دون تردد" },
                 "قم بمص شفتي شريكك وفي نفس الوقت مرر يدك بداخل ملابسه الحساسة واقبض على كسه/قضيبه",
                 { مذكر: "اجعل زوجتك تقذف سوائل وماء كسها على أصابعك ثم تذوق مياهها أمامها بلسانك وتلذذ به", مؤنث: "مصي قضيب زوجك حتى تخرج مياه المذي وتذوقيها بلسانك وأمام عينيه بشهوة" },
-                { mذكر: "انفخ هواء بارداً على كس وبظر زوجتك مباشرة بعد لعقه لكي تشعر بالقشعريرة والشهوة", مؤنث: "انفخي هواء ساخناً من جوف فمك على قضيب زوجك وهو مستقر بداخل فمك" },
-                { مذكر: "قم بعمل مساج جنسي مثير لمؤخرة وردف شريكك باستخدام يديك العاريتين مع الضغط والعجن العنيف", مؤنث: "قم بعمل مساج جنسي لمؤخرة زوجك بيدك" },
+                { مذكر: "انفخ هواء بارداً على كس وبظر زوجتك مباشرة بعد لعقه لكي تشعر بالقشعريرة والشهوة", مؤنث: "انفخي هواء ساخناً من جوف فمك على قضيب زوجك وهو مستقر بداخل فمك" },
+                { مذكر: "قم بعمل مساج جنسي مثير لمؤخرة وردف شريكك باستخدام يديك العاريتين مع الضغط والعجن العنيف", مؤنث: "قومي بعمل مساج جنسي دافئ لزوجك" },
                 { مذكر: "ضع رأسك بالكامل بين نهدّي زوجتك وحركهما يميناً ويساراً مع إصدار أصوات نكاح ومص مثيرة", مؤنث: "الحسي عانة وشعر عانة زوجك ونزولاً لقضيبه بلسانك وبطء شديد وجوع جنسي" },
                 { مذكر: "قم بلعق عانة زوجتك صعوداً وهبوطاً حتى تصل إلى سرتها ونهودها برقة مثيرة", مؤنث: "الحسي منطقة ما بين خصيتي زوجك وشرجه ببطء ولطف شديد لتثيري جنونه" },
                 { مذكر: "اضغط بإصبعك على بظر زوجتك بقوة متوسطة وسرعة بينما تقوم بمص حلمتها بشفتيك", مؤنث: "مصي رأس قضيب زوجك بنهم بينما تدعكين وتفركين خصيتيه بيديكِ الاثنتين" },
@@ -421,211 +409,112 @@
                 "خذ ريق شريكك في فمك واحتفظ به لثوانٍ ثم ابلعه بإثارة متبادلة وجوع جنسي عارم",
                 { مذكر: "الحس عانة وكس زوجتك بضربات لسان عريضة وسريعة تهييجاً لها لتقذف شهوتها", مؤنث: "امسحي بكسكِ المبلل الساخن على طول قضيب زوجكِ دون إدخاله صعوداً ونزولاً لإثارته" },
                 { مذكر: "اجعل زوجتك تستلقي على ظهرها وارفع رجليها وقبّل مؤخرتها وكسها من الأسفل بلهفة", مؤنث: "استلقي على بطنك وافتحي رجليكِ ودعي زوجك يعجن مؤخرتك ويلعق شق استك برغبة" },
-                { مذكر: "ضع لعابك بكثافة على بظرها واضغط عليه بشفتيك ومصه بقوة كأنك تمص حلمة ثديها", مؤنث: "مصي طول قضيب زوجك وااصنعي صوتاً عالياً للامتصاص يثير شهوته ويجعله ينتصب أكثر" },
-                { مذكر: "امسك خصر زوجتك وارفعها قليلاً وقبل عانتها وكسها بلهفة وجنون جنسي", مؤنث: "النور شغال انحني أمام زوجك ودعيه يرى مؤخرتك وكسك المبلل من الخلف ويلعق شق كسك ونيكك بالنظر" }
+                { مذكر: "ضع لعابك بكثافة على بظرها واضغط عليه بشفتيك ومصه بقوة كأنك تمص حلمة ثديها", مؤنث: "مصي طول قضيب زوجك واصنعي صوتاً عالياً للامتصاص يثير شهوته ويجعله ينتصب أكثر" },
+                { مذكر: "امسك خصر زوجتك وارفعها قليلاً وقبل عانتها وكسها بلهفة وجنون جنسي", مؤنث: "النور شغال انحني أمام زوجك ودعيه يرى مؤخرتك وكسك المبلل من الخلف ويلعق شق كسك ونيكك بالنظر" },
+                { مذكر: "مداعبة حلمتي ونهود زوجتك بأصابعك بقرصات خفيفة ومثيرة جداً تجعلها تصرخ آه", مؤنث: "داعبي حلمات وصدر زوجك بأظافرك برقة مفرطة تجعله يقشعر ويسلم لكِ نفسه" },
+                { مذكر: "الحس ما بين أصابع قدم زوجتك وصعوداً لساقيها وفخذها حتى تنقض على كسها الساخن", مؤنث: "الحسي صدر زوجك وعضلات بطنه ونزولاً لعانته وقضيبه الساخن والتهامه بفمكِ" },
+                { مذكر: "اجعل زوجتك تكتشف لسانك بينما تداعب كسها وبظرها بقوة وسرعة بأصابعك المبللة", مؤنث: "مصي لسان زوجك بعمق بينما يده نائمة بداخل كسكِ وتداعب بظركِ الساخن بعنف مثير" },
+                { مذكر: "قم بنكح كس زوجتك بإصبع الإبهام ببطء وعمق لإثارة ونكاح نقطة الـ G-Spot لتقذف ماءها", مؤنث: "امسكي قضيب زوجك وحركيه ملامساً شفتيك ووجهك ورقبتك ونهديكِ بنعومة وشهوة صارخة" },
+                "ضع يدك بداخل الملابس الداخلية لشريكك واقبض على كسه/قضيبه بقوة دافئة ومثيرة وعجن المكان"
             ],
             4: [
-                { مذكر: "قم بإدخال قضيبك بداخل كس زوجتك الآن بعنف وقوة وسرعة وسماع صوت النكاح العالي حتى تقذف لبنك الساخن بداخل كسمها", مؤنث: "اجلسي فوق قضيب زوجك المنتصب الآن بقوة وعنف وحركي مؤخرتك صعوداً ونزولاً حتى تقذفي مياه كسك الساخنة" },
-                { مذكر: "نيك كس زوجتك من الخلف (وضعية الدوجي ستايل) وادخال قضيبك لأعمق نقطة وعجن مؤخرتها ونهودها بيديك بعنف حتى تنزل شهوتك", مؤنث: "نامي على بطنك وارفعي مؤخرتك العارية للأعلى ودعي زوجك يدخل قضيبه الساخن بداخل كسك بعنف وقوة كالمجنون" },
-                { مذكر: "اجعل زوجتك تستلقي على ظهرها وارفع قدميها على كتفيك وقم بنكاح كسه المبلل بقوة صعوداً ونزولاً حتى تقذف", مؤنث: "ارفعي رجليكِ بالكامل على كتفي زوجك ودعيه ينيك كسكِ بعنف وسرعة بالغة حتى تصرخي من شدة اللذة الجنسية" },
-                { مذكر: "قم بنكاح كس زوجتك عارية تماماً أمام المرآة لكي تريا قضيبك وهو يدخل ويخرج من كسمها الساخن المبلل", مؤنث: "انظري للمرآة بشهوة ودعي زوجك ينيك كسكِ من الخلف بعنف والنور شغال لكي تتأملي النكاح المثلي" }
+                { مذكر: "أدخل قضيبك ببطء شديد في كس زوجتك وابقه داخلها عارياً دون حركة لدقيقة وتأمل وجهها ونحيبها", مؤنث: "استلقي على ظهركِ وافتحي رجليكِ بالكامل ودعي زوجكِ يدخل قضيبه ببطء وعمق داخل كسّكِ الساخن" },
+                "مارس الجنس ونكاح الكس ببطء وعمق تامين أمام المرآة لتستمتعا برؤية القضيب وهو يلج الكس ملتصقين",
+                { مذكر: "جامع ونكح كس زوجتك من الخلف (Doggy Style)، وامسك ردفها بقوة واضرب قضيبك بعمق وسرعة", مؤنث: "اتخذي وضعية السجود على السرير واسترخي بالكامل ليدخل زوجك قضيبه من الخلف بعمق كبير داخل كسِك" },
+                { مذكر: "اجعل زوجتك تستلقي على بطنها تماماً واركب مؤخرتها وادخل قضيبك ببطء ونكاح دافئ بداخل كسها", مؤنث: "نامي على بطنك وافردي رجليكِ ودعي زوجكِ يعتليكِ من الخلف ويدخل قضيبه ببطء في كسّكِ المبلل" },
+                "جامع شريكك في الوضعية التقليدية (المبشرة) مع ذوبان كامل في الأحضان وقبلات فرنسية ونكاح كس عنيف",
+                "مارس الجنس ونكاح الكس بسرعة عالية جداً وهيجان مكثف واضرب قضيبك بداخلها لمدة دقيقتين متواصلتين",
+                { مذكر: "اجعل زوجتك تعتليك وتركب فوق قضيبك بوضعية (Reverse Cowgirl) بحيث يعطيك ظهرها ومؤخرتها لتلعق ظهرها", مؤنث: "اجلسي فوق قضيب زوجكِ المنتصب ولكن بالمعكوس (Reverse Cowgirl) وتحركي لأعلى وأسفل ليدخل لأقصى عمق" },
+                "مارس الجنس ونكاح الكس مع شريكك واقفاً أمام المرآة أو مستندين إلى الحائط بنكاح عنيف ومثير وقضيبك بداخلها",
+                "مارس الجنس مع شريكك في وضعية الملعقة (Spoon Position) حيث يستلقي كلاكما على الجانب ويدخل القضيب في الكس من الخلف",
+                { مذكر: "ارفع ساقي زوجتك بالكامل وضعهما على كتفيك، وادخل في كسها بعمق كامل وضربات قوية حتى تصرخ لذة", مؤنث: "استلقي على ظهركِ وارفعي ساقيكِ وضعيها على كتفي زوجكِ، وتدعيه يدخل قضيبه لأقصى عمق ممكن بكسِكِ" },
+                { مذكر: "اجعل زوجتك تعتليك بالوضعية التقليدية (الفارسة) وتنظر في عينيك وتتحرك صعوداً وهبوطاً ليدخل قضيبك كاملاً", مؤنث: "اركبي فوق زوجكِ (وضعية الفارسة) وادخلي قضيبه بداخل كسكِ بالكامل وتحكمي بسرعه النكاح والضرب" },
+                { مذكر: "وضعية (Spork): استلقِ على جنبك واجعل زوجتك تستلقي فوقك وارفع رجلها ونيك كسها بعمق وقوة", مؤنث: "استلقي بشكل متقاطع فوق زوجكِ وارفعي ساقاً واحدة ليدخل قضيبه في كسكِ بشكل جانبي ومثير" },
+                { مذكر: "اجعل زوجتك تجلس على حافة السرير واركع أنت بين رجليها وادخل بداخل كسها بقوة وعمق واعجن نهودها", مؤنث: "اجلسي على حافة السرير تماماً وافتحي رجليكِ ودعي زوجكِ يدخل قضيبه بداخل كسكِ وهو واقف أمامكِ" },
+                { مذكر: "وضعية (Lotus/اللوتس): اجلس متربعاً واجعل زوجتك تجلس فوق قضيبك وتلف رجليها حول خصرك ونيكها ببطء", مؤنث: "اجلسي فوق زوجكِ المتربع وادخلي قضيبه بداخل كسكِ تماماً ولفي رجليكِ حول خصرها وتحركي بشهوة" },
+                { مذكر: "اجعل زوجتك تتخذ وضعية السجود ولكن على الكنبة أو حافة السرير وادخل في كسها بقوة من الخلف كالمجنون", مؤنث: "انحني على حافة السرير أو الكنبة ودعي زوجكِ يعتليكِ ويدخل قضيبه الساخن من الخلف بداخل كسكِ" },
+                { مذكر: "جامع زوجتك في وضعية (المقص)، حيث تستلقي هي على ظهرها وتفتح رجلاً واحدة وأنت تدخل قضيبك بجانبها", مؤنث: "استلقي على ظهركِ وافتحي رجلاً واحدة للأعلى دعي زوجكِ يدخل بجانبكِ بزاوية (المقص) وينكح كسكِ" },
+                { مذكر: "ارفع رجلي زوجتك للأعلى في الهواء واقبض على مؤخرتها بيديك واضرب قضيبك بداخل كسها بعمق عارم", مؤنث: "استلقي على ظهركِ واجعل زوجكِ يرفع مؤخرتكِ ورجليكِ عالياً في الهواء ويدخل قضيبه بعمق كامل داخل كسكِ" },
+                { مذكر: "وضعية (الـ 69 المقلوبة): مارس اللحس والمص الفموي المتبادل (الكس والقضيب) في نفس الوقت التام ليلعق كل منكما الآخر", مؤنث: "اتخذي وضعية (69) مع زوجكِ بحيث يكون فمكِ عند قضيبه وفمه عند كسكِ وقوما بمص ولعق بعضكما بجنون" },
+                { مذكر: "جامع زوجتك بوضعية النكاح العميق مع ثني ركبتيها بالكامل نحو صدرها، مما يجعل الكس ضيقاً جداً على قضيبك", مؤنث: "اثني ركبتيكِ تماماً واضغطيهما نحو صدركِ لفتح كسكِ بالكامل ودعي زوجكِ يدخل قضيبه بعمق يلامس رحمكِ" },
+                "اتركا الحرية التامة لأجسادكما الآن في اختيار الوضعية الأكثر جنوناً وشهوة لنكاح الكس ومص القضيب وقوما بالممارسة الكاملة حتى الوصول للنشوة الكبرى وقذف المني والشهوات! 🔥"
             ]
         };
 
-        const stageNames = {
-            1: "المرحلة 1: مصارحة وجرأة صريحة 💬",
-            2: "المرحلة 2: مداعبة ساخنة وتقبيل 💋",
-            3: "المرحلة 3: مص ولحس جنوني للبظر والقضيب 👅",
-            4: "المرحلة 4: نيك وعنف جنسي وإدخال كامل 🔥"
-        };
-
+        let dailyStages = {1: [], 2: [], 3: [], 4: []};
+        let usedInDaily = {1: new Set(), 2: new Set(), 3: new Set(), 4: new Set()};
+        let players = [];
         let currentStage = 1;
-        let p1 = { name: "الزوج", gender: "مذكر" };
-        let p2 = { name: "الزوجة", gender: "مؤنث" };
-        let isP1Turn = true;
+        let currentPlayerIndex = 0;
         let isSpinning = false;
-        let dailyPool = { 1: [], 2: [], 3: [], 4: [] };
+        let currentRotation = 0;
 
-        function initParticles() {
-            const container = document.getElementById('particles');
-            container.innerHTML = '';
-            for (let i = 0; i < 15; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.innerText = ['❤️','🔥','✨','💋','🍆','🍑'][Math.floor(Math.random()*6)];
-                p.style.left = Math.random() * 100 + 'vw';
-                p.style.animationDelay = Math.random() * 5 + 's';
-                p.style.fontSize = (Math.random() * 1 + 1) + 'rem';
-                container.appendChild(p);
-            }
-        }
+        function generateDailyPool(forceReset = false) {
+            let history = {1:[], 2:[], 3:[], 4:[]};
+            try {
+                let saved = localStorage.getItem('roulette_history');
+                if (saved && !forceReset) history = JSON.parse(saved);
+            } catch(e) { history = {1:[], 2:[], 3:[], 4:[]}; }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+            for (let s = 1; s <= 4; s++) {
+                let allItems = masterStages[s];
+                let unplayedIndexes = [];
+                allItems.forEach((item, index) => {
+                    if (!history[s] || !history[s].includes(index)) unplayedIndexes.push(index);
+                });
+                if (unplayedIndexes.length === 0) {
+                    history[s] = [];
+                    unplayedIndexes = allItems.map((_, i) => i);
+                }
+                unplayedIndexes.sort(() => Math.random() - 0.5);
+                dailyStages[s] = unplayedIndexes.map(idx => ({ originalIndex: idx, content: allItems[idx] }));
+                usedInDaily[s].clear();
             }
-            return array;
-        }
-
-        function generateDailyPool(resetPlayed = false) {
-            for (let s in masterStages) {
-                let list = [...masterStages[s]];
-                shuffleArray(list);
-                dailyPool[s] = list.slice(0, 8);
-            }
-            if (resetPlayed) {
-                localStorage.removeItem('roulette_played_commands');
-            }
-        }
-
-        function getPlayedCommands() {
-            const played = localStorage.getItem('roulette_played_commands');
-            return played ? JSON.parse(played) : [];
-        }
-
-        function savePlayedCommand(cmdText) {
-            let played = getPlayedCommands();
-            if (!played.includes(cmdText)) {
-                played.push(cmdText);
-                localStorage.setItem('roulette_played_commands', JSON.stringify(played));
-            }
+            try { localStorage.setItem('roulette_history', JSON.stringify(history)); } catch(e){}
         }
 
         function startGame() {
-            const p1n = document.getElementById('p1name').value.trim();
-            const p2n = document.getElementById('p2name').value.trim();
-            if(!p1n || !p2n) {
-                alert("الرجاء إدخال الأسماء");
-                return;
-            }
-            p1 = { name: p1n, gender: document.getElementById('p1gender').value };
-            p2 = { name: p2n, gender: document.getElementById('p2gender').value };
+            const name1 = document.getElementById('p1name').value.trim() || "الزوج";
+            const gen1 = document.getElementById('p1gender').value;
+            const name2 = document.getElementById('p2name').value.trim() || "الزوجة";
+            const gen2 = document.getElementById('p2gender').value;
 
-            localStorage.setItem('roulette_p1', JSON.stringify(p1));
-            localStorage.setItem('roulette_p2', JSON.stringify(p2));
-
-            generateDailyPool(false);
-
-            document.getElementById('setup').classList.add('hidden');
-            document.getElementById('game').classList.remove('hidden');
+            players = [
+                { name: name1, gender: gen1 },
+                { name: name2, gender: gen2 }
+            ];
+            
+            try {
+                localStorage.setItem('roulette_p1', JSON.stringify(players[0]));
+                localStorage.setItem('roulette_p2', JSON.stringify(players[1]));
+            } catch(e){}
 
             currentStage = 1;
-            isP1Turn = Math.random() > 0.5;
-
+            currentPlayerIndex = Math.floor(Math.random() * 2);
+            generateDailyPool(false);
+            
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('game').classList.remove('hidden');
+            
             updateStageTitle();
-            updateProgressDots();
-            updateTurnDisplay();
             document.getElementById('result').classList.add('hidden');
-            initParticles();
+            updateTurnDisplay();
+            updateProgressDots();
         }
 
         function updateStageTitle() {
-            document.getElementById('stageTitle').innerHTML = `
-                <span class="stage-badge">${currentStage}</span>
-                <span>${stageNames[currentStage]}</span>
-            `;
+            let total = dailyStages[currentStage] ? dailyStages[currentStage].length : 0;
+            let used = usedInDaily[currentStage] ? usedInDaily[currentStage].size : 0;
+            let currentLeft = total - used;
+            let stageNames = { 1:"🌶️ صريح", 2:"🔥 مثير", 3:"💋 مداعبة", 4:"🛏️ وضعيات" };
+            document.getElementById('stageTitle').innerHTML =
+                `${stageNames[currentStage]} <span class="stage-badge">المتبقي: ${currentLeft}</span>`;
         }
 
         function updateProgressDots() {
-            const dots = document.querySelectorAll('#progressDots .dot');
-            dots.forEach(d => {
-                const s = parseInt(d.getAttribute('data-stage'));
-                if (s === currentStage) d.className = "dot active";
-                else d.className = "dot";
+            document.querySelectorAll('.dot').forEach(d => {
+                d.classList.toggle('active', parseInt(d.dataset.stage) === currentStage);
             });
-        }
-
-        function updateTurnDisplay() {
-            const activePlayer = isP1Turn ? p1 : p2;
-            const genderColor = activePlayer.gender === 'مذكر' ? 'text-blue-400' : 'text-pink-400';
-            document.getElementById('currentTurn').innerHTML = `دور اللاعب: <span class="${genderColor} font-black">${activePlayer.name}</span> 🎲`;
-        }
-
-        function spinRoulette() {
-            if (isSpinning) return;
-            isSpinning = true;
-            document.getElementById('spinBtn').disabled = true;
-            document.getElementById('result').classList.add('hidden');
-
-            const ring = document.getElementById('wheelRing');
-            const targetDeg = 1800 + Math.floor(Math.random() * 360);
-            ring.style.transition = 'transform 3s cubic-bezier(0.25, 1, 0.5, 1)';
-            ring.style.transform = `rotate(${targetDeg}deg)`;
-
-            setTimeout(() => {
-                ring.style.transition = 'none';
-                ring.style.transform = `rotate(${targetDeg % 360}deg)`;
-                showResult();
-                isSpinning = false;
-                document.getElementById('spinBtn').disabled = false;
-                triggerConfetti();
-            }, 3000);
-        }
-
-        function triggerConfetti() {
-            for(let i=0; i<30; i++) {
-                const conf = document.createElement('div');
-                conf.className = 'confetti-piece';
-                conf.style.left = Math.random()*100+'vw';
-                conf.style.top = '-20px';
-                conf.style.backgroundColor = ['#ec4899','#a855f7','#f43f5e','#3b82f6','#eab308'][Math.floor(Math.random()*5)];
-                conf.style.transform = `rotate(${Math.random()*360}deg)`;
-                conf.style.animationDelay = Math.random()*0.2+'s';
-                document.body.appendChild(conf);
-                setTimeout(() => conf.remove(), 2500);
-            }
-        }
-
-        function parseCommand(cmd, gender) {
-            if (typeof cmd === 'string') return cmd;
-            if (typeof cmd === 'object') {
-                return cmd[gender] || cmd['مذكر'] || "أمر مميز لكما";
-            }
-            return "";
-        }
-
-        function showResult() {
-            const activePlayer = isP1Turn ? p1 : p2;
-            const pool = dailyPool[currentStage] || [];
-            
-            if(pool.length === 0) {
-                document.getElementById('playerName').innerText = "انتهت باقة هذه المرحلة!";
-                document.getElementById('commandText').innerText = "اضغط على باقة جديدة أو التالي للانتقال.";
-                document.getElementById('result').classList.remove('hidden');
-                return;
-            }
-
-            let played = getPlayedCommands();
-            let available = pool.filter(c => {
-                let txt = parseCommand(c, activePlayer.gender);
-                return !played.includes(txt);
-            });
-
-            if (available.length === 0) {
-                available = pool;
-            }
-
-            const chosen = available[Math.floor(Math.random() * available.length)];
-            let rawText = parseCommand(chosen, activePlayer.gender);
-
-            let finalTxt = rawText.replace(/شريكك/g, isP1Turn ? p2.name : p1.name);
-            finalTxt = finalTxt.replace(/زوجتك/g, isP1Turn ? p2.name : p1.name);
-            finalTxt = finalTxt.replace(/زوجك/g, isP1Turn ? p2.name : p1.name);
-
-            savePlayedCommand(rawText);
-
-            const gColor = activePlayer.gender === 'مذكر' ? 'text-blue-400' : 'text-pink-400';
-            document.getElementById('playerName').innerHTML = `🔥 أمر موجه لـ <span class="${gColor}">${activePlayer.name}</span>:`;
-            document.getElementById('commandText').innerText = finalTxt;
-            document.getElementById('result').classList.remove('hidden');
-        }
-
-        function newCommand() {
-            if (isSpinning) return;
-            isP1Turn = !isP1Turn;
-            updateTurnDisplay();
-            spinRoulette();
         }
 
         function jumpStage(s) {
@@ -634,6 +523,102 @@
             updateStageTitle();
             updateProgressDots();
             document.getElementById('result').classList.add('hidden');
+        }
+
+        function adaptCommand(cmdObj, player) {
+            let cmd = typeof cmdObj === 'object'
+                ? (player.gender === "مذكر" ? cmdObj.مذكر : cmdObj.مؤنث)
+                : cmdObj;
+                
+            if (player.gender === "مذكر") {
+                cmd = cmd.replace(/شريكك/g, "زوجتك");
+                cmd = cmd.replace(/زوجك/g, "زوجتك");
+                cmd = cmd.replace(/كسكِ/g, "كسها");
+                cmd = cmd.replace(/مهبلكِ/g, "مهبلها");
+            } else {
+                cmd = cmd.replace(/شريكك/g, "زوجك");
+                cmd = cmd.replace(/زوجتك/g, "زوجك");
+            }
+            return cmd;
+        }
+
+        function updateTurnDisplay() {
+            if(!players[currentPlayerIndex]) return;
+            const player = players[currentPlayerIndex];
+            document.getElementById('currentTurn').innerHTML =
+                `الدور على: <span style="color:#ec4899" class="font-extrabold">${player.name}</span> ✨`;
+        }
+
+        function spinRoulette() {
+            if (isSpinning) return;
+            const player = players[currentPlayerIndex];
+            const pool = dailyStages[currentStage];
+            let available = pool.filter((_, i) => !usedInDaily[currentStage].has(i));
+
+            if (available.length === 0) {
+                const btn = document.getElementById('spinBtn');
+                btn.classList.add('shake');
+                setTimeout(() => btn.classList.remove('shake'), 400);
+                document.getElementById('result').classList.add('hidden');
+                document.getElementById('playerName').innerHTML =
+                    `<span style="color:#f87171;font-size:1rem">انتهت أوامر هذه المرحلة! انتقل للمرحلة التالية ⚡</span>`;
+                document.getElementById('commandText').textContent = '';
+                document.getElementById('result').classList.remove('hidden');
+                return;
+            }
+
+            isSpinning = true;
+            const spinBtn = document.getElementById('spinBtn');
+            spinBtn.disabled = true;
+            spinBtn.textContent = '⏳ يدور...';
+            document.getElementById('result').classList.add('hidden');
+
+            const randomObj = available[Math.floor(Math.random() * available.length)];
+            const itemIndexInPool = pool.indexOf(randomObj);
+            usedInDaily[currentStage].add(itemIndexInPool);
+
+            let history = {1:[],2:[],3:[],4:[]};
+            try {
+                let saved = localStorage.getItem('roulette_history');
+                if(saved) history = JSON.parse(saved);
+                if (!history[currentStage].includes(randomObj.originalIndex)) {
+                    history[currentStage].push(randomObj.originalIndex);
+                    localStorage.setItem('roulette_history', JSON.stringify(history));
+                }
+            } catch(e){}
+
+            const finalCmd = adaptCommand(randomObj.content, player);
+            
+            const extraSpins = (Math.floor(Math.random() * 5) + 6) * 360;
+            currentRotation += extraSpins + Math.floor(Math.random() * 360);
+            const wheel = document.getElementById('wheelRing');
+            wheel.style.transition = 'transform 3.2s cubic-bezier(0.15, 0.85, 0.15, 1)';
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            setTimeout(() => {
+                document.getElementById('playerName').innerHTML =
+                    `🎯 <span style="color:#ec4899" class="font-black">${player.name}</span>`;
+                document.getElementById('commandText').textContent = finalCmd;
+                const resultEl = document.getElementById('result');
+                resultEl.classList.remove('hidden');
+                resultEl.classList.remove('result-card');
+                void resultEl.offsetWidth;
+                resultEl.classList.add('result-card');
+
+                currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+                updateTurnDisplay();
+                updateStageTitle();
+
+                isSpinning = false;
+                spinBtn.disabled = false;
+                spinBtn.textContent = '🎲 لف الروليت';
+            }, 3300);
+        }
+
+        function newCommand() {
+            if (isSpinning) return;
+            document.getElementById('result').classList.add('hidden');
+            spinRoulette();
         }
 
         function changeStage() {
@@ -647,7 +632,7 @@
 
         function resetDailyPool() {
             if (isSpinning) return;
-            if (confirm("هل ترغب في سحب باقة يومية جديدة (8 أسئلة جديدة لكل مرحلة) دون تكرار ما لعبتوه سابقاً؟")) {
+            if (confirm("هل ترغب في سحب باقة يومية جديدة (أسئلة جديدة لكل مرحلة) دون تكرار ما لعبتوه سابقاً؟")) {
                 generateDailyPool(true);
                 currentStage = 1;
                 updateStageTitle();
@@ -663,19 +648,16 @@
         }
 
         window.onload = function() {
-            const p1Str = localStorage.getItem('roulette_p1');
-            const p2Str = localStorage.getItem('roulette_p2');
-            if (p1Str && p2Str) {
-                try {
-                    const parsedP1 = JSON.parse(p1Str);
-                    const parsedP2 = JSON.parse(p2Str);
-                    document.getElementById('p1name').value = parsedP1.name;
-                    document.getElementById('p1gender').value = parsedP1.gender;
-                    document.getElementById('p2name').value = parsedP2.name;
-                    document.getElementById('p2gender').value = parsedP2.gender;
-                } catch(e) {}
-            }
-            initParticles();
+            try {
+                const p1 = localStorage.getItem('roulette_p1');
+                const p2 = localStorage.getItem('roulette_p2');
+                if (p1 && p2) {
+                    document.getElementById('p1name').value = JSON.parse(p1).name;
+                    document.getElementById('p1gender').value = JSON.parse(p1).gender;
+                    document.getElementById('p2name').value = JSON.parse(p2).name;
+                    document.getElementById('p2gender').value = JSON.parse(p2).gender;
+                }
+            } catch(e){}
         }
     </script>
 </body>
