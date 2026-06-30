@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎲 روليت الإثارة الزوجية - النسخة الجريئة والصريحة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif; }
+
+        body {
+            background: #0a0a0f;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== Ambient background ===== */
+        .bg-ambient {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background:
+                radial-gradient(ellipse 60% 40% at 20% 10%, rgba(236,72,153,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 35% at 80% 80%, rgba(168,85,247,0.15) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 30% at 60% 40%, rgba(244,63,94,0.10) 0%, transparent 70%);
+        }
+
+        /* floating particles */
+        .particle {
+            position: fixed; pointer-events: none; z-index: 0;
+            font-size: 1.4rem; opacity: 0;
+            animation: floatUp 8s ease-in infinite;
+        }
+        @keyframes floatUp {
+            0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+            10%  { opacity: 0.5; }
+            90%  { opacity: 0.3; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ===== Glass card ===== */
+        .glass {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .glass-pink {
+            background: rgba(236,72,153,0.07);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(236,72,153,0.2);
+        }
+
+        /* ===== Inputs ===== */
+        .fancy-input {
+            width: 100%; padding: 1rem 1.2rem;
+            background: rgba(255,255,255,0.06);
+            border: 1.5px solid rgba(236,72,153,0.25);
+            border-radius: 16px; color: #fff; font-size: 1.05rem;
+            transition: border-color .3s, box-shadow .3s, background .3s;
+            outline: none;
+        }
+        .fancy-input:focus {
+            border-color: #ec4899;
+            box-shadow: 0 0 0 3px rgba(236,72,153,0.15), 0 0 20px rgba(236,72,153,0.1);
+            background: rgba(236,72,153,0.06);
+        }
+
+        /* ===== Primary button ===== */
+        .btn-primary {
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #be185d, #ec4899, #a855f7);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+            border: none; border-radius: 20px; cursor: pointer;
+            font-weight: 800; letter-spacing: .5px;
+            transition: transform .2s, box-shadow .2s;
+            box-shadow: 0 4px 30px rgba(236,72,153,0.35);
+        }
+        .btn-primary:hover  { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(236,72,153,0.5); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-primary::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+            pointer-events: none;
+        }
+        @keyframes gradientShift {
+            0%,100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
+        }
+
+        /* ===== Small action buttons ===== */
+        .btn-action {
+            border-radius: 14px; font-weight: 700; font-size: .82rem;
+            padding: .9rem .4rem; cursor: pointer; transition: transform .2s, filter .2s;
+            border: none;
+        }
+        .btn-action:hover  { transform: translateY(-2px); filter: brightness(1.15); }
+        .btn-action:active { transform: translateY(0); }
+
+        /* ===== Roulette wheel ===== */
+        .wheel-wrapper {
+            position: relative; width: 220px; height: 220px; margin: 0 auto;
+        }
+        .wheel-ring {
+            position: absolute; inset: 0; border-radius: 50%;
+            background: conic-gradient(
+                #ec4899 0deg 60deg,  #a855f7 60deg 120deg,
+                #f43f5e 120deg 180deg, #ec4899 180deg 240deg,
+                #a855f7 240deg 300deg, #f43f5e 300deg 360deg
+            );
+            box-shadow: 0 0 40px rgba(236,72,153,0.5), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .wheel-center {
+            position: absolute; inset: 25px; border-radius: 50%;
+            background: radial-gradient(circle, #1a0a1e, #0d0010);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 2px solid rgba(236,72,153,0.3);
+            box-shadow: inset 0 0 30px rgba(236,72,153,0.15);
+            z-index: 5;
+        }
+        .wheel-arrow {
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            font-size: 2rem; filter: drop-shadow(0 0 8px #ec4899);
+            animation: bounce 1s ease-in-out infinite;
+            z-index: 10;
+        }
+        @keyframes bounce {
+            0%,100% { transform: translateX(-50%) translateY(0); }
+            50%      { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* ===== Result card ===== */
+        .result-card {
+            animation: slideUp .5s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0)    scale(1); }
+        }
+
+        .pulse-ring {
+            position: absolute; inset: -8px; border-radius: inherit;
+            border: 2px solid rgba(236,72,153,0.4);
+            animation: pulseRing 2s ease-out infinite;
+        }
+        @keyframes pulseRing {
+            0%   { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.06); }
+        }
+
+        /* ===== Stage pill ===== */
+        .stage-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; border-radius: 50px; font-size: .8rem; font-weight: 700;
+            background: rgba(236,72,153,0.15); border: 1px solid rgba(236,72,153,0.3);
+            color: #f9a8d4;
+        }
+        .stage-badge {
+            background: #ec4899; color: #fff; border-radius: 50px;
+            padding: 2px 8px; font-size: .7rem;
+        }
+
+        .neon-title {
+            text-shadow: 0 0 20px #ec4899, 0 0 40px rgba(236,72,153,0.5);
+        }
+
+        .turn-display {
+            background: linear-gradient(135deg, rgba(236,72,153,0.1), rgba(168,85,247,0.1));
+            border: 1px solid rgba(236,72,153,0.2);
+            border-radius: 16px; padding: 14px 20px;
+            text-align: center; font-size: 1.1rem; font-weight: 700;
+        }
+
+        .command-text {
+            font-size: 1.15rem; line-height: 2;
+            background: rgba(0,0,0,0.4); border-radius: 16px;
+            padding: 1.5rem; text-align: center; color: #f3f4f6;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .progress-dots { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all .3s; cursor: pointer; }
+        .dot.active { background: #ec4899; box-shadow: 0 0 10px #ec4899; transform: scale(1.2); }
+
+        .confetti-piece {
+            position: fixed; pointer-events: none; z-index: 999;
+            width: 10px; height: 10px; border-radius: 2px;
+            animation: confettiFall 2.5s ease-in forwards;
+        }
+        @keyframes confettiFall {
+            0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .logo-emoji { display: inline-block; animation: logoPulse 2s ease-in-out infinite; }
+        @keyframes logoPulse {
+            0%,100% { transform: scale(1) rotate(0deg); }
+            50%      { transform: scale(1.1) rotate(-5deg); }
+        }
+
+        .btn-spin {
+            background: linear-gradient(135deg, #fff, #fce7f3);
+            color: #be185d; border: none; border-radius: 14px;
+            padding: 12px 32px; font-weight: 900; font-size: 1rem;
+            cursor: pointer; transition: transform .2s, box-shadow .2s;
+            box-shadow: 0 4px 20px rgba(236,72,153,0.3);
+        }
+        .btn-spin:hover  { transform: scale(1.05); box-shadow: 0 6px 30px rgba(236,72,153,0.5); }
+        .btn-spin:active { transform: scale(0.97); }
+        .btn-spin:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%      { transform: translateX(-8px); }
+            40%      { transform: translateX(8px); }
+            60%      { transform: translateX(-6px); }
+            80%      { transform: translateX(6px); }
+        }
+        .shake { animation: shake .4s ease; }
+
+        select option { background: #1a0a1e; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="bg-ambient"></div>
+    <div id="particles"></div>
+
+    <div class="relative z-10 max-w-md mx-auto p-4 pb-12">
+
+        <!-- ===== HEADER ===== -->
+        <div class="text-center py-8">
+            <div class="text-5xl mb-3">
+                <span class="logo-emoji">🔥</span>
+            </div>
+            <h1 class="text-3xl font-black neon-title text-white mb-2">روليت الإثارة</h1>
+            <p class="text-pink-400 text-sm font-medium tracking-wide">باقة جنسية صريحة · ليلة مثيرة جداً</p>
+        </div>
+
+        <!-- ===== SETUP ===== -->
+        <div id="setup">
+            <div class="glass rounded-3xl p-7 mb-6">
+                <h2 class="text-xl font-bold text-center mb-7 text-pink-300">✨ أدخل معلوماتكما</h2>
+                <div class="space-y-5">
+                    <div>
+                        <label class="block mb-2 text-pink-200 text-sm font-semibold">اسم اللاعب الأول</label>
+                        <input id="p1name" type="text" value="الزوج" class="fancy-input">
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-pink-200 text-sm font-semibold">نوع جنسه</label>
+                        <select id="p1gender" class="fancy-input">
+                            <option value="مذكر">مذكر</option>
+                            <option value="مؤنث">مؤنث</option>
+                        </select>
+                    </div>
+                    <div style="height:1px; background: linear-gradient(to left, transparent, rgba(236,72,153,0.3), transparent);"></div>
+                    <div>
+                        <label class="block mb-2 text-pink-200 text-sm font-semibold">اسم اللاعب الثاني</label>
+                        <input id="p2name" type="text" value="الزوجة" class="fancy-input">
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-pink-200 text-sm font-semibold">نوع جنسه</label>
+                        <select id="p2gender" class="fancy-input">
+                            <option value="مؤنث" selected>مؤنث</option>
+                            <option value="مذكر">مذكر</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="startGame()" class="btn-primary w-full py-6 text-xl text-white">
+                ابدأ الليلة الساخنة 🔥
+            </button>
+        </div>
+
+        <!-- ===== GAME ===== -->
+        <div id="game" class="hidden">
+            <div class="flex justify-between items-center mb-5">
+                <button onclick="showSetup()" class="glass px-4 py-2 rounded-xl text-sm text-pink-300 font-semibold hover:bg-white/10 transition-colors">
+                    ← تعديل الاسماء
+                </button>
+                <div id="stageTitle" class="stage-pill"></div>
+            </div>
+
+            <div id="currentTurn" class="turn-display mb-6"></div>
+
+            <div class="progress-dots mb-6" id="progressDots">
+                <div class="dot active" data-stage="1" onclick="jumpStage(1)"></div>
+                <div class="dot" data-stage="2" onclick="jumpStage(2)"></div>
+                <div class="dot" data-stage="3" onclick="jumpStage(3)"></div>
+                <div class="dot" data-stage="4" onclick="jumpStage(4)"></div>
+            </div>
+
+            <div class="glass-pink rounded-3xl p-6 flex flex-col items-center">
+                <div class="wheel-wrapper mb-5">
+                    <div class="wheel-arrow">🔻</div>
+                    <div class="wheel-ring" id="wheelRing"></div>
+                    <div class="wheel-center">
+                        <span style="font-size:2.5rem;">🎰</span>
+                        <span class="text-pink-300 text-xs font-bold mt-1">دور!</span>
+                    </div>
+                </div>
+                <button class="btn-spin" id="spinBtn" onclick="spinRoulette()">
+                    🎲 لف الروليت
+                </button>
+            </div>
+
+            <div id="result" class="hidden mt-6 result-card">
+                <div class="relative glass-pink rounded-3xl p-7">
+                    <div class="pulse-ring rounded-3xl"></div>
+                    <div id="playerName" class="text-2xl font-black text-center mb-5"></div>
+                    <div id="commandText" class="command-text"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 mt-6">
+                <button onclick="newCommand()" class="btn-action text-white" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+                    🎯<br>أمر جديد
+                </button>
+                <button onclick="changeStage()" class="btn-action text-white" style="background:linear-gradient(135deg,#be185d,#ec4899)">
+                    ⚡<br>التالي
+                </button>
+                <button onclick="resetDailyPool()" class="btn-action text-white" style="background:linear-gradient(135deg,#991b1b,#ef4444)">
+                    🔄<br>باقة جديدة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // داتا الأوامر المحدثة لتكون في منتهى الجرأة والصراحة الجنسية المباشرة
+        const masterStages = {
+            1: [
+                "ما هو أكثر خيال جنسي يراودك عندما تفكر في كسي/قضيبي؟", "ما هي الوضعية الجنسية التي تجعل قضيبي يدخل لأعمق نقطة بداخل كسِك؟", "هل تفضل نيك الكس العنيف والسرير أم نيكاً هادئاً ورومانسياً؟",
+                "ما هي أكثر منطقة تثير شهوتك جنسياً حول كسِك/قضيبك؟", "هل تفضل مص القضيب ولحس الكس في الظلام التام أم تحت إضاءة خفيفة؟", "ما هي الكلمات القذرة المثيرة التي تحب سماعها أثناء نكاح الكس؟",
+                "هل مداعبة المؤخرة والشرج يثير شهوتك بشكل كبير؟", "كم مرة تحب الوصول إلى الأورجازم (النشوة وتنزيل الشهوة) في ليلة واحدة؟", "ما رأيك في دهن المزلق على البظر والكس بنكهات مثيرة للمص؟",
+                "هل تحب الحديث القذر (Dirty Talk) عن كسّي وقضيبي أثناء الجماع؟", "ما هي الحركة الجنسية التي لو فعلتها لقضيبك/كسِك تجعلك تذوب فوراً؟", "هل تفضل أن يسيطر شريكك على نيك الكس والنهدين أم تحب السيطرة؟",
+                "ما هو اللباس الساخن أو اللانجري العاري الذي يثير شهوتك عندما يكشف نهدي وكس شريكك؟", "هل تفضل نيك الكس الصباحي السريع أم النيك الليلي الطويل؟", "ما هو الجزء الذي تحب مصه ولحسه في كسّي/قضيبي؟",
+                "هل سبق لك وأن تخيلت نيك كسّي/قضيبي بعنف في مكان مضاء؟", "ما هي المدة المثالية التي تفضلها لمص القضيب ولحس الكس قبل الإدخال؟", "هل تحب أن يقوم شريكك بابتلاع المني أو سوائل الكس الخاصة بك؟",
+                "ما هو المكان الأكثر جنوناً في المنزل الذي ترغب بنكاح الكس ومص القضيب فيه؟", "هل يثيرك أن ترى شريكك يفرك كسه/يقبض على قضيبه ويمارس العادة السرية أمامك؟", "ما هو شعورك عندما أعض نهودك أو قضيبك/كسك بلطف أثناء الشبق؟",
+                "هل تفضل القبلات العميقة المبللة أم مص اللسان والشفرات؟", "ما هو أكثر تصرف يطفئ شهوتك تماماً أثناء نيك الكس؟", "هل تحب أن يمسك شريكك شعرك ويشد عليه بينما يدخل قضيبه في كسك بعنف؟",
+                "ما هو تقييمك لشهوتك وجوعك الجنسي لنيك الكس من 10؟", "هل تحب أن تسمع صوت آهات وصراخ شريكك بوضوح عند إدخال القضيب؟", "ما هو العطر أو رائحة العرق التي تثير رغبتك في لحس الكس أو مص القضيب؟",
+                "هل تفضل إزالة الشعر بالكامل ليكون الكس والقضيب عاريين تماماً للحس؟", "ما هي الوضعية التي تجعل قضيبك يطلق المني/يجعل كسك ينزل شهوته بشكل أسرع؟", "هل تحب النظر مباشرة في عيني شريكك أثناء إدخال القضيب بداخل الكس؟",
+                "ما هو الجزء الأقل إثارة بالنسبة لك في جسد شريكك العاري؟", "هل تفضل الاستحمام ولحس الأجساد معاً قبل النيك أم بعده؟", "ما هو أكثر شيء يثيرك في مؤخرة شريكك وشق استه؟",
+                "هل تحب مساج الزيت الساخن على النهود والكس والمؤخرة كجزء من المداعبة؟", "ما هي الفكرة الجنسية الجريئة عن الكس/القضيب التي تخجل من طلبها؟", "هل تفضل اللمس الخفيف للبظر والقضيب أم الضغط القوي المثير؟",
+                "ما هو شعورك الصريح تجاه ابتلاع لبن القضيب (المني) أو لحس مياه الكس؟", "هل تحب النوم عارياً وقضيبك يلامس كسي دائماً؟", "ما هي الأجواء التي تراها مثيرة لليلة نيك ومص جنونية؟",
+                "هل تفضل أن تمزق ملابسك الداخلية وتعرية كسك/قضيبك بعنف في السرير؟", "ما هي أكثر لحظة نكنا فيها الكس بعنف ولا يمكنك نسيانها أبداً؟", "هل يثيرك أن يطلب منك شريكك مص قضيبه أو لحس بظرها فوراً؟",
+                "ما هي الحركة التي تجعل كسك/قضيبك يرتعش من شدة اللذة الجنسية؟", "هل تفضل نيك الكس في السرير أم تفضل التنويع (الكنبة، الأرض، المطبخ)؟", "هل تحب المص المفاجئ في الرقبة والنهود أثناء انشغالك بامر آخر؟",
+                "ما هو التصرف الذي لو فعلته الآن لقضيبك/كسِك ستفقد السيطرة وتطلب النيك فوراً؟", "هل تحب رؤية قضيبك وهو يدخل ويخرج من كسي في المرآة؟", "ما هو رأيك في مص ولعق أصابع والنهود؟",
+                "هل تفضل علاقة نيك سريعة ومفاجئة (Spontaneous) أم مخططة؟", "هل تريد تصوير ليلتكم الجنسيه","أوصف بصراحة: ما الذي يميز كسي/قضيبي في الفراش ويجعلك تذوب شهوة؟"
+            ],
+            2: [
+                "قبل شريكك بعمق وبطء شديد مع دفع أنفاس ساخنة في فمه لمدة دقيقة", "عض شفتي شريكك السفلى برفق شديد ومصها أثناء التقبيل الساخن", "قبل رقبة شريكك بعمق واصنع علامة مص حمراء واضحة",
+                "اهمس في أذن شريكك بأكثر جملة قذرة وجنسية تثير قضيبه/كسها"، "أنزل ملابس شريكك الداخلية ببطء شديد وأنت تتأمل كسه/قضيبها أمام المرآة والنور شغال", "قف خلف شريكك عارياً وقم بضمّه وتحريك قضيبك/كسك على مؤخرته",
+                "أمسك وجه شريكك بيديك وقبله قبلة فرنسية عميقة مع مص لساته بلعاب كثيف", "قم بتمرير لسانك على طول رقبة شريكك ونزولاً حتى صدره ونهديه", "امسح بيدك على فخذ شريكك من الداخل واقترب بإنش واحد من كسه/قضيبه دون لمسه",
+                "اجلس في حضن شريكك وقم بالاحتكاك بقضيبه/كسها ببطء عارياً وأنت تقبله", "انزع قطعة واحدة من ملابسك الداخلية بشكل جنسي ومثير أمام شريكك والنور شغال", "قم بعض شحمة أذن شريكك بلطف مع إصدار آهة جنسية عالية",
+                "دع شريكك يستلقي وقم بعمل مساج لنهديه أو صدره باستخدام شفتيك ولسانك فقط", "خذ يد شريكك وضعها مباشرة على قضيبك المنتصب/كسِك المبلل الآن", "انظر في عيني شريكك بشهوة عارمة لمدة 30 ثانية ثم قبله واقضم شفتيه بعنف",
+                "قم بلعق شفتي شريكك وامسح لعابك على فمه ورقبتها ببطء مثير", "تنفس بعمق وبأنفاس ساخنة جداً على منطقة عانة وكس/قضيب شريكك فوق الملابس", "قم بفك حمالة صدر زوجتك (أو اطلبي من زوجك نزع قميصه) باستخدام أسنانك فقط وبصقها أرضاً",
+                "امشِ بأصابعك ببطء من قدم شريكك وصعوداً حتى تداعب عانته وكسه/قضيبه", "قم بتقبيل بطن شريكك ومنطقة السرة بلطف ومصها بنهم", "اجعل شريكك يغمض عينيه، ثم قبل ٣ أماكن جنسية في جسده واجعله يحزرها",
+                "اربط يدي شريكك، وقبّل نهوده وكسه/قضيبه وهو مستسلم تماماً لك", "قم بمص أصابع يد شريكك واحداً تلو الآخر ببطء وإثارة جنسية كأنك تمص قضيبه", "اجلس خلف شريكك وقم بمداعبة نهودها وصدره بيديك وشفاهك مص رقبه بقوة",
+                "امسك مؤخرة شريكك واضغط عليها بعنف وقم بتقبيل شق استه", "قم بلعق ومص عظام الترقوة لشريكك (المنطقة أسفل الرقبة) لإثارته", "تحدث بصوت مليء بالشهوة وأخبر شريكك كيف تريد أن تنيك كسه/تمصي قضيبه الآن",
+                "قم بتقبيل الفخذين من الداخل لشريكك صعوداً وهبوطاً واقترب من كسه/قضيبه", "اجعل شريكك يستلقي على بطنه وقم بتقبيل مؤخرته وشقها من فوق الملابس الداخلية", "ارفع رأس شريكك للخلف وقبّل حنجرته ورقبتها مع إصدار تأوهات دافئة",
+                "قم بنزع جوارب وملابس شريكك بأسنانك وقبّل قدمه وساقه برغبة", "مرر يدك أو لسانك برقة متناهية على نهود شريكك وحلماته المفتونة", "قم بامتصاص الشفة العليا لشريكك بينما هو يمتص ويلعق شفتك السفلى بجوع",
+                "اجلس أمام شريكك وقم بملامسة قدميك بقضيبه/كسها وتحريكهما بشكل جنسي ومثير", "قم بإصدار صوت تأوه جنسي دافئ في أذن شريكك مباشرة مع قبلة عنيفة في الرقبة", "امسك خصر شريكك وقربه إليك بقوة حتى يلتصق قضيبك بكسها تماماً",
+                "قم بتقبيل الساعدين والذراعين لشريكك ببطء وبقبلات متتالية حارة", "انظر إلى شريكك بنظرة مليئة بالشهوة واطلب منه التعرية والاستسلام الكامل لك والاضائه شغاله", "قم بوضع لعابك على إصبعك ومرره على بظر زوجتك/رأس قضيب زوجك ببطء",
+                "اجعل شريكك يتنفس من فمك مباشرة (قبلة الأكسجين الساخنة المبللة)", "قم بتقبيل ظهر شريكك من الأعلى وعلى طول العمود الفقري ونزولاً للمؤخرة", "داعب شعر شريكك وشدّه بلطف للخلف لإظهار رقبته ونهديه وقبلهما بجنون",
+                "قم بخلع ملابس شريكك العلوية ودع نهودها/صدره عارياً أمامك وتأمله بتلذذ وجوع", "اطلب من شريكك أن يقوم بحركات جنسية بمؤخرته وكسه/قضيبه أمامك لمدة دقيقة", "قم بعض كتف ونحر شريكك عضّة خفيفة تترك أثراً بسيطاً من الشهوة",
+                "امسح بشفتيك ولسانك المبلل على جفون وعيني شريكك وهو مغمض العينين", "اجعل شريكك يضع يده على قضيبك/كسك ليلمس نبضات الشهوة المتسارعة", "قم بمداعبة الجانبين والخصر لشريكك بلسانك صعوداً وهبوطاً ونزولاً لعانته",
+                "قل لشريكك سراً جنسياً أو خيالاً عن نيك كسه/مص قضيبه لم تخبره به من قبل أبداً بصوت خافت", "خذ قطعة ثلج (إذا توفرت) ومررها على شفتيك ثم قبل نهود ورقبة شريكك فوراً"
+            ],
+            3: [
+                "مصمص شفتي شريكك ولسانه بعمق وقوة جنسية جائعة لمدة دقيقتين كاملتين", "لحس رقبة شريكك وبطنه ببطء مع إغراق المكان باللعاب الساخن تمهيداً للنيك",
+                { مذكر: "مص نهدي زوجتك بقوة مع لعق ومص الحلمات بأسنانك وشفتيك حتى تنتصب تماماً وتتأوه", مؤنث: "لحس ومص صدر زوجك ومداعبة حلماته بلسانك وأسنانك وامتصاصها بنهم" },
+                { مذكر: "قم بمص وقضم حلمة زوجتك اليسرى ببطء ثم اليمنى بقوة كالمجنون حتى تصرخ لذة", مؤنث: "قم بمداعبة حلمتي وصدر زوجك بأصابعك المبللة بريقك ولعابك الساخن" },
+                { مذكر: "قم بلعق ومص كس زوجتك بلسانك من الأسفل إلى الأعلى وافتح شفراته بفمك بشكل متواصل", مؤنث: "انزلي لأسفل وافتحي فمك ومصي قضيب زوجك بعمق وبطء والتهام رأسه" },
+                { مذكر: "أدخل لسانك داخل كس زوجتك وحركه بشكل دائري سريع كأنك تنكحه بلسانك المبلل", مؤنث: "أدخلي قضيب زوجك كاملاً في فمك صعوداً ونزولاً وقم بمص رأس القضيب بقوة وجوع" },
+                { مذكر: "داعب بظر زوجتك بلسانك وامتصه بشفتيك بحركات سريعة ومستمرة حتى تتأوه بقوة وتقذف شهوتها", مؤنث: "قم بلعق كيس خُصيتي زوجك ومصهما برفق شديد والتهامهما بين شفاهك الساخنة" },
+                { مذكر: "مداعبة وفرك كس زوجتك بأصابعك ببطء حتى تفرز مياه الكس المثيرة الساخنة", مؤنث: "فرك وقبض قضيب زوجك بيدك بقوة وسرعة صعوداً وهبوطاً حتى ينتصب كالحجر" },
+                { مذكر: "أدخل أصبعين بداخل كس زوجتك وحركهما للداخل والأعلى بسرعة خفيفه لنيك يدوي مثير", مؤنث: "امسكي خصيتي زوجك بيدك بلطف واضغطي عليهما برقة متناهية بينما يده بداخل كسك" },
+                { مذكر: "ضع مزلقاً أو لعاباً بكثافة على بظر زوجتك وقم بفركه بإصبعك بحركات دائرية مكثفة ومثيرة", مؤنث: "قم بوضع لعابك بالكامل على قضيب زوجك وافركيه بيدك ونظفي شفتيك برأسه الساخن" }
+                { مذكر: "قم مداعبة شق مؤخرة وشق است زوجتك برفق تام بإصبعك خفيف وضغط خفيف دون ادخال لتثور شهوتها وتصرخ من اللذة", مؤنث: "قم بمداعبة قضيب زوجك بإصبعك المبلل بريقك برقة متناهية من الخارج صعوداً وهبوطاً" },
+                { مذكر: "اجلس بين فخذي زوجتك وافتح شفرتي كسها المبلل وقبلهما والتهم بظرها بعمق", مؤنث: "قم بلعق طول قضيب زوجك من القاعدة وحتى الرأس بلسانك صعوداً ونزولاً بنهم" },
+                { مذكر: "استخدم يديك الاثنتين لمداعبة وعجن نهد ومؤخرة زوجتك في نفس الوقت بعنف جنسي مثير", مؤنث: "استخدمي يديك لفرك خصيتي زوجك ومصي قضيبه الساخن في نفس الوقت بنهم وجوع" },
+                { مذكر: "مص الفخذ الداخلي لزوجتك بالقرب من الكس العاري واترك علامة حمراء واضحة بأسنانك", مؤنث: "اضغطي مؤخرتك العارية على قضيب زوجك المنتصب وحركيها بشكل دائري ومثير" },
+                { مذكر: "قم بنزع ملابس زوجتك الداخلية بأسنانك بالكامل والقفز لكسها بلحمك وقضيبك", مؤنث: "انزعي الملابس الداخلية لزوجك بأسنانك والتهام قضيبه بفمك فوراً دون تردد" },
+                "قم بمص شفتي شريكك وفي نفس الوقت مرر يدك بداخل ملابسه الحساسة واقبض على كسه/قضيبه",
+                { مذكر: "اجعل زوجتك تقذف سوائل وماء كسها على أصابعك ثم تذوق مياهها أمامها بلسانك وتلذذ به", مؤنث: "مصي قضيب زوجك حتى تخرج مياه المذي وتذوقيها بلسانك وأمام عينيه بشهوة" },
+                { مذكر: "انفخ هواء بارداً على كس وبظر زوجتك مباشرة بعد لعقه لكي تشعر بالقشعريرة والشهوة", مؤنث: "انفخي هواء ساخناً من جوف فمك على قضيب زوجك وهو مستقر بداخل فمك" },
+                 "مذكر:"قم بعمل مساج جنسي مثير لمؤخرة وردف شريكك باستخدام يديك العاريتين مع الضغط والعجن العنيف",
+                { مذكر: "ضع رأسك بالكامل بين نهدّي زوجتك وحركهما يميناً ويساراً مع إصدار أصوات نكاح ومص مثيرة", مؤنث: "الحسي عانة وشعر عانة زوجك ونزولاً لقضيبه بلسانك وبطء شديد وجوع جنسي" },
+                { مذكر: "قم بلعق عانة زوجتك صعوداً وهبوطاً حتى تصل إلى سرتها ونهودها برقة مثيرة", مؤنث: "الحسي منطقة ما بين خصيتي زوجك وشرجه ببطء ولطف شديد لتثيري جنونه" },
+                { مذكر: "اضغط بإصبعك على بظر زوجتك بقوة متوسطة وسرعة بينما تقوم بمص حلمتها بشفتيك", مؤنث: "مصي رأس قضيب زوجك بنهم بينما تدعكين وتفركين خصيتيه بيديكِ الاثنتين" },
+                { مذكر: "اجعل زوجتك تجلس بمؤخرتها وكسها على وجهك تماماً لكي تلعق كسها وبظرها براحة تامة", مؤنث: "نامي على ظهرك وارفعي قدميكِ بالكامل ودعي زوجكِ يلتهم كسّكِ بلسانه وقبلاته الساخنة" },
+                "قم بتقبيل شريكك قبلات متتالية وسريعة على طول جسمه العاري من الأسفل للأعلى وصولاً للنهود والكس/القضيب",
+                { مذكر: "امسك شفرتي كس زوجتك ومطهما بلطف شديد بأسنانك وشفتيك ومص بظرها المنتفخ", مؤنث: "امسكي قضيب زوجك المنتصب بأسنانك برفق شديد ومصيه كالحلوى وأصنعي صوتاً عالياً" },
+                { مذكر: "قم بمص نهود وصدر زوجتك بعنف حتى تسمع صوت تنهيداتها وصراخها العالي شهوة", مؤنث: "الحسي رقبة زوجك وصعوداً خلف أذنه ونزولاً لصدره وقضيبه الساخن بنهم عارم" },
+                { مذكر: "مداعبة شق مؤخرة زوجتك بإصبعك صعوداً وهبوطاً وبطء شديد لإثارة دبريتها", مؤنث: "داعبي قضيب زوجك المنتصب بخصيلات شعرك أو بوجهك ونهديكِ بنعومة وإثارة" },
+                { مذكر: "أدخل ثلاثة أصابع بداخل كس زوجتك ببطء وتوسع في النكح اليدوي لتهيئة الكس للقضيب", مؤنث: "ادخلي قضيب زوجك بالكامل في فمك حتى تلمس رغبته حلقك الخلفي وتبلعي ريقه" },
+                { مذكر: "الحس مؤخرة زوجتك المستديرة وردفيها ثم عضها بلطف حتى تصرخ إثارة وشبقاً", مؤنث: "عضي ظهر زوجك برفق وأنتِ تمسكين وتقبضين على قضيبه الساخن بيدكِ" },
+                "مرر لسانك الدافئ داخل فم شريكك لتستكشف كل زاوية بنهم وجوع جنسي وعناق حار",
+                { mذكر: "ضع شفتيك على كس زوجتك وقم بالنفخ والتأوه بداخل شفراتها وبظرها لتقشعر لذة", مؤنث: "داعبي رأس قضيب زوجك بإصبعك المبلل بريقك بحركات دائرية سريعة ومكثفة" },
+                { مذكر: "الحس المنطقة الحساسة ما بين كس زوجتك وشرجها بلسان دافئ ومص ردفها بقوة", مؤنث: "اجلسي بكسِك المبلل فوق وجه زوجك ودعيه يلتهم كسكِ تماماً بلسانه وشفتيه" },
+                "امسك شريكك من خصرها وعض جوانب بطنها ونهودها بلطف ومص المكان بنهم جنسي",
+                { مذكر: "اجعل زوجتك عارية تماماً وتأمل كسها ونهودها لدقيقة ثم انقض على كسها بقبلات عميقة", مؤنث: "تأملي قضيب زوجك المنتصب لدقيقة كاملة بشهوة ثم قبليه من رأسه بحب وشهوة عارمة" },
+                { مذكر: "قم بمداعبة وضرب مؤخرة وردف زوجتك بيدك ضربات مثيرة (سبانك) حتى تحمر وتثور شهوتها", مؤنث: "نامي تحت زوجك ودعيه يعجن صدرك ونهديكِ ويداعب كسكِ العاري براحته الكاملة" },
+                { مذكر: "افرط في لعق ومص بظر زوجتك وشفراتها حتى تطلب منك التوقف من شدة اللذة والحساسية", مؤنث: "مصي قضيب زوجك بسرعة جنونية وشهوة عارمة لمدة دقيقة كاملة دون توقف" },
+                { مذكر: "ضع أصابعك في فم زوجتك لتمصها بغرام بينما يدك الأخرى بداخل كسها تداعب بظرها", مؤنث: "ضعي أصابع زوجك في فمكِ ومصيها بنهم بينما يده نائمة بداخل كسكِ وتداعب بظركِ الساخن" },
+                { مذكر: "الحس بطن زوجتك ونزولاً للمثانة ثم انقض على كسها بقبلة فرنسية مبللة بداخل شفراتها", مؤنث: "الحسي خصيتي زوجك واجعليهما بداخل فمكِ بالكامل برفق تلمسينهما بلسانكِ المبلل" },
+                { مذكر: "مداعبة نهد زوجتك الأيمن بيدك وعجن النهد الأيسر بلسانك وشفتيك في آن واحد", مؤنث: "داعبي خصيتي زوجك بأصابعكِ المبللة بينما تمصين قضيبه الساخن بنهم" },
+                "خذ ريق شريكك في فمك واحتفظ به لثوانٍ ثم ابلعه بإثارة متبادلة وجوع جنسي عارم",
+                { مذكر: "الحس عانة وكس زوجتك بضربات لسان عريضة وسريعة تهييجاً لها لتقذف شهوتها", مؤنث: "امسحي بكسكِ المبلل الساخن على طول قضيب زوجكِ دون إدخاله صعوداً ونزولاً لإثارته" },
+                { مذكر: "اجعل زوجتك تستلقي على ظهرها وارفع رجليها وقبّل مؤخرتها وكسها من الأسفل بلهفة", مؤنث: "استلقي على بطنك وافتحي رجليكِ ودعي زوجك يعجن مؤخرتك ويلعق شق استك برغبة" },
+                { مذكر: "ضع لعابك بكثافة على بظرها واضغط عليه بشفتيك ومصه بقوة كأنك تمص حلمة ثديها", مؤنث: "مصي طول قضيب زوجك واصنعي صوتاً عالياً للامتصاص يثير شهوته ويجعله ينتصب أكثر" },
+                { مذكر: "امسك خصر زوجتك وارفعها قليلاً وقبل عانتها وكسها بلهفة وجنون جنسي", مؤنث: "النور شغال انحني أمام زوجك ودعيه يرى مؤخرتك وكسك المبلل من الخلف ويلعق شق كسك ونيكك بالنظر" },
+                { مذكر: "مداعبة حلمتي ونهود زوجتك بأصابعك بقرصات خفيفة ومثيرة جداً تجعلها تصرخ آه", مؤنث: "داعبي حلمات وصدر زوجك بأظافرك برقة مفرطة تجعله يقشعر ويسلم لكِ نفسه" },
+                { مذكر: "الحس ما بين أصابع قدم زوجتك وصعوداً لساقيها وفخذها حتى تنقض على كسها الساخن", مؤنث: "الحسي صدر زوجك وعضلات بطنه ونزولاً لعانته وقضيبه الساخن والتهامه بفمكِ" },
+                { مذكر: "اجعل زوجتك تمتص لسانك بينما تداعب كسها وبظرها بقوة وسرعة بأصابعك المبللة", مؤنث: "مصي لسان زوجك بعمق بينما يده نائمة بداخل كسكِ وتداعب بظركِ الساخن بعنف مثير" },
+                { مذكر: "قم بنكح كس زوجتك بإصبع الإبهام ببطء وعمق لإثارة ونكاح نقطة الـ G-Spot لتقذف ماءها", مؤنث: "امسكي قضيب زوجك وحركيه ملامساً شفتيك ووجهك ورقبتك ونهديكِ بنعومة وشهوة صارخة" },
+                "ضع يدك بداخل الملابس الداخلية لشريكك واقبض على كسه/قضيبه بقوة دافئة ومثيرة وعجن المكان"
+            ],
+            4: [
+                { مذكر: "أدخل قضيبك ببطء شديد في كس زوجتك وابقه داخلها عارياً دون حركة لدقيقة وتأمل وجهها ونحيبها", مؤنث: "استلقي على ظهركِ وافتحي رجليكِ بالكامل ودعي زوجكِ يدخل قضيبه ببطء وعمق داخل كسّكِ الساخن" },
+                "مارس الجنس ونكاح الكس ببطء وعمق تامين أمام المرآة لتستمتعا برؤية القضيب وهو يلج الكس ملتصقين",
+                { مذكر: "جامع ونكح كس زوجتك من الخلف (Doggy Style)، وامسك ردفها بقوة واضرب قضيبك بعمق وسرعة", مؤنث: "اتخذي وضعية السجود على السرير واسترخي بالكامل ليدخل زوجك قضيبه من الخلف بعمق كبير داخل كسِك" },
+                { مذكر: "اجعل زوجتك تستلقي على بطنها تماماً واركب مؤخرتها وادخل قضيبك ببطء ونكاح دافئ بداخل كسها", مؤنث: "نامي على بطنك وافردي رجليكِ ودعي زوجكِ يعتليكِ من الخلف ويدخل قضيبه ببطء في كسّكِ المبلل" },
+                "جامع شريكك في الوضعية التقليدية (المبشرة) مع ذوبان كامل في الأحضان وقبلات فرنسية ونكاح كس عنيف",
+                "مارس الجنس ونكاح الكس بسرعة عالية جداً وهيجان مكثف واضرب قضيبك بداخلها لمدة دقيقتين متواصلتين",
+                { مذكر: "اجعل زوجتك تعتليك وتركب فوق قضيبك بوضعية (Reverse Cowgirl) بحيث يعطيك ظهرها ومؤخرتها لتلعق ظهرها", مؤنث: "اجلسي فوق قضيب زوجكِ المنتصب ولكن بالمعكوس (Reverse Cowgirl) وتحركي لأعلى وأسفل ليدخل لأقصى عمق" },
+                "مارس الجنس ونكاح الكس مع شريكك واقفاً أمام المرآة أو مستندين إلى الحائط بنكاح عنيف ومثير وقضيبك بداخلها",
+                "مارس الجنس مع شريكك في وضعية الملعقة (Spoon Position) حيث يستلقي كلاكما على الجانب ويدخل القضيب في الكس من الخلف",
+                { مذكر: "ارفع ساقي زوجتك بالكامل وضعهما على كتفيك، وادخل في كسها بعمق كامل وضربات قوية حتى تصرخ لذة", مؤنث: "استلقي على ظهركِ وارفعي ساقيكِ وضعيها على كتفي زوجكِ، وتدعيه يدخل قضيبه لأقصى عمق ممكن بكسِكِ" },
+                { مذكر: "اجعل زوجتك تعتليك بالوضعية التقليدية (الفارسة) وتنظر في عينيك وتتحرك صعوداً وهبوطاً ليدخل قضيبك كاملاً", مؤنث: "اركبي فوق زوجكِ (وضعية الفارسة) وادخلي قضيبه بداخل كسكِ بالكامل وتحكمي بسرعه النكاح والضرب" },
+                { مذكر: "وضعية (Spork): استلقِ على جنبك واجعل زوجتك تستلقي فوقك وارفع رجلها ونيك كسها بعمق وقوة", مؤنث: "استلقي بشكل متقاطع فوق زوجكِ وارفعي ساقاً واحدة ليدخل قضيبه في كسكِ بشكل جانبي ومثير" },
+                { مذكر: "اجعل زوجتك تجلس على حافة السرير واركع أنت بين رجليها وادخل بداخل كسها بقوة وعمق واعجن نهودها", مؤنث: "اجلسي على حافة السرير تماماً وافتحي رجليكِ ودعي زوجكِ يدخل قضيبه بداخل كسكِ وهو واقف أمامكِ" },
+                { مذكر: "وضعية (Lotus/اللوتس): اجلس متربعاً واجعل زوجتك تجلس فوق قضيبك وتلف رجليها حول خصرك ونيكها ببطء", مؤنث: "اجلسي فوق زوجكِ المتربع وادخلي قضيبه بداخل كسكِ تماماً ولفي رجليكِ حول خصرها وتحركي بشهوة" },
+                { مذكر: "اجعل زوجتك تتخذ وضعية السجود ولكن على الكنبة أو حافة السرير وادخل في كسها بقوة من الخلف كالمجنون", مؤنث: "انحني على حافة السرير أو الكنبة ودعي زوجكِ يعتليكِ ويدخل قضيبه الساخن من الخلف بداخل كسكِ" },
+                { مذكر: "جامع زوجتك في وضعية (المقص)، حيث تستلقي هي على ظهرها وتفتح رجلاً واحدة وأنت تدخل قضيبك بجانبها", مؤنث: "استلقي على ظهركِ وافتحي رجلاً واحدة للأعلى دعي زوجكِ يدخل بجانبكِ بزاوية (المقص) وينكح كسكِ" },
+                { مذكر: "ارفع رجلي زوجتك للأعلى في الهواء واقبض على مؤخرتها بيديك واضرب قضيبك بداخل كسها بعمق عارم", مؤنث: "استلقي على ظهركِ واجعل زوجكِ يرفع مؤخرتكِ ورجليكِ عالياً في الهواء ويدخل قضيبه بعمق كامل داخل كسكِ" },
+                { مذكر: "وضعية (الـ 69 المقلوبة): مارس اللحس والمص الفموي المتبادل (الكس والقضيب) في نفس الوقت التام ليلعق كل منكما الآخر", مؤنث: "اتخذي وضعية (69) مع زوجكِ بحيث يكون فمكِ عند قضيبه وفمه عند كسكِ وقوما بمص ولعق بعضكما بجنون" },
+                { مذكر: "جامع زوجتك بوضعية النكاح العميق مع ثني ركبتيها بالكامل نحو صدرها، مما يجعل الكس ضيقاً جداً على قضيبك", مؤنث: "اثني ركبتيكِ تماماً واضغطيهما نحو صدركِ لفتح كسكِ بالكامل ودعي زوجكِ يدخل قضيبه بعمق يلامس رحمكِ" },
+                "اتركا الحرية التامة لأجسادكما الآن في اختيار الوضعية الأكثر جنوناً وشهوة لنكاح الكس ومص القضيب وقوما بالممارسة الكاملة حتى الوصول للنشوة الكبرى وقذف المني والشهوات! 🔥"
+            ]
+        };
+
+        // متغيرات الحالة الأساسية للعبة
+        let dailyStages = {1: [], 2: [], 3: [], 4: []};
+        let usedInDaily = {1: new Set(), 2: new Set(), 3: new Set(), 4: new Set()};
+        let players = [];
+        let currentStage = 1;
+        let currentPlayerIndex = 0;
+        let isSpinning = false;
+        let currentRotation = 0;
+
+        // دالة الاحتفال
+        function spawnConfetti() {
+            const colors = ['#ec4899','#a855f7','#f43f5e','#fbbf24','#34d399'];
+            for (let i = 0; i < 40; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti-piece';
+                c.style.cssText = `
+                    left:${Math.random()*100}vw;
+                    top:0;
+                    background:${colors[Math.floor(Math.random()*colors.length)]};
+                    border-radius:${Math.random()>.5?'50%':'2px'};
+                    width:${6+Math.random()*8}px;
+                    height:${6+Math.random()*8}px;
+                    animation-delay:${Math.random()*.5}s;
+                    animation-duration:${1.5+Math.random()*1.5}s;
+                `;
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 4000);
+            }
+        }
+
+        // بناء الباقة اليومية وتحديث الـ localStorage
+        function generateDailyPool(forceReset = false) {
+            let history = JSON.parse(localStorage.getItem('roulette_history')) || {1:[],2:[],3:[],4:[]};
+            if (forceReset) {
+                history = {1:[],2:[],3:[],4:[]};
+                localStorage.setItem('roulette_history', JSON.stringify(history));
+            }
+            for (let s = 1; s <= 4; s++) {
+                let limit = (s === 4) ? 1 : 8;
+                let allItems = masterStages[s];
+                let unplayedIndexes = [];
+                
+                allItems.forEach((item, index) => {
+                    if (!history[s].includes(index)) unplayedIndexes.push(index);
+                });
+                
+                if (unplayedIndexes.length < limit) {
+                    history[s] = [];
+                    localStorage.setItem('roulette_history', JSON.stringify(history));
+                    unplayedIndexes = allItems.map((_, i) => i);
+                }
+                
+                unplayedIndexes.sort(() => Math.random() - 0.5);
+                let chosenIndexes = unplayedIndexes.slice(0, limit);
+                dailyStages[s] = chosenIndexes.map(idx => ({ originalIndex: idx, content: allItems[idx] }));
+                usedInDaily[s].clear();
+            }
+        }
+
+        // دالة بدء اللعبة وحفظ أسماء وتفضيلات اللاعبين
+        function startGame() {
+            const p1 = { name: document.getElementById('p1name').value.trim() || "الزوج", gender: document.getElementById('p1gender').value };
+            const p2 = { name: document.getElementById('p2name').value.trim() || "الزوجة", gender: document.getElementById('p2gender').value };
+            players = [p1, p2];
+            
+            localStorage.setItem('roulette_p1', JSON.stringify(p1));
+            localStorage.setItem('roulette_p2', JSON.stringify(p2));
+
+            currentStage = 1;
+            currentPlayerIndex = Math.floor(Math.random() * 2);
+            generateDailyPool(false);
+            
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('game').classList.remove('hidden');
+            
+            updateStageTitle();
+            document.getElementById('result').classList.add('hidden');
+            updateTurnDisplay();
+            updateProgressDots();
+        }
+
+        function updateStageTitle() {
+            let total = dailyStages[currentStage].length;
+            let currentLeft = total - usedInDaily[currentStage].size;
+            let stageNames = { 1:"🌶️ صريح", 2:"🔥 مثير", 3:"💋 مداعبة", 4:"🛏️ وضعيات" };
+            document.getElementById('stageTitle').innerHTML =
+                `${stageNames[currentStage]} <span class="stage-badge">المتبقي: ${currentLeft}</span>`;
+        }
+
+        function updateProgressDots() {
+            document.querySelectorAll('.dot').forEach(d => {
+                d.classList.toggle('active', parseInt(d.dataset.stage) === currentStage);
+            });
+        }
+
+        function jumpStage(s) {
+            if (isSpinning) return;
+            currentStage = s;
+            updateStageTitle();
+            updateProgressDots();
+            document.getElementById('result').classList.add('hidden');
+        }
+
+        // معالجة ذكية للضمائر لتظل متناسقة مع المصطلحات الجنسية الصريحة للزوجين
+        function adaptCommand(cmdObj, player) {
+            let cmd = typeof cmdObj === 'object'
+                ? (player.gender === "مذكر" ? cmdObj.مذكر : cmdObj.مؤنث)
+                : cmdObj;
+                
+            if (player.gender === "مذكر") {
+                cmd = cmd.replace(/شريكك/g, "زوجتك");
+                cmd = cmd.replace(/زوجك/g, "زوجتك");
+                cmd = cmd.replace(/كسكِ/g, "كسها");
+                cmd = cmd.replace(/مهبلكِ/g, "مهبلها");
+            } else {
+                cmd = cmd.replace(/شريكك/g, "زوجك");
+                cmd = cmd.replace(/زوجتك/g, "زوجك");
+            }
+            return cmd;
+        }
+
+        function updateTurnDisplay() {
+            const player = players[currentPlayerIndex];
+            document.getElementById('currentTurn').innerHTML =
+                `الدور على: <span style="color:#ec4899" class="font-extrabold">${player.name}</span> ✨`;
+        }
+
+        // دالة دوران الروليت
+        function spinRoulette() {
+            if (isSpinning) return;
+            const player = players[currentPlayerIndex];
+            const pool = dailyStages[currentStage];
+            let available = pool.filter((_, i) => !usedInDaily[currentStage].has(i));
+
+            if (available.length === 0) {
+                const btn = document.getElementById('spinBtn');
+                btn.classList.add('shake');
+                setTimeout(() => btn.classList.remove('shake'), 400);
+                document.getElementById('result').classList.add('hidden');
+                document.getElementById('commandText').textContent = '';
+                document.getElementById('playerName').innerHTML =
+                    `<span style="color:#f87171;font-size:1rem">انتهت أوامر هذه المرحلة! انتقل للمرحلة التالية ⚡</span>`;
+                document.getElementById('result').classList.remove('hidden');
+                return;
+            }
+
+            isSpinning = true;
+            const spinBtn = document.getElementById('spinBtn');
+            spinBtn.disabled = true;
+            spinBtn.textContent = '⏳ يدور...';
+            document.getElementById('result').classList.add('hidden');
+
+            const randomObj = available[Math.floor(Math.random() * available.length)];
+            const itemIndexInPool = pool.indexOf(randomObj);
+            usedInDaily[currentStage].add(itemIndexInPool);
+
+            let history = JSON.parse(localStorage.getItem('roulette_history')) || {1:[],2:[],3:[],4:[]};
+            if (!history[currentStage].includes(randomObj.originalIndex)) {
+                history[currentStage].push(randomObj.originalIndex);
+                localStorage.setItem('roulette_history', JSON.stringify(history));
+            }
+
+            const finalCmd = adaptCommand(randomObj.content, player);
+            
+            const extraSpins = (Math.floor(Math.random() * 5) + 6) * 360;
+            currentRotation += extraSpins + Math.floor(Math.random() * 360);
+            const wheel = document.getElementById('wheelRing');
+            wheel.style.transition = 'transform 3.2s cubic-bezier(0.15, 0.85, 0.15, 1)';
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            if ('vibrate' in navigator) {
+                setTimeout(() => { navigator.vibrate([100, 50, 100]); }, 2800);
+            }
+
+            setTimeout(() => {
+                document.getElementById('playerName').innerHTML =
+                    `🎯 <span style="color:#ec4899" class="font-black">${player.name}</span>`;
+                document.getElementById('commandText').textContent = finalCmd;
+                const resultEl = document.getElementById('result');
+                resultEl.classList.remove('hidden');
+                resultEl.classList.remove('result-card');
+                void resultEl.offsetWidth;
+                resultEl.classList.add('result-card');
+
+                spawnConfetti();
+
+                currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+                updateTurnDisplay();
+                updateStageTitle();
+
+                isSpinning = false;
+                spinBtn.disabled = false;
+                spinBtn.textContent = '🎲 لف الروليت';
+            }, 3300);
+        }
+
+        function newCommand() {
+            if (isSpinning) return;
+            document.getElementById('result').classList.add('hidden');
+            spinRoulette();
+        }
+
+        function changeStage() {
+            if (isSpinning) return;
+            currentStage = currentStage === 4 ? 1 : currentStage + 1;
+            updateStageTitle();
+            updateProgressDots();
+            document.getElementById('result').classList.add('hidden');
+            updateTurnDisplay();
+        }
+
+        function resetDailyPool() {
+            if (isSpinning) return;
+            if (confirm("هل ترغب في سحب باقة يومية جديدة (8 أسئلة جديدة لكل مرحلة) دون تكرار ما لعبتوه سابقاً؟")) {
+                generateDailyPool(true);
+                currentStage = 1;
+                updateStageTitle();
+                updateProgressDots();
+                document.getElementById('result').classList.add('hidden');
+            }
+        }
+
+        function showSetup() {
+            if (isSpinning) return;
+            document.getElementById('setup').classList.remove('hidden');
+            document.getElementById('game').classList.add('hidden');
+        }
+
+        window.onload = function() {
+            const p1 = localStorage.getItem('roulette_p1');
+            const p2 = localStorage.getItem('roulette_p2');
+            if (p1 && p2) {
+                document.getElementById('p1name').value = JSON.parse(p1).name;
+                document.getElementById('p1gender').value = JSON.parse(p1).gender;
+                document.getElementById('p2name').value = JSON.parse(p2).name;
+                document.getElementById('p2gender').value = JSON.parse(p2).gender;
+            }
+        }
+    </script>
+</body>
+</html>
