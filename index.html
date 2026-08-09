@@ -1,174 +1,299 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 روليت الإثارة - الإصدار المصحح</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { font-family: 'Tajawal', sans-serif; }
-        body { background: #0a0a0f; min-height: 100vh; overflow-x: hidden; }
-        .bg-ambient {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none;
-            background:
-                radial-gradient(ellipse 60% 40% at 20% 10%, rgba(236,72,153,0.18) 0%, transparent 70%),
-                radial-gradient(ellipse 50% 35% at 80% 80%, rgba(168,85,247,0.15) 0%, transparent 70%);
-        }
-        .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
-        .glass-pink { background: rgba(236,72,153,0.07); backdrop-filter: blur(20px); border: 1px solid rgba(236,72,153,0.2); }
-        .fancy-input {
-            width: 100%; padding: 1rem 1.2rem; background: rgba(255,255,255,0.06);
-            border: 1.5px solid rgba(236,72,153,0.25); border-radius: 16px; color: #fff;
-            font-size: 1.05rem; outline: none; transition: all .3s;
-        }
-        .fancy-input:focus { border-color: #ec4899; box-shadow: 0 0 0 3px rgba(236,72,153,0.15); }
-        .btn-primary {
-            background: linear-gradient(135deg, #be185d, #ec4899, #a855f7);
-            background-size: 200% 200%; animation: gradientShift 4s ease infinite;
-            border: none; border-radius: 20px; padding: 1.5rem; font-weight: 800; color: white;
-            cursor: pointer; box-shadow: 0 4px 30px rgba(236,72,153,0.35); transition: transform .2s;
-        }
-        .btn-primary:hover { transform: translateY(-2px); }
-        @keyframes gradientShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-        
-        .wheel-wrapper { position: relative; width: 220px; height: 220px; margin: 0 auto; }
-        .wheel-ring {
-            position: absolute; inset: 0; border-radius: 50%;
-            background: conic-gradient(#ec4899 0deg 60deg, #a855f7 60deg 120deg, #f43f5e 120deg 180deg, #ec4899 180deg 240deg, #a855f7 240deg 300deg, #f43f5e 300deg 360deg);
-            box-shadow: 0 0 40px rgba(236,72,153,0.5); transition: transform 3.2s cubic-bezier(0.15, 0.85, 0.15, 1);
-        }
-        .wheel-center {
-            position: absolute; inset: 25px; border-radius: 50%; background: radial-gradient(circle, #1a0a1e, #0d0010);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border: 2px solid rgba(236,72,153,0.3);
-        }
-        .wheel-arrow {
-            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-            font-size: 2rem; filter: drop-shadow(0 0 8px #ec4899); animation: bounce 1s ease-in-out infinite;
-        }
-        @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-5px); } }
-        
-        .result-card { animation: slideUp .5s cubic-bezier(0.34,1.56,0.64,1); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        
-        .stage-pill {
-            display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 50px;
-            font-size: .8rem; font-weight: 700; background: rgba(236,72,153,0.15);
-            border: 1px solid rgba(236,72,153,0.3); color: #f9a8d4;
-        }
-        .stage-badge { background: #ec4899; color: #fff; border-radius: 50px; padding: 2px 8px; font-size: .7rem; }
-        
-        .btn-spin {
-            background: linear-gradient(135deg, #fff, #fce7f3); color: #be185d; border: none; border-radius: 14px;
-            padding: 12px 32px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 20px rgba(236,72,153,0.3);
-            transition: transform .2s;
-        }
-        .btn-spin:hover { transform: scale(1.05); }
-        .btn-spin:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-        
-        .btn-action {
-            border-radius: 14px; font-weight: 700; font-size: .82rem; padding: .9rem .4rem;
-            cursor: pointer; border: none; transition: transform .2s; color: white;
-        }
-        .btn-action:hover { transform: translateY(-2px); }
-        .command-text {
-            font-size: 1.15rem; line-height: 2; background: rgba(0,0,0,0.4); border-radius: 16px;
-            padding: 1.5rem; text-align: center; color: #f3f4f6; border: 1px solid rgba(255,255,255,0.06);
-        }
-        .turn-display {
-            background: linear-gradient(135deg, rgba(236,72,153,0.1), rgba(168,85,247,0.1));
-            border: 1px solid rgba(236,72,153,0.2); border-radius: 16px; padding: 14px 20px;
-            text-align: center; font-weight: 700; color: white;
-        }
-        .neon-title { text-shadow: 0 0 20px #ec4899, 0 0 40px rgba(236,72,153,0.5); }
-        
-        .progress-container { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #ec4899, #a855f7); width: 0%; transition: width 0.5s ease; }
-        
-        .shake { animation: shake .4s ease; }
-        @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
-        
-        .confetti-piece {
-            position: fixed; pointer-events: none; z-index: 999; width: 10px; height: 10px; border-radius: 2px;
-            animation: confettiFall 2.5s ease-in forwards;
-        }
-        @keyframes confettiFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-        .logo-emoji { display: inline-block; animation: logoPulse 2s ease-in-out infinite; }
-        @keyframes logoPulse { 0%,100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(-5deg); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex, nosnippet">
+<title>جدول</title>
+<link rel="icon" href="data:,">
+<style>
+/* ============================================================
+   اتجاه التصميم: جمرة وضوء شمعة — لا نيون، لا زجاج، لا إيموجي.
+   صفر اتصال خارجي: لا خطوط ولا CDN.
+   ============================================================ */
+
+/* اختياري: ضع Tajawal-Bold.woff2 و Tajawal-Regular.woff2 في مجلد fonts/
+   بجانب الملف. إن لم تفعل، يعمل بخطوط النظام بلا أي طلب خارجي. */
+@font-face{font-family:'Disp';src:local('Tajawal Bold'),local('Tajawal-Bold'),
+  url('fonts/Tajawal-Bold.woff2') format('woff2');font-weight:700;font-display:swap;}
+@font-face{font-family:'Body';src:local('Tajawal'),local('Tajawal-Regular'),
+  url('fonts/Tajawal-Regular.woff2') format('woff2');font-weight:400;font-display:swap;}
+
+:root{
+  /* لوحة: حبر برقوقي دافئ + جمرة + ذهب شمعة + نبيذ */
+  --ink:      #150a0e;
+  --ink-2:    #1e0f15;
+  --ink-3:    #2a151d;
+  --ember:    #ff6a3c;
+  --ember-d:  #c2410c;
+  --wine:     #9d1c46;
+  --gold:     #e0aa6b;
+  --ash:      #4a3a3c;
+  --cream:    #f2e4dc;
+  --cream-d:  #b9a49c;
+
+  --r-lg: 20px; --r-md: 14px; --r-sm: 10px;
+  --sp: 1rem;
+}
+*{box-sizing:border-box;margin:0;padding:0;
+  font-family:'Body','Noto Kufi Arabic','Segoe UI',Tahoma,system-ui,sans-serif;}
+h1,h2,.disp{font-family:'Disp','Noto Kufi Arabic','Segoe UI',Tahoma,system-ui,sans-serif;font-weight:700;}
+
+body{background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;}
+
+/* ضوء الشمعة: هالة واحدة تتنفس، لا هالات متعددة */
+.candle{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% -5%, rgba(255,106,60,.20) 0, transparent 65%),
+    radial-gradient(ellipse 90% 60% at 50% 110%, rgba(157,28,70,.16) 0, transparent 70%);
+  animation:breathe 7s ease-in-out infinite;}
+@keyframes breathe{0%,100%{opacity:.85}50%{opacity:1}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;
+  background-image:radial-gradient(rgba(255,255,255,.9) .5px, transparent .5px);
+  background-size:3px 3px;}
+
+.wrap{position:relative;z-index:10;max-width:26rem;margin:0 auto;padding:1rem 1.15rem 3.5rem;}
+.hidden{display:none!important;}
+
+/* ---------- مقياس الطباعة ---------- */
+h1{font-size:2.35rem;line-height:1.15;letter-spacing:-.02em;}
+h2{font-size:1.05rem;letter-spacing:.02em;color:var(--gold);margin-bottom:1.35rem;}
+.eyebrow{font-size:.7rem;letter-spacing:.32em;color:var(--ember);
+  text-transform:uppercase;font-weight:700;}
+.lede{color:var(--cream-d);font-size:.9rem;line-height:1.9;}
+.note{font-size:.74rem;color:var(--cream-d);line-height:1.9;margin-top:.9rem;}
+
+/* ---------- ألواح: حواف رفيعة بدل الزجاج الضبابي ---------- */
+.panel{background:linear-gradient(180deg, var(--ink-2), var(--ink));
+  border:1px solid rgba(224,170,107,.16);border-radius:var(--r-lg);padding:1.6rem;}
+.panel+.panel{margin-top:1.1rem;}
+.hairline{height:1px;background:linear-gradient(to left,transparent,rgba(224,170,107,.3),transparent);
+  margin:1.3rem 0;}
+
+/* ---------- المدخلات ---------- */
+label{display:block;margin-bottom:.5rem;font-size:.72rem;letter-spacing:.18em;
+  color:var(--gold);font-weight:700;}
+.input{width:100%;padding:.95rem 1.1rem;background:var(--ink-3);
+  border:1px solid rgba(224,170,107,.18);border-radius:var(--r-md);
+  color:var(--cream);font-size:1.05rem;outline:none;transition:border-color .25s;}
+.input:focus-visible{border-color:var(--ember);}
+
+/* ---------- الأزرار ---------- */
+.btn{border:none;border-radius:var(--r-md);cursor:pointer;font-weight:700;
+  color:var(--cream);transition:transform .18s ease, filter .18s ease;
+  font-family:'Disp','Noto Kufi Arabic',system-ui,sans-serif;}
+.btn:hover{filter:brightness(1.12);}
+.btn:active{transform:scale(.98);}
+.btn:disabled{opacity:.32;cursor:not-allowed;filter:none;}
+.btn-lead{display:block;width:100%;padding:1.15rem;font-size:1.15rem;letter-spacing:.04em;
+  background:linear-gradient(105deg, var(--ember-d), var(--ember));
+  box-shadow:0 6px 26px rgba(255,106,60,.22);border-radius:var(--r-lg);margin-top:1.4rem;}
+.btn-quiet{background:var(--ink-3);border:1px solid rgba(224,170,107,.18);
+  padding:.55rem 1rem;font-size:.78rem;color:var(--gold);border-radius:var(--r-sm);}
+.row{display:grid;gap:.6rem;margin-top:.7rem;}
+.row-2{grid-template-columns:1fr 1fr;}
+.row-3{grid-template-columns:repeat(3,1fr);}
+.btn-cell{padding:.85rem .3rem;font-size:.8rem;line-height:1.7;border-radius:var(--r-md);}
+.b-done{background:linear-gradient(105deg,#7a2f10,var(--ember));}
+.b-skip{background:var(--ink-3);border:1px solid rgba(224,170,107,.22);color:var(--gold);}
+.b-next{background:linear-gradient(105deg,#6d1230,var(--wine));}
+.b-ghost{background:var(--ink-3);border:1px solid rgba(255,255,255,.08);color:var(--cream-d);
+  padding:.8rem;font-size:.76rem;border-radius:var(--r-md);}
+
+/* ---------- المراحل ---------- */
+.stage-row{display:flex;align-items:center;gap:.85rem;padding:.9rem 1rem;border-radius:var(--r-md);
+  background:var(--ink-3);border:1px solid rgba(224,170,107,.14);cursor:pointer;margin-bottom:.55rem;}
+.stage-row input{width:1.1rem;height:1.1rem;accent-color:var(--ember);cursor:pointer;}
+.stage-row .gl{flex:0 0 auto;}
+.stage-row .nm{font-weight:700;font-size:.95rem;}
+.stage-row .ct{margin-inline-start:auto;font-size:.7rem;color:var(--cream-d);letter-spacing:.1em;}
+.glyph{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;}
+
+/* ---------- شريط اللعب ---------- */
+.topbar{display:flex;justify-content:space-between;align-items:center;
+  gap:.5rem;margin-bottom:1.1rem;}
+.stage-tag{display:inline-flex;align-items:center;gap:.5rem;padding:.45rem .9rem;
+  border-radius:50px;background:var(--ink-3);border:1px solid rgba(224,170,107,.22);
+  font-size:.78rem;font-weight:700;color:var(--gold);}
+.stage-tag .glyph{width:16px;height:16px;}
+.turn{text-align:center;padding:.9rem;border-radius:var(--r-md);
+  background:linear-gradient(180deg,var(--ink-2),transparent);
+  border-block-end:1px solid rgba(224,170,107,.14);margin-bottom:1.3rem;}
+.turn .lb{font-size:.68rem;letter-spacing:.28em;color:var(--cream-d);display:block;margin-bottom:.3rem;}
+.turn .nm{font-size:1.5rem;color:var(--ember);}
+
+/* ---------- التوقيع: القرص الذي يحترق ---------- */
+.dial-box{display:flex;flex-direction:column;align-items:center;padding:1.5rem 1rem 1.7rem;
+  background:radial-gradient(ellipse 80% 70% at 50% 35%, rgba(255,106,60,.09), transparent 70%);
+  border:1px solid rgba(224,170,107,.14);border-radius:var(--r-lg);}
+.dial{position:relative;width:250px;height:250px;}
+#dialSvg{width:100%;height:100%;overflow:visible;}
+#dialRot{transform-origin:125px 125px;transition:transform 3.4s cubic-bezier(.16,.84,.24,1);}
+.seg-live{fill:url(#emberGrad);}
+.seg-ash{fill:var(--ash);opacity:.42;}
+.seg-line{stroke:var(--ink);stroke-width:2;}
+.dial-hub{fill:var(--ink);stroke:rgba(224,170,107,.3);stroke-width:1;}
+.hub-num{fill:var(--gold);font-size:34px;text-anchor:middle;font-weight:700;
+  font-family:'Disp',system-ui,sans-serif;}
+.hub-lb{fill:var(--cream-d);font-size:10px;text-anchor:middle;letter-spacing:3px;}
+.pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);z-index:3;
+  width:0;height:0;border-inline:9px solid transparent;border-block-start:16px solid var(--gold);
+  filter:drop-shadow(0 2px 6px rgba(224,170,107,.5));}
+.flare{position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0;
+  box-shadow:0 0 0 0 rgba(255,106,60,.55);}
+.flare.on{animation:flare .9s ease-out;}
+@keyframes flare{0%{opacity:1;box-shadow:0 0 0 0 rgba(255,106,60,.5)}
+  100%{opacity:0;box-shadow:0 0 0 46px rgba(255,106,60,0)}}
+.btn-spin{margin-top:1.4rem;padding:.95rem 2.4rem;font-size:1rem;letter-spacing:.06em;
+  background:linear-gradient(105deg,var(--ember-d),var(--ember));border-radius:50px;
+  box-shadow:0 5px 22px rgba(255,106,60,.24);}
+
+/* ---------- البطاقة ---------- */
+.card{margin-top:1.3rem;padding:1.7rem 1.5rem;border-radius:var(--r-lg);
+  background:linear-gradient(180deg,var(--ink-2),var(--ink));
+  border:1px solid rgba(224,170,107,.2);
+  border-block-start:2px solid var(--ember);
+  animation:rise .55s cubic-bezier(.2,.9,.3,1);}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.card .who{text-align:center;font-size:.72rem;letter-spacing:.26em;color:var(--gold);
+  margin-bottom:1.1rem;}
+.card .txt{font-size:1.18rem;line-height:2.1;text-align:center;color:var(--cream);}
+.card.warn{border-block-start-color:var(--wine);}
+.card.warn .txt{color:var(--cream-d);font-size:1rem;}
+
+/* ---------- القفل ---------- */
+.dots{display:flex;justify-content:center;gap:.7rem;margin:1.6rem 0 1.9rem;}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--ink-3);
+  border:1px solid rgba(224,170,107,.28);transition:background .2s, box-shadow .2s;}
+.dot.on{background:var(--ember);box-shadow:0 0 12px rgba(255,106,60,.55);}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;}
+.key{padding:1.05rem;border-radius:var(--r-md);background:var(--ink-3);
+  border:1px solid rgba(224,170,107,.14);color:var(--cream);font-size:1.25rem;
+  font-weight:700;cursor:pointer;font-family:'Disp',system-ui,sans-serif;}
+.key:active{background:rgba(255,106,60,.2);}
+.err{min-height:1.3rem;margin-top:.8rem;text-align:center;font-size:.82rem;color:var(--ember);}
+
+:focus-visible{outline:2px solid var(--ember);outline-offset:3px;}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+@media (max-width:360px){.dial{width:210px;height:210px}h1{font-size:2rem}}
+</style>
 </head>
 <body>
-    <div class="bg-ambient"></div>
-    <div class="relative z-10 max-w-md mx-auto p-4 pb-12">
-        <div class="text-center py-8">
-            <div class="text-5xl mb-3"><span class="logo-emoji">🔥</span></div>
-            <h1 class="text-3xl font-black neon-title text-white mb-2">روليت الإثارة</h1>
-            <p class="text-pink-400 text-sm font-medium">باقة جنسية صريحة · ليلة مثيرة جداً</p>
-        </div>
+<div class="candle"></div><div class="grain"></div>
 
-        <!-- SETUP -->
-        <div id="setup">
-            <div class="glass rounded-3xl p-7 mb-6">
-                <h2 class="text-xl font-bold text-center mb-7 text-pink-300">✨ أدخل معلوماتكما</h2>
-                <div class="space-y-5">
-                    <div>
-                        <label class="block mb-2 text-pink-200 text-sm font-semibold">اسم الزوج</label>
-                        <input id="p1name" type="text" value="الزوج" class="fancy-input">
-                    </div>
-                    <div style="height:1px; background: linear-gradient(to left, transparent, rgba(236,72,153,0.3), transparent);"></div>
-                    <div>
-                        <label class="block mb-2 text-pink-200 text-sm font-semibold">اسم الزوجة</label>
-                        <input id="p2name" type="text" value="الزوجة" class="fancy-input">
-                    </div>
-                </div>
-            </div>
-            <button onclick="startGame()" class="btn-primary w-full text-xl">ابدأ الليلة الساخنة 🔥</button>
-        </div>
+<!-- رموز المراحل: خطوط مجرّدة بدل الإيموجي -->
+<svg style="display:none">
+  <symbol id="g1" viewBox="0 0 24 24"><path d="M4 15V9a2 2 0 012-2h5l5-3v16l-5-3H6a2 2 0 01-2-2z"/><path d="M19 9c.9 1.8.9 4.2 0 6"/></symbol>
+  <symbol id="g2" viewBox="0 0 24 24"><path d="M12 3c3 4 5 6 5 9a5 5 0 01-10 0c0-1.6.7-2.8 1.8-4.2"/><path d="M12 20a2.4 2.4 0 01-2.4-2.4c0-1.6 2.4-3.6 2.4-3.6s2.4 2 2.4 3.6A2.4 2.4 0 0112 20z"/></symbol>
+  <symbol id="g3" viewBox="0 0 24 24"><circle cx="7" cy="17" r="1.6"/><path d="M10.5 14.5a5 5 0 011.6-1.6"/><path d="M13.5 11a9 9 0 013-3"/><path d="M16.6 7.5a13 13 0 013.4-3"/></symbol>
+  <symbol id="g4" viewBox="0 0 24 24"><path d="M3 17V9a3 3 0 013-3h5v11"/><path d="M21 17V9a3 3 0 00-3-3h-5"/><path d="M2 17h20"/></symbol>
+</svg>
 
-        <!-- GAME -->
-        <div id="game" class="hidden">
-            <div class="flex justify-between items-center mb-5">
-                <button onclick="showSetup()" class="glass px-4 py-2 rounded-xl text-sm text-pink-300 font-semibold hover:bg-white/10 transition-colors">← تعديل الأسماء</button>
-                <div id="stageTitle" class="stage-pill"></div>
-            </div>
-            <div id="currentTurn" class="turn-display mb-4"></div>
-            <div class="progress-container mb-4"><div class="progress-bar" id="progressBar"></div></div>
+<div class="wrap">
 
-            <div class="glass-pink rounded-3xl p-6 flex flex-col items-center">
-                <div class="wheel-wrapper mb-5">
-                    <div class="wheel-arrow">🔻</div>
-                    <div class="wheel-ring" id="wheelRing"></div>
-                    <div class="wheel-center">
-                        <span style="font-size:2.5rem;">🎰</span>
-                        <span class="text-pink-300 text-xs font-bold mt-1">دور!</span>
-                    </div>
-                </div>
-                <button class="btn-spin" id="spinBtn" onclick="spinRoulette()">🎲 لف الروليت</button>
-            </div>
+  <!-- ==================== القفل ==================== -->
+  <section id="lock">
+    <header style="text-align:center;padding:2.6rem 0 1.4rem">
+      <span class="eyebrow">خاص</span>
+      <h1 id="lockTitle" style="margin-top:.7rem">أدخل الرمز</h1>
+    </header>
+    <div class="panel">
+      <div class="dots" id="pinDots"></div>
+      <div class="pad">
+        <button class="key" data-k="1">١</button><button class="key" data-k="2">٢</button><button class="key" data-k="3">٣</button>
+        <button class="key" data-k="4">٤</button><button class="key" data-k="5">٥</button><button class="key" data-k="6">٦</button>
+        <button class="key" data-k="7">٧</button><button class="key" data-k="8">٨</button><button class="key" data-k="9">٩</button>
+        <button class="key" data-k="del">⌫</button><button class="key" data-k="0">٠</button><button class="key" data-k="clr">C</button>
+      </div>
+      <div class="err" id="pinErr"></div>
+      <p class="note">الرمز يمنع من يلتقط الجهاز. لا يحمي الملف نفسه.</p>
+      <div class="row"><button class="btn b-ghost" onclick="wipeAll()">نسيت الرمز — امسح كل البيانات</button></div>
+    </div>
+  </section>
 
-            <div id="result" class="hidden mt-6 result-card">
-                <div class="relative glass-pink rounded-3xl p-7">
-                    <div id="playerName" class="text-2xl font-black text-center mb-5"></div>
-                    <div id="commandText" class="command-text"></div>
-                </div>
-            </div>
+  <!-- ==================== الإعداد ==================== -->
+  <section id="setup" class="hidden">
+    <header style="text-align:center;padding:2.4rem 0 1.6rem">
+      <span class="eyebrow">ليلة واحدة · بينكما</span>
+      <h1 style="margin:.8rem 0 .7rem">روليت<br>الإثارة</h1>
+      <p class="lede">أربع مراحل. القرص يحترق كلما تقدّمتما.</p>
+    </header>
 
-            <div class="grid grid-cols-3 gap-3 mt-6">
-                <button onclick="newCommand()" class="btn-action" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">🎯<br>أمر جديد</button>
-                <button onclick="changeStage()" class="btn-action" style="background:linear-gradient(135deg,#be185d,#ec4899)">⚡<br>التالي</button>
-                <button onclick="resetDailyPool()" class="btn-action" style="background:linear-gradient(135deg,#991b1b,#ef4444)">🔄<br>باقة جديدة</button>
-            </div>
-        </div>
+    <div class="panel">
+      <h2>الأسماء</h2>
+      <div><label for="p1name">الزوج</label>
+        <input id="p1name" class="input" type="text" value="الزوج" autocomplete="off"></div>
+      <div class="hairline"></div>
+      <div><label for="p2name">الزوجة</label>
+        <input id="p2name" class="input" type="text" value="الزوجة" autocomplete="off"></div>
     </div>
 
-    <script>
-        // ========================================================================
-        // قاعدة البيانات المصححة (خالية من الأخطاء الإملائية والنحوية)
-        // ========================================================================
-        const masterStages = {
-            1: [ // أسئلة صريحة
+    <div class="panel">
+      <h2>اتفاق الحدود</h2>
+      <div id="stageToggles"></div>
+      <p class="note">أي مرحلة معطّلة لن تظهر إطلاقاً. وأثناء اللعب، «تخطّي» متاح دائماً بلا سؤال.</p>
+    </div>
+
+    <button class="btn btn-lead" onclick="startGame()">أشعل الليلة</button>
+    <div class="row row-2">
+      <button class="btn b-ghost" onclick="freshBatch()">باقة جديدة</button>
+      <button class="btn b-ghost" onclick="wipeAll()">مسح كل البيانات</button>
+    </div>
+  </section>
+
+  <!-- ==================== اللعب ==================== -->
+  <section id="game" class="hidden">
+    <div class="topbar">
+      <button class="btn btn-quiet" onclick="showSetup()">← الإعدادات</button>
+      <div id="stageTag" class="stage-tag"></div>
+    </div>
+
+    <div class="turn"><span class="lb">الدور</span><span class="nm disp" id="turnName"></span></div>
+
+    <div class="dial-box">
+      <div class="dial">
+        <div class="pointer"></div>
+        <div class="flare" id="flare"></div>
+        <svg id="dialSvg" viewBox="0 0 250 250" aria-hidden="true">
+          <defs>
+            <radialGradient id="emberGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="55%" stop-color="#9d1c46"/>
+              <stop offset="100%" stop-color="#ff6a3c"/>
+            </radialGradient>
+          </defs>
+          <g id="dialRot"></g>
+          <circle class="dial-hub" cx="125" cy="125" r="62"/>
+          <text class="hub-num" id="hubNum" x="125" y="128">·</text>
+          <text class="hub-lb" x="125" y="150">متبقٍ</text>
+        </svg>
+      </div>
+      <button class="btn btn-spin" id="spinBtn" onclick="spinRoulette()">أدر القرص</button>
+    </div>
+
+    <div id="result" class="hidden">
+      <div class="card" id="resultCard">
+        <div class="who" id="playerName"></div>
+        <div class="txt" id="commandText"></div>
+      </div>
+    </div>
+
+    <div class="row row-3">
+      <button id="btnDone" class="btn btn-cell b-done" onclick="markDone()" disabled>تمّ</button>
+      <button id="btnSkip" class="btn btn-cell b-skip" onclick="skipCurrent()" disabled>تخطّي</button>
+      <button class="btn btn-cell b-next" onclick="changeStage()">المرحلة التالية</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ============================================================
+   1) الصق مصفوفة masterStages الخاصة بك هنا كما هي، بلا تعديل.
+   ============================================================ */
+const masterStages = { 
+      1: [ // أسئلة صريحة
                 { مذكر: "ما هو أكثر خيال جنسي يراودك عندما تلمس قضيبي؟", مؤنث: "ما هو أكثر خيال جنسي يراودك عندما ألمس كسكِ؟" },
                 { مذكر: "هل تفضل نكاح كس زوجتك بقوة وعنف أم ببطء وحنان؟", مؤنث: "هل تفضلين أن أنكح كسكِ بقوة وعنف أم ببطء وحنان؟" },
                 { مذكر: "كم مرة في الليلة تتمنى أن تقذف داخل كسها؟", مؤنث: "كم مرة في الليلة تتمنين أن أقذف داخلكِ؟" },
@@ -328,188 +453,294 @@
                 { مذكر: "ارفع ساقي زوجتك وضعهما على كتفيك وأدخل قضيبك بعمق.", مؤنث: "ارفعي ساقيكِ وضعهما على كتفي زوجك ودعيه يدخل قضيبه بعمق." },
                 { مذكر: "اجلس على الأرض واجعل زوجتك تركب فوقك.", مؤنث: "اجلسي فوق زوجك وهو جالس على الأرض وحركي كسكِ على قضيبه." },
                 { مذكر: "جامع زوجتك وهي على بطنها واركض قضيبك في كسها.", مؤنث: "استلقي على بطنكِ ودعي زوجك يركل قضيبه في كسكِ." }
-            ]
-        };
-
-        // ========================================================================
-        // منطق اللعبة
-        // ========================================================================
-        let dailyStages = {1: [], 2: [], 3: [], 4: []};
-        let usedInDaily = {1: new Set(), 2: new Set(), 3: new Set(), 4: new Set()};
-        let players = [];
-        let currentStage = 1;
-        let currentPlayerIndex = 0;
-        let isSpinning = false;
-        let currentRotation = 0;
-
-        function generateDailyPool(forceReset = false) {
-            let history = JSON.parse(localStorage.getItem('roulette_history')) || {1:[],2:[],3:[],4:[]};
-            if (forceReset) {
-                history = {1:[],2:[],3:[],4:[]};
-                localStorage.setItem('roulette_history', JSON.stringify(history));
-            }
-            for (let s = 1; s <= 4; s++) {
-                let limit = (s === 4) ? 1 : 8;
-                let allItems = masterStages[s];
-                let unplayedIndexes = [];
-                allItems.forEach((item, index) => {
-                    if (!history[s].includes(index)) unplayedIndexes.push(index);
-                });
-                if (unplayedIndexes.length < limit) {
-                    history[s] = [];
-                    localStorage.setItem('roulette_history', JSON.stringify(history));
-                    unplayedIndexes = allItems.map((_, i) => i);
-                }
-                unplayedIndexes.sort(() => Math.random() - 0.5);
-                let chosenIndexes = unplayedIndexes.slice(0, limit);
-                dailyStages[s] = chosenIndexes.map(idx => ({ originalIndex: idx, content: allItems[idx] }));
-                usedInDaily[s].clear();
-            }
-        }
-
-        function startGame() {
-            const p1 = { name: document.getElementById('p1name').value.trim() || "الزوج", gender: "مذكر" };
-            const p2 = { name: document.getElementById('p2name').value.trim() || "الزوجة", gender: "مؤنث" };
-            players = [p1, p2];
-            localStorage.setItem('roulette_p1', JSON.stringify(p1));
-            localStorage.setItem('roulette_p2', JSON.stringify(p2));
-
-            currentStage = 1;
-            currentPlayerIndex = Math.floor(Math.random() * 2);
-            generateDailyPool(false);
-
-            document.getElementById('setup').classList.add('hidden');
-            document.getElementById('game').classList.remove('hidden');
-            updateStageTitle();
-            document.getElementById('result').classList.add('hidden');
-            updateTurnDisplay();
-            updateProgress();
-        }
-
-        function updateStageTitle() {
-            let total = dailyStages[currentStage].length;
-            let currentLeft = total - usedInDaily[currentStage].size;
-            let stageNames = { 1:"🌶️ صريح", 2:"🔥 مثير", 3:"💋 مداعبة", 4:"🛏️ وضعيات" };
-            document.getElementById('stageTitle').innerHTML =
-                `${stageNames[currentStage]} <span class="stage-badge">المتبقي: ${currentLeft}</span>`;
-        }
-
-        function updateTurnDisplay() {
-            const player = players[currentPlayerIndex];
-            document.getElementById('currentTurn').innerHTML =
-                `الدور على: <span style="color:#ec4899" class="font-extrabold">${player.name}</span> ✨`;
-        }
-
-        function updateProgress() {
-            const total = dailyStages[currentStage].length;
-            const used = usedInDaily[currentStage].size;
-            const percentage = total > 0 ? (used / total) * 100 : 0;
-            document.getElementById('progressBar').style.width = percentage + '%';
-        }
-
-        // ========================================================================
-        // الدالة الذكية: تختار النص الصحيح بناءً على جنس اللاعب
-        // ========================================================================
-        function getCommandForPlayer(cmdObj, player) {
-            if (typeof cmdObj === 'object' && cmdObj.مذكر && cmdObj.مؤنث) {
-                return player.gender === "مذكر" ? cmdObj.مذكر : cmdObj.مؤنث;
-            }
-            let text = cmdObj;
-            if (player.gender === "مذكر") {
-                text = text.replace(/شريكك/g, "زوجتك").replace(/زوجك/g, "زوجتك");
-            } else {
-                text = text.replace(/شريكك/g, "زوجك").replace(/زوجتك/g, "زوجك");
-            }
-            return text;
-        }
-
-        function spinRoulette() {
-            if (isSpinning) return;
-            const player = players[currentPlayerIndex];
-            const pool = dailyStages[currentStage];
-            let available = pool.filter((_, i) => !usedInDaily[currentStage].has(i));
-
-            if (available.length === 0) {
-                const btn = document.getElementById('spinBtn');
-                btn.classList.add('shake');
-                setTimeout(() => btn.classList.remove('shake'), 400);
-                document.getElementById('result').classList.add('hidden');
-                document.getElementById('playerName').innerHTML =
-                    `<span style="color:#f87171;font-size:1rem">انتهت أوامر هذه المرحلة! انتقل للمرحلة التالية ⚡</span>`;
-                document.getElementById('result').classList.remove('hidden');
-                return;
-            }
-
-            isSpinning = true;
-            const spinBtn = document.getElementById('spinBtn');
-            spinBtn.disabled = true;
-            spinBtn.textContent = '⏳ يدور...';
-            document.getElementById('result').classList.add('hidden');
-
-            const randomObj = available[Math.floor(Math.random() * available.length)];
-            const itemIndexInPool = pool.indexOf(randomObj);
-            usedInDaily[currentStage].add(itemIndexInPool);
-
-            let history = JSON.parse(localStorage.getItem('roulette_history')) || {1:[],2:[],3:[],4:[]};
-            if (!history[currentStage].includes(randomObj.originalIndex)) {
-                history[currentStage].push(randomObj.originalIndex);
-                localStorage.setItem('roulette_history', JSON.stringify(history));
-            }
-
-            // الحصول على النص الصحيح
-            const finalCmd = getCommandForPlayer(randomObj.content, player);
-
-            const extraSpins = (Math.floor(Math.random() * 5) + 6) * 360;
-            currentRotation += extraSpins + Math.floor(Math.random() * 360);
-            const wheel = document.getElementById('wheelRing');
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-            if ('vibrate' in navigator) {
-                setTimeout(() => { navigator.vibrate([100, 50, 100]); }, 2800);
-            }
-
-            setTimeout(() => {
-                document.getElementById('playerName').innerHTML =
-                    `🎯 <span style="color:#ec4899" class="font-black">${player.name}</span>`;
-                document.getElementById('commandText').textContent = finalCmd;
-                const resultEl = document.getElementById('result');
-                resultEl.classList.remove('hidden');
-                resultEl.classList.remove('result-card');
-                void resultEl.offsetWidth;
-                resultEl.classList.add('result-card');
-
-                for(let i=0; i<20; i++) {
-                    const c = document.createElement('div');
-                    c.className = 'confetti-piece';
-                    c.style.cssText = `left:${Math.random()*100}vw; top:0; background:${['#ec4899','#a855f7','#f43f5e','#fbbf24','#34d399'][Math.floor(Math.random()*5)]}; border-radius:${Math.random()>.5?'50%':'2px'}; width:${6+Math.random()*8}px; height:${6+Math.random()*8}px; animation-delay:${Math.random()*.5}s; animation-duration:${1.5+Math.random()*1.5}s;`;
-                    document.body.appendChild(c);
-                    setTimeout(() => c.remove(), 4000);
                 }
 
-                currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
-                updateTurnDisplay();
-                updateStageTitle();
-                updateProgress();
+/* ============================================================
+   2) الإعدادات
+   ============================================================ */
+const STAGE_LIMITS = {1:8, 2:8, 3:8, 4:1};
+const STAGE_NAMES  = {1:"صريح", 2:"مثير", 3:"مداعبة", 4:"وضعيات"};
+const STAGE_GLYPH  = {1:"g1", 2:"g2", 3:"g3", 4:"g4"};
+const K = { pin:'rt_k', p1:'rt_a', p2:'rt_b', hist:'rt_h', stages:'rt_e' };
 
-                isSpinning = false;
-                spinBtn.disabled = false;
-                spinBtn.textContent = '🎲 لف الروليت';
-            }, 3300);
-        }
+/* 3) تخزين لا ينهار عند التلف أو المنع */
+const LS = {
+  read(k, f){ try{ const v = localStorage.getItem(k); return v === null ? f : JSON.parse(v); }catch(e){ return f; } },
+  write(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
 
-        function newCommand() { if (isSpinning) return; document.getElementById('result').classList.add('hidden'); spinRoulette(); }
-        function changeStage() { if (isSpinning) return; currentStage = currentStage === 4 ? 1 : currentStage + 1; updateStageTitle(); updateProgress(); document.getElementById('result').classList.add('hidden'); updateTurnDisplay(); }
-        function resetDailyPool() { if (isSpinning) return; if (confirm("هل ترغب في سحب باقة يومية جديدة (8 أسئلة جديدة لكل مرحلة) دون تكرار ما لعبتوه سابقاً؟")) { generateDailyPool(true); currentStage = 1; updateStageTitle(); updateProgress(); document.getElementById('result').classList.add('hidden'); } }
-        function showSetup() { if (isSpinning) return; document.getElementById('setup').classList.remove('hidden'); document.getElementById('game').classList.add('hidden'); }
+/* 4) الحالة */
+let dailyStages = {1:[],2:[],3:[],4:[]};
+let usedInDaily = {1:new Set(),2:new Set(),3:new Set(),4:new Set()};
+let enabledStages = LS.read(K.stages, {1:true,2:true,3:true,4:true});
+let players = [], currentStage = 1, currentPlayerIndex = 0;
+let isSpinning = false, poolReady = false, currentPick = null;
+let dialRotation = 0, pinBuffer = '', pinConfirm = null;
 
-        window.onload = function() {
-            const p1 = localStorage.getItem('roulette_p1');
-            const p2 = localStorage.getItem('roulette_p2');
-            if (p1 && p2) {
-                document.getElementById('p1name').value = JSON.parse(p1).name;
-                document.getElementById('p2name').value = JSON.parse(p2).name;
-            }
-        };
-    </script>
+/* 5) خلط عادل */
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function readHistory(){
+  const h = LS.read(K.hist, null), safe = {1:[],2:[],3:[],4:[]};
+  if (h && typeof h === 'object') for (let s=1;s<=4;s++) if (Array.isArray(h[s])) safe[s] = h[s];
+  return safe;
+}
+
+/* 6) الباقة */
+function generateDailyPool(forget = false){
+  let history = forget ? {1:[],2:[],3:[],4:[]} : readHistory();
+  for (let s=1; s<=4; s++){
+    const all = masterStages[s] || [];
+    const limit = Math.min(STAGE_LIMITS[s], all.length);
+    let unplayed = all.map((_,i)=>i).filter(i => !history[s].includes(i));
+    if (unplayed.length < limit){ history[s] = []; unplayed = all.map((_,i)=>i); }
+    dailyStages[s] = shuffle(unplayed).slice(0, limit).map(i => ({ originalIndex:i, content:all[i] }));
+    usedInDaily[s].clear();
+  }
+  LS.write(K.hist, history);
+  poolReady = true;
+}
+function topUp(stage){
+  const all = masterStages[stage] || [], history = readHistory();
+  const inBatch = new Set(dailyStages[stage].map(x => x.originalIndex));
+  const cand = all.map((_,i)=>i).filter(i => !inBatch.has(i) && !history[stage].includes(i));
+  if (!cand.length) return false;
+  const i = cand[Math.floor(Math.random()*cand.length)];
+  dailyStages[stage].push({ originalIndex:i, content:all[i] });
+  return true;
+}
+
+/* ============================================================
+   7) التوقيع — القرص الذي يحترق
+   كل قطاع = عنصر حقيقي في باقة المرحلة. المستهلَك يتحوّل رماداً،
+   والمؤشر يقف فعلاً على القطاع المختار (لا دوران تزييني).
+   ============================================================ */
+const CX = 125, CY = 125, R_OUT = 118, R_IN = 62;
+function polar(a, r){ const rad = (a-90) * Math.PI/180; return [CX + r*Math.cos(rad), CY + r*Math.sin(rad)]; }
+function segPath(a0, a1){
+  if (a1 - a0 >= 359.99){                                  // قطاع واحد = حلقة كاملة
+    return `M ${CX-R_OUT} ${CY} A ${R_OUT} ${R_OUT} 0 1 0 ${CX+R_OUT} ${CY}`
+         + ` A ${R_OUT} ${R_OUT} 0 1 0 ${CX-R_OUT} ${CY} Z`;
+  }
+  const [x0,y0] = polar(a0, R_OUT), [x1,y1] = polar(a1, R_OUT);
+  const [x2,y2] = polar(a1, R_IN),  [x3,y3] = polar(a0, R_IN);
+  const large = (a1 - a0) > 180 ? 1 : 0;
+  return `M ${x0} ${y0} A ${R_OUT} ${R_OUT} 0 ${large} 1 ${x1} ${y1}`
+       + ` L ${x2} ${y2} A ${R_IN} ${R_IN} 0 ${large} 0 ${x3} ${y3} Z`;
+}
+function drawDial(){
+  const g = document.getElementById('dialRot');
+  const pool = dailyStages[currentStage] || [];
+  const n = Math.max(pool.length, 1);
+  const seg = 360 / n;
+  let out = '';
+  for (let i = 0; i < n; i++){
+    const burnt = usedInDaily[currentStage].has(i);
+    out += `<path d="${segPath(i*seg, (i+1)*seg)}" class="seg-line ${burnt?'seg-ash':'seg-live'}"/>`;
+  }
+  g.innerHTML = out;
+  const left = pool.length - usedInDaily[currentStage].size;
+  document.getElementById('hubNum').textContent = left;
+}
+function aimAt(index, total){
+  const seg = 360 / Math.max(total,1);
+  const jitter = (Math.random() - .5) * seg * .55;
+  const target = -(index * seg + seg/2) + jitter;          // نريده أعلى القرص عند المؤشر
+  const delta = ((target - (dialRotation % 360)) % 360 + 360) % 360;
+  dialRotation += delta + 360 * (4 + Math.floor(Math.random()*3));
+  document.getElementById('dialRot').style.transform = `rotate(${dialRotation}deg)`;
+}
+
+/* 8) الشاشات */
+function show(id){ ['lock','setup','game'].forEach(s =>
+  document.getElementById(s).classList.toggle('hidden', s !== id)); }
+function gl(s, cls){ return `<svg class="glyph ${cls||''}"><use href="#${STAGE_GLYPH[s]}"/></svg>`; }
+function renderToggles(){
+  document.getElementById('stageToggles').innerHTML = [1,2,3,4].map(s => `
+    <label class="stage-row">
+      <input type="checkbox" data-stage="${s}" ${enabledStages[s]?'checked':''}>
+      <span class="gl">${gl(s)}</span>
+      <span class="nm">${STAGE_NAMES[s]}</span>
+      <span class="ct">${STAGE_LIMITS[s]}</span>
+    </label>`).join('');
+  document.querySelectorAll('#stageToggles input').forEach(cb =>
+    cb.addEventListener('change', () => {
+      const s = +cb.dataset.stage, on = [1,2,3,4].filter(x => enabledStages[x]);
+      if (!cb.checked && on.length === 1 && on[0] === s){ cb.checked = true; return; }
+      enabledStages[s] = cb.checked; LS.write(K.stages, enabledStages);
+    }));
+}
+function showSetup(){ if (!isSpinning) show('setup'); }
+
+/* 9) بدء / استئناف */
+function firstEnabledStage(){ return [1,2,3,4].find(s => enabledStages[s]) || 1; }
+function startGame(){
+  players = [
+    { name: document.getElementById('p1name').value.trim() || "الزوج",  gender:"مذكر" },
+    { name: document.getElementById('p2name').value.trim() || "الزوجة", gender:"مؤنث" }
+  ];
+  LS.write(K.p1, players[0]); LS.write(K.p2, players[1]);
+  if (!poolReady){
+    generateDailyPool(false);
+    currentStage = firstEnabledStage();
+    currentPlayerIndex = Math.floor(Math.random()*2);
+  }
+  show('game'); clearResult(); refresh();
+}
+function freshBatch(){
+  if (!confirm("سحب باقة جديدة؟ لن يتكرر ما لُعب سابقاً.")) return;
+  generateDailyPool(false);
+  currentStage = firstEnabledStage();
+  clearResult(); refresh();
+}
+function wipeAll(){
+  if (!confirm("مسح كل شيء: الرمز، الأسماء، السجل. لا يمكن التراجع.")) return;
+  Object.values(K).forEach(LS.del); location.reload();
+}
+
+/* 10) العرض */
+function refresh(){
+  document.getElementById('stageTag').innerHTML = `${gl(currentStage)}<span>${STAGE_NAMES[currentStage]}</span>`;
+  const p = players[currentPlayerIndex];
+  if (p) document.getElementById('turnName').textContent = p.name;
+  drawDial();
+}
+function clearResult(){
+  const r = document.getElementById('result');
+  r.classList.add('hidden');
+  document.getElementById('resultCard').classList.remove('warn');
+  document.getElementById('playerName').textContent = '';
+  document.getElementById('commandText').textContent = '';
+  currentPick = null;
+  document.getElementById('btnDone').disabled = true;
+  document.getElementById('btnSkip').disabled = true;
+}
+
+/* 11) اختيار النص حسب الجنس (تصريف الأفعال لا يُستنتج برمجياً) */
+function getCommandForPlayer(cmd, player){
+  if (cmd && typeof cmd === 'object')
+    return player.gender === "مذكر" ? (cmd.مذكر ?? cmd.مؤنث ?? '') : (cmd.مؤنث ?? cmd.مذكر ?? '');
+  const t = String(cmd ?? '');
+  return player.gender === "مذكر"
+    ? t.replace(/شريكك/g,"زوجتك").replace(/زوجك/g,"زوجتك")
+    : t.replace(/شريكك/g,"زوجك").replace(/زوجتك/g,"زوجك");
+}
+
+/* 12) الإدارة */
+function spinRoulette(){
+  if (isSpinning || !players.length) return;
+  const pool = dailyStages[currentStage];
+  const remaining = pool.map((_,i)=>i).filter(i => !usedInDaily[currentStage].has(i));
+
+  if (!remaining.length){
+    clearResult();
+    document.getElementById('resultCard').classList.add('warn');
+    document.getElementById('playerName').textContent = 'انتهت المرحلة';
+    document.getElementById('commandText').textContent = 'انتقلا إلى المرحلة التالية.';
+    document.getElementById('result').classList.remove('hidden');
+    return;
+  }
+
+  isSpinning = true;
+  const btn = document.getElementById('spinBtn');
+  btn.disabled = true; btn.textContent = 'يدور…';
+  clearResult();
+
+  const poolIndex = remaining[Math.floor(Math.random()*remaining.length)];
+  const item = pool[poolIndex];
+  const player = players[currentPlayerIndex];
+  const text = getCommandForPlayer(item.content, player);
+
+  aimAt(poolIndex, pool.length);
+  if ('vibrate' in navigator) setTimeout(() => navigator.vibrate([90,40,90]), 3000);
+
+  setTimeout(() => {
+    currentPick = { stage: currentStage, poolIndex, originalIndex: item.originalIndex };
+    document.getElementById('playerName').textContent = player.name;
+    document.getElementById('commandText').textContent = text;
+    document.getElementById('result').classList.remove('hidden');
+    const f = document.getElementById('flare');
+    f.classList.remove('on'); void f.offsetWidth; f.classList.add('on');
+    document.getElementById('btnDone').disabled = false;
+    document.getElementById('btnSkip').disabled = false;
+    isSpinning = false; btn.disabled = false; btn.textContent = 'أدر القرص';
+  }, 3500);
+}
+function markDone(){
+  if (isSpinning || !currentPick) return;
+  const { stage, poolIndex, originalIndex } = currentPick;
+  usedInDaily[stage].add(poolIndex);
+  const h = readHistory();
+  if (!h[stage].includes(originalIndex)){ h[stage].push(originalIndex); LS.write(K.hist, h); }
+  currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+  clearResult(); refresh();
+}
+function skipCurrent(){
+  if (isSpinning || !currentPick) return;
+  const { stage, poolIndex } = currentPick;
+  usedInDaily[stage].add(poolIndex);
+  topUp(stage);
+  clearResult(); refresh();
+}
+function changeStage(){
+  if (isSpinning) return;
+  const on = [1,2,3,4].filter(s => enabledStages[s]);
+  if (!on.length) return;
+  currentStage = on[(on.indexOf(currentStage) + 1) % on.length];
+  clearResult(); refresh();
+}
+
+/* 13) القفل */
+function renderDots(){
+  document.getElementById('pinDots').innerHTML =
+    [0,1,2,3].map(i => `<span class="dot ${i < pinBuffer.length ? 'on':''}"></span>`).join('');
+}
+function pinKey(k){
+  document.getElementById('pinErr').textContent = '';
+  if (k === 'del') pinBuffer = pinBuffer.slice(0,-1);
+  else if (k === 'clr') pinBuffer = '';
+  else if (pinBuffer.length < 4) pinBuffer += k;
+  renderDots();
+  if (pinBuffer.length === 4) setTimeout(submitPin, 160);
+}
+function submitPin(){
+  const stored = LS.read(K.pin, null), err = document.getElementById('pinErr');
+  if (stored === null){
+    if (pinConfirm === null){
+      pinConfirm = pinBuffer; pinBuffer = ''; renderDots();
+      document.getElementById('lockTitle').textContent = 'أعد إدخال الرمز'; return;
+    }
+    if (pinConfirm !== pinBuffer){
+      pinConfirm = null; pinBuffer = ''; renderDots();
+      document.getElementById('lockTitle').textContent = 'اختر رمزاً من ٤ أرقام';
+      err.textContent = 'الرمزان غير متطابقين'; return;
+    }
+    LS.write(K.pin, pinBuffer); unlock(); return;
+  }
+  if (pinBuffer === stored) unlock();
+  else { pinBuffer = ''; renderDots(); err.textContent = 'رمز غير صحيح'; }
+}
+function unlock(){
+  pinBuffer = ''; pinConfirm = null;
+  const a = LS.read(K.p1, null), b = LS.read(K.p2, null);
+  if (a && a.name) document.getElementById('p1name').value = a.name;
+  if (b && b.name) document.getElementById('p2name').value = b.name;
+  renderToggles(); show('setup');
+}
+
+/* 14) الإقلاع */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.key').forEach(b =>
+    b.addEventListener('click', () => pinKey(b.dataset.k)));
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('lock').classList.contains('hidden')) return;
+    if (/^[0-9]$/.test(e.key)) pinKey(e.key);
+    else if (e.key === 'Backspace') pinKey('del');
+  });
+  if (LS.read(K.pin, null) === null)
+    document.getElementById('lockTitle').textContent = 'اختر رمزاً من ٤ أرقام';
+  renderDots(); show('lock');
+});
+</script>
 </body>
 </html>
