@@ -5,741 +5,587 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow, noarchive, noimageindex, nosnippet">
-<title>جدول</title>
+<meta name="theme-color" content="#150a0e">
+<title>روليت الإثارة</title>
 <link rel="icon" href="data:,">
 <style>
-/* ============================================================
-   اتجاه التصميم: جمرة وضوء شمعة — لا نيون، لا زجاج، لا إيموجي.
-   صفر اتصال خارجي: لا خطوط ولا CDN.
-   ============================================================ */
-
-/* اختياري: ضع Tajawal-Bold.woff2 و Tajawal-Regular.woff2 في مجلد fonts/
-   بجانب الملف. إن لم تفعل، يعمل بخطوط النظام بلا أي طلب خارجي. */
-@font-face{font-family:'Disp';src:local('Tajawal Bold'),local('Tajawal-Bold'),
-  url('fonts/Tajawal-Bold.woff2') format('woff2');font-weight:700;font-display:swap;}
-@font-face{font-family:'Body';src:local('Tajawal'),local('Tajawal-Regular'),
-  url('fonts/Tajawal-Regular.woff2') format('woff2');font-weight:400;font-display:swap;}
-
+/* اتجاه التصميم الأصلي: جمرة وضوء شمعة، بلا اتصالات خارجية. */
+@font-face{font-family:'Disp';src:local('Tajawal Bold'),local('Tajawal-Bold');font-weight:700;font-display:swap;}
+@font-face{font-family:'Body';src:local('Tajawal'),local('Tajawal-Regular');font-weight:400;font-display:swap;}
 :root{
-  /* لوحة: حبر برقوقي دافئ + جمرة + ذهب شمعة + نبيذ */
-  --ink:      #150a0e;
-  --ink-2:    #1e0f15;
-  --ink-3:    #2a151d;
-  --ember:    #ff6a3c;
-  --ember-d:  #c2410c;
-  --wine:     #9d1c46;
-  --gold:     #e0aa6b;
-  --ash:      #4a3a3c;
-  --cream:    #f2e4dc;
-  --cream-d:  #b9a49c;
-
-  --r-lg: 20px; --r-md: 14px; --r-sm: 10px;
-  --sp: 1rem;
+  --ink:#150a0e;--ink-2:#1e0f15;--ink-3:#2a151d;
+  --ember:#ff6a3c;--ember-d:#c2410c;--wine:#9d1c46;
+  --gold:#e0aa6b;--ash:#4a3a3c;--cream:#f2e4dc;--cream-d:#b9a49c;
+  --r-lg:20px;--r-md:14px;--r-sm:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0;
   font-family:'Body','Noto Kufi Arabic','Segoe UI',Tahoma,system-ui,sans-serif;}
 h1,h2,.disp{font-family:'Disp','Noto Kufi Arabic','Segoe UI',Tahoma,system-ui,sans-serif;font-weight:700;}
-
-body{background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden;
-  -webkit-tap-highlight-color:transparent;}
-
-/* ضوء الشمعة: هالة واحدة تتنفس، لا هالات متعددة */
-.candle{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 70% 45% at 50% -5%, rgba(255,106,60,.20) 0, transparent 65%),
-    radial-gradient(ellipse 90% 60% at 50% 110%, rgba(157,28,70,.16) 0, transparent 70%);
+body{background:var(--ink);color:var(--cream);min-height:100vh;min-height:100dvh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;}
+.candle{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(ellipse 70% 45% at 50% -5%,rgba(255,106,60,.20) 0,transparent 65%),
+  radial-gradient(ellipse 90% 60% at 50% 110%,rgba(157,28,70,.16) 0,transparent 70%);
   animation:breathe 7s ease-in-out infinite;}
 @keyframes breathe{0%,100%{opacity:.85}50%{opacity:1}}
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;
-  background-image:radial-gradient(rgba(255,255,255,.9) .5px, transparent .5px);
-  background-size:3px 3px;}
-
+  background-image:radial-gradient(rgba(255,255,255,.9) .5px,transparent .5px);background-size:3px 3px;}
 .wrap{position:relative;z-index:10;max-width:26rem;margin:0 auto;padding:1rem 1.15rem 3.5rem;}
 .hidden{display:none!important;}
-
-/* ---------- مقياس الطباعة ---------- */
 h1{font-size:2.35rem;line-height:1.15;letter-spacing:-.02em;}
 h2{font-size:1.05rem;letter-spacing:.02em;color:var(--gold);margin-bottom:1.35rem;}
-.eyebrow{font-size:.7rem;letter-spacing:.32em;color:var(--ember);
-  text-transform:uppercase;font-weight:700;}
-.lede{color:var(--cream-d);font-size:.9rem;line-height:1.9;}
-.note{font-size:.74rem;color:var(--cream-d);line-height:1.9;margin-top:.9rem;}
-
-/* ---------- ألواح: حواف رفيعة بدل الزجاج الضبابي ---------- */
-.panel{background:linear-gradient(180deg, var(--ink-2), var(--ink));
+.eyebrow{font-size:.75rem;letter-spacing:.32em;color:var(--ember);font-weight:700;}
+.lede{color:var(--cream-d);font-size:.95rem;line-height:1.9;}
+.note{font-size:.78rem;color:var(--cream-d);line-height:1.9;margin-top:.9rem;}
+.panel{background:linear-gradient(180deg,var(--ink-2),var(--ink));
   border:1px solid rgba(224,170,107,.16);border-radius:var(--r-lg);padding:1.6rem;}
 .panel+.panel{margin-top:1.1rem;}
-.hairline{height:1px;background:linear-gradient(to left,transparent,rgba(224,170,107,.3),transparent);
-  margin:1.3rem 0;}
-
-/* ---------- المدخلات ---------- */
-label{display:block;margin-bottom:.5rem;font-size:.72rem;letter-spacing:.18em;
-  color:var(--gold);font-weight:700;}
-.input{width:100%;padding:.95rem 1.1rem;background:var(--ink-3);
-  border:1px solid rgba(224,170,107,.18);border-radius:var(--r-md);
-  color:var(--cream);font-size:1.05rem;outline:none;transition:border-color .25s;}
+.hairline{height:1px;background:linear-gradient(to left,transparent,rgba(224,170,107,.3),transparent);margin:1.3rem 0;}
+label{display:block;margin-bottom:.5rem;font-size:.76rem;letter-spacing:.18em;color:var(--gold);font-weight:700;}
+.input{width:100%;padding:.95rem 1.1rem;background:var(--ink-3);border:1px solid rgba(224,170,107,.18);
+  border-radius:var(--r-md);color:var(--cream);font-size:1.05rem;outline:none;transition:border-color .25s;}
 .input:focus-visible{border-color:var(--ember);}
-
-/* ---------- الأزرار ---------- */
-.btn{border:none;border-radius:var(--r-md);cursor:pointer;font-weight:700;
-  color:var(--cream);transition:transform .18s ease, filter .18s ease;
-  font-family:'Disp','Noto Kufi Arabic',system-ui,sans-serif;}
-.btn:hover{filter:brightness(1.12);}
-.btn:active{transform:scale(.98);}
+.btn{border:none;border-radius:var(--r-md);cursor:pointer;font-weight:700;color:var(--cream);
+  transition:transform .18s ease,filter .18s ease;font-family:'Disp','Noto Kufi Arabic',system-ui,sans-serif;}
+.btn:hover{filter:brightness(1.12);}.btn:active{transform:scale(.98);}
 .btn:disabled{opacity:.32;cursor:not-allowed;filter:none;}
 .btn-lead{display:block;width:100%;padding:1.15rem;font-size:1.15rem;letter-spacing:.04em;
-  background:linear-gradient(105deg, var(--ember-d), var(--ember));
-  box-shadow:0 6px 26px rgba(255,106,60,.22);border-radius:var(--r-lg);margin-top:1.4rem;}
-.btn-quiet{background:var(--ink-3);border:1px solid rgba(224,170,107,.18);
-  padding:.55rem 1rem;font-size:.78rem;color:var(--gold);border-radius:var(--r-sm);}
-.row{display:grid;gap:.6rem;margin-top:.7rem;}
-.row-2{grid-template-columns:1fr 1fr;}
-.row-3{grid-template-columns:repeat(3,1fr);}
-.btn-cell{padding:.85rem .3rem;font-size:.8rem;line-height:1.7;border-radius:var(--r-md);}
+  background:linear-gradient(105deg,var(--ember-d),var(--ember));box-shadow:0 6px 26px rgba(255,106,60,.22);
+  border-radius:var(--r-lg);margin-top:1.4rem;}
+.btn-quiet{background:var(--ink-3);border:1px solid rgba(224,170,107,.18);padding:.65rem 1rem;
+  min-height:44px;font-size:.78rem;color:var(--gold);border-radius:var(--r-sm);}
+.row{display:grid;gap:.6rem;margin-top:.7rem;}.row-2{grid-template-columns:1fr 1fr;}.row-3{grid-template-columns:repeat(3,1fr);}
+.btn-cell{padding:.85rem .3rem;min-height:44px;font-size:.8rem;line-height:1.7;border-radius:var(--r-md);}
 .b-done{background:linear-gradient(105deg,#7a2f10,var(--ember));}
 .b-skip{background:var(--ink-3);border:1px solid rgba(224,170,107,.22);color:var(--gold);}
 .b-next{background:linear-gradient(105deg,#6d1230,var(--wine));}
 .b-ghost{background:var(--ink-3);border:1px solid rgba(255,255,255,.08);color:var(--cream-d);
-  padding:.8rem;font-size:.76rem;border-radius:var(--r-md);}
-
-/* ---------- المراحل ---------- */
-.stage-row{display:flex;align-items:center;gap:.85rem;padding:.9rem 1rem;border-radius:var(--r-md);
+  padding:.8rem;min-height:44px;font-size:.76rem;border-radius:var(--r-md);}
+.stage-row{display:flex;align-items:center;gap:.85rem;padding:.9rem 1rem;min-height:52px;border-radius:var(--r-md);
   background:var(--ink-3);border:1px solid rgba(224,170,107,.14);cursor:pointer;margin-bottom:.55rem;}
 .stage-row input{width:1.1rem;height:1.1rem;accent-color:var(--ember);cursor:pointer;}
-.stage-row .gl{flex:0 0 auto;}
-.stage-row .nm{font-weight:700;font-size:.95rem;}
-.stage-row .ct{margin-inline-start:auto;font-size:.7rem;color:var(--cream-d);letter-spacing:.1em;}
-.glyph{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.6;
-  stroke-linecap:round;stroke-linejoin:round;}
-
-/* ---------- شريط اللعب ---------- */
-.topbar{display:flex;justify-content:space-between;align-items:center;
-  gap:.5rem;margin-bottom:1.1rem;}
-.stage-tag{display:inline-flex;align-items:center;gap:.5rem;padding:.45rem .9rem;
-  border-radius:50px;background:var(--ink-3);border:1px solid rgba(224,170,107,.22);
-  font-size:.78rem;font-weight:700;color:var(--gold);}
+.stage-row .gl{flex:0 0 auto;}.stage-row .nm{font-weight:700;font-size:.95rem;}
+.stage-row .ct{margin-inline-start:auto;font-size:.72rem;color:var(--cream-d);letter-spacing:.04em;}
+.glyph{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:1.1rem;}
+.stage-tag{display:inline-flex;align-items:center;gap:.5rem;padding:.45rem .9rem;border-radius:50px;
+  background:var(--ink-3);border:1px solid rgba(224,170,107,.22);font-size:.78rem;font-weight:700;color:var(--gold);}
 .stage-tag .glyph{width:16px;height:16px;}
-.turn{text-align:center;padding:.9rem;border-radius:var(--r-md);
-  background:linear-gradient(180deg,var(--ink-2),transparent);
+.turn{text-align:center;padding:.9rem;border-radius:var(--r-md);background:linear-gradient(180deg,var(--ink-2),transparent);
   border-block-end:1px solid rgba(224,170,107,.14);margin-bottom:1.3rem;}
-.turn .lb{font-size:.68rem;letter-spacing:.28em;color:var(--cream-d);display:block;margin-bottom:.3rem;}
+.turn .lb{font-size:.7rem;letter-spacing:.28em;color:var(--cream-d);display:block;margin-bottom:.3rem;}
 .turn .nm{font-size:1.5rem;color:var(--ember);}
-
-/* ---------- التوقيع: القرص الذي يحترق ---------- */
 .dial-box{display:flex;flex-direction:column;align-items:center;padding:1.5rem 1rem 1.7rem;
-  background:radial-gradient(ellipse 80% 70% at 50% 35%, rgba(255,106,60,.09), transparent 70%);
+  background:radial-gradient(ellipse 80% 70% at 50% 35%,rgba(255,106,60,.09),transparent 70%);
   border:1px solid rgba(224,170,107,.14);border-radius:var(--r-lg);}
-.dial{position:relative;width:250px;height:250px;}
+.dial{position:relative;width:250px;height:250px;max-width:100%;}
 #dialSvg{width:100%;height:100%;overflow:visible;}
 #dialRot{transform-origin:125px 125px;transition:transform 3.4s cubic-bezier(.16,.84,.24,1);}
-.seg-live{fill:url(#emberGrad);}
-.seg-ash{fill:var(--ash);opacity:.42;}
-.seg-line{stroke:var(--ink);stroke-width:2;}
-.dial-hub{fill:var(--ink);stroke:rgba(224,170,107,.3);stroke-width:1;}
-.hub-num{fill:var(--gold);font-size:34px;text-anchor:middle;font-weight:700;
-  font-family:'Disp',system-ui,sans-serif;}
+.seg-live{fill:url(#emberGrad);}.seg-ash{fill:var(--ash);opacity:.42;}
+.seg-line{stroke:var(--ink);stroke-width:2;}.dial-hub{fill:var(--ink);stroke:rgba(224,170,107,.3);stroke-width:1;}
+.hub-num{fill:var(--gold);font-size:34px;text-anchor:middle;font-weight:700;font-family:'Disp',system-ui,sans-serif;}
 .hub-lb{fill:var(--cream-d);font-size:10px;text-anchor:middle;letter-spacing:3px;}
-.pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);z-index:3;
-  width:0;height:0;border-inline:9px solid transparent;border-block-start:16px solid var(--gold);
-  filter:drop-shadow(0 2px 6px rgba(224,170,107,.5));}
-.flare{position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0;
-  box-shadow:0 0 0 0 rgba(255,106,60,.55);}
+.pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);z-index:3;width:0;height:0;
+  border-inline:9px solid transparent;border-block-start:16px solid var(--gold);filter:drop-shadow(0 2px 6px rgba(224,170,107,.5));}
+.flare{position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0;box-shadow:0 0 0 0 rgba(255,106,60,.55);}
 .flare.on{animation:flare .9s ease-out;}
-@keyframes flare{0%{opacity:1;box-shadow:0 0 0 0 rgba(255,106,60,.5)}
-  100%{opacity:0;box-shadow:0 0 0 46px rgba(255,106,60,0)}}
-.btn-spin{margin-top:1.4rem;padding:.95rem 2.4rem;font-size:1rem;letter-spacing:.06em;
-  background:linear-gradient(105deg,var(--ember-d),var(--ember));border-radius:50px;
-  box-shadow:0 5px 22px rgba(255,106,60,.24);}
-
-/* ---------- البطاقة ---------- */
-.card{margin-top:1.3rem;padding:1.7rem 1.5rem;border-radius:var(--r-lg);
-  background:linear-gradient(180deg,var(--ink-2),var(--ink));
-  border:1px solid rgba(224,170,107,.2);
-  border-block-start:2px solid var(--ember);
-  animation:rise .55s cubic-bezier(.2,.9,.3,1);}
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-.card .who{text-align:center;font-size:.72rem;letter-spacing:.26em;color:var(--gold);
-  margin-bottom:1.1rem;}
+@keyframes flare{0%{opacity:1;box-shadow:0 0 0 0 rgba(255,106,60,.5)}100%{opacity:0;box-shadow:0 0 0 46px rgba(255,106,60,0)}}
+.btn-spin{margin-top:1.4rem;padding:.95rem 2.4rem;min-height:48px;font-size:1rem;letter-spacing:.06em;
+  background:linear-gradient(105deg,var(--ember-d),var(--ember));border-radius:50px;box-shadow:0 5px 22px rgba(255,106,60,.24);}
+.card{margin-top:1.3rem;padding:1.7rem 1.5rem;border-radius:var(--r-lg);background:linear-gradient(180deg,var(--ink-2),var(--ink));
+  border:1px solid rgba(224,170,107,.2);border-block-start:2px solid var(--ember);animation:rise .3s ease-out;}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.card .who{text-align:center;font-size:.75rem;letter-spacing:.26em;color:var(--gold);margin-bottom:1.1rem;}
 .card .txt{font-size:1.18rem;line-height:2.1;text-align:center;color:var(--cream);}
-.card.warn{border-block-start-color:var(--wine);}
-.card.warn .txt{color:var(--cream-d);font-size:1rem;}
-
-/* ---------- القفل ---------- */
+.card.warn{border-block-start-color:var(--wine);}.card.warn .txt{color:var(--cream-d);font-size:1rem;}
 .dots{display:flex;justify-content:center;gap:.7rem;margin:1.6rem 0 1.9rem;}
-.dot{width:12px;height:12px;border-radius:50%;background:var(--ink-3);
-  border:1px solid rgba(224,170,107,.28);transition:background .2s, box-shadow .2s;}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--ink-3);border:1px solid rgba(224,170,107,.28);
+  transition:background .2s,box-shadow .2s;}
 .dot.on{background:var(--ember);box-shadow:0 0 12px rgba(255,106,60,.55);}
 .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;}
-.key{padding:1.05rem;border-radius:var(--r-md);background:var(--ink-3);
-  border:1px solid rgba(224,170,107,.14);color:var(--cream);font-size:1.25rem;
-  font-weight:700;cursor:pointer;font-family:'Disp',system-ui,sans-serif;}
+.key{padding:1.05rem;min-height:52px;border-radius:var(--r-md);background:var(--ink-3);border:1px solid rgba(224,170,107,.14);
+  color:var(--cream);font-size:1.25rem;font-weight:700;cursor:pointer;font-family:'Disp',system-ui,sans-serif;}
 .key:active{background:rgba(255,106,60,.2);}
 .err{min-height:1.3rem;margin-top:.8rem;text-align:center;font-size:.82rem;color:var(--ember);}
-
 :focus-visible{outline:2px solid var(--ember);outline-offset:3px;}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
-@media (max-width:360px){.dial{width:210px;height:210px}h1{font-size:2rem}}
+@media (max-width:360px){.dial{width:210px;height:210px}h1{font-size:2rem}.wrap{padding-inline:.85rem}}
 </style>
 </head>
 <body>
 <div class="candle"></div><div class="grain"></div>
-
-<!-- رموز المراحل: خطوط مجرّدة بدل الإيموجي -->
-<svg style="display:none">
+<svg style="display:none" aria-hidden="true">
   <symbol id="g1" viewBox="0 0 24 24"><path d="M4 15V9a2 2 0 012-2h5l5-3v16l-5-3H6a2 2 0 01-2-2z"/><path d="M19 9c.9 1.8.9 4.2 0 6"/></symbol>
   <symbol id="g2" viewBox="0 0 24 24"><path d="M12 3c3 4 5 6 5 9a5 5 0 01-10 0c0-1.6.7-2.8 1.8-4.2"/><path d="M12 20a2.4 2.4 0 01-2.4-2.4c0-1.6 2.4-3.6 2.4-3.6s2.4 2 2.4 3.6A2.4 2.4 0 0112 20z"/></symbol>
   <symbol id="g3" viewBox="0 0 24 24"><circle cx="7" cy="17" r="1.6"/><path d="M10.5 14.5a5 5 0 011.6-1.6"/><path d="M13.5 11a9 9 0 013-3"/><path d="M16.6 7.5a13 13 0 013.4-3"/></symbol>
   <symbol id="g4" viewBox="0 0 24 24"><path d="M3 17V9a3 3 0 013-3h5v11"/><path d="M21 17V9a3 3 0 00-3-3h-5"/><path d="M2 17h20"/></symbol>
 </svg>
-
 <div class="wrap">
-
-  <!-- ==================== القفل ==================== -->
   <section id="lock">
     <header style="text-align:center;padding:2.6rem 0 1.4rem">
-      <span class="eyebrow">خاص</span>
-      <h1 id="lockTitle" style="margin-top:.7rem">أدخل الرمز</h1>
+      <span class="eyebrow">خاص</span><h1 id="lockTitle" style="margin-top:.7rem">أدخل الرمز</h1>
     </header>
     <div class="panel">
-      <div class="dots" id="pinDots"></div>
-      <div class="pad">
-        <button class="key" data-k="1">١</button><button class="key" data-k="2">٢</button><button class="key" data-k="3">٣</button>
-        <button class="key" data-k="4">٤</button><button class="key" data-k="5">٥</button><button class="key" data-k="6">٦</button>
-        <button class="key" data-k="7">٧</button><button class="key" data-k="8">٨</button><button class="key" data-k="9">٩</button>
-        <button class="key" data-k="del">⌫</button><button class="key" data-k="0">٠</button><button class="key" data-k="clr">C</button>
+      <div class="dots" id="pinDots" aria-hidden="true"></div>
+      <div class="pad" aria-label="لوحة إدخال الرمز">
+        <button type="button" class="key" data-k="1">١</button><button type="button" class="key" data-k="2">٢</button><button type="button" class="key" data-k="3">٣</button>
+        <button type="button" class="key" data-k="4">٤</button><button type="button" class="key" data-k="5">٥</button><button type="button" class="key" data-k="6">٦</button>
+        <button type="button" class="key" data-k="7">٧</button><button type="button" class="key" data-k="8">٨</button><button type="button" class="key" data-k="9">٩</button>
+        <button type="button" class="key" data-k="del" aria-label="حذف آخر رقم">⌫</button><button type="button" class="key" data-k="0">٠</button><button type="button" class="key" data-k="clr" aria-label="مسح الرمز">C</button>
       </div>
-      <div class="err" id="pinErr"></div>
+      <div class="err" id="pinErr" role="alert"></div>
       <p class="note">الرمز يمنع من يلتقط الجهاز. لا يحمي الملف نفسه.</p>
-      <div class="row"><button class="btn b-ghost" onclick="wipeAll()">نسيت الرمز — امسح كل البيانات</button></div>
+      <div class="row"><button type="button" class="btn b-ghost" onclick="wipeAll()">نسيت الرمز — امسح كل البيانات</button></div>
     </div>
   </section>
 
-  <!-- ==================== الإعداد ==================== -->
   <section id="setup" class="hidden">
     <header style="text-align:center;padding:2.4rem 0 1.6rem">
-      <span class="eyebrow">ليلة واحدة · بينكما</span>
+      <span class="eyebrow">للبالغين · بينكما فقط</span>
       <h1 style="margin:.8rem 0 .7rem">روليت<br>الإثارة</h1>
       <p class="lede">أربع مراحل. القرص يحترق كلما تقدّمتما.</p>
     </header>
-
     <div class="panel">
       <h2>الأسماء</h2>
-      <div><label for="p1name">الزوج</label>
-        <input id="p1name" class="input" type="text" value="الزوج" autocomplete="off"></div>
+      <div><label for="p1name">الزوج</label><input id="p1name" class="input" type="text" value="الزوج" maxlength="20" autocomplete="off"></div>
       <div class="hairline"></div>
-      <div><label for="p2name">الزوجة</label>
-        <input id="p2name" class="input" type="text" value="الزوجة" autocomplete="off"></div>
+      <div><label for="p2name">الزوجة</label><input id="p2name" class="input" type="text" value="الزوجة" maxlength="20" autocomplete="off"></div>
+      <p class="note">لكل لاعب صياغة مستقلة: المذكر للزوج، والمؤنث للزوجة، بلا استبدال آلي للكلمات.</p>
     </div>
-
     <div class="panel">
       <h2>اتفاق الحدود</h2>
       <div id="stageToggles"></div>
-      <p class="note">أي مرحلة معطّلة لن تظهر إطلاقاً. وأثناء اللعب، «تخطّي» متاح دائماً بلا سؤال.</p>
+      <p class="note">أي مرحلة معطّلة لن تظهر. «تخطّي» متاح دائماً بلا تفسير، وتوقفا فوراً عند أي ألم أو انزعاج.</p>
     </div>
-
-    <button class="btn btn-lead" onclick="startGame()">أشعل الليلة</button>
+    <button type="button" class="btn btn-lead" onclick="startGame()">أشعل الليلة</button>
     <div class="row row-2">
-      <button class="btn b-ghost" onclick="freshBatch()">باقة جديدة</button>
-      <button class="btn b-ghost" onclick="wipeAll()">مسح كل البيانات</button>
+      <button type="button" class="btn b-ghost" onclick="freshBatch()">باقة جديدة</button>
+      <button type="button" class="btn b-ghost" onclick="wipeAll()">مسح كل البيانات</button>
     </div>
   </section>
 
-  <!-- ==================== اللعب ==================== -->
   <section id="game" class="hidden">
     <div class="topbar">
-      <button class="btn btn-quiet" onclick="showSetup()">← الإعدادات</button>
+      <button type="button" class="btn btn-quiet" onclick="showSetup()">الإعدادات</button>
       <div id="stageTag" class="stage-tag"></div>
     </div>
-
     <div class="turn"><span class="lb">الدور</span><span class="nm disp" id="turnName"></span></div>
-
     <div class="dial-box">
       <div class="dial">
-        <div class="pointer"></div>
-        <div class="flare" id="flare"></div>
-        <svg id="dialSvg" viewBox="0 0 250 250" aria-hidden="true">
-          <defs>
-            <radialGradient id="emberGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="55%" stop-color="#9d1c46"/>
-              <stop offset="100%" stop-color="#ff6a3c"/>
-            </radialGradient>
-          </defs>
-          <g id="dialRot"></g>
-          <circle class="dial-hub" cx="125" cy="125" r="62"/>
-          <text class="hub-num" id="hubNum" x="125" y="128">·</text>
-          <text class="hub-lb" x="125" y="150">متبقٍ</text>
+        <div class="pointer"></div><div class="flare" id="flare"></div>
+        <svg id="dialSvg" viewBox="0 0 250 250" aria-label="قرص اختيار البطاقة" role="img">
+          <defs><radialGradient id="emberGrad" cx="50%" cy="50%" r="50%"><stop offset="55%" stop-color="#9d1c46"/><stop offset="100%" stop-color="#ff6a3c"/></radialGradient></defs>
+          <g id="dialRot"></g><circle class="dial-hub" cx="125" cy="125" r="62"/>
+          <text class="hub-num" id="hubNum" x="125" y="128">·</text><text class="hub-lb" x="125" y="150">متبقٍ</text>
         </svg>
       </div>
-      <button class="btn btn-spin" id="spinBtn" onclick="spinRoulette()">أدر القرص</button>
+      <button type="button" class="btn btn-spin" id="spinBtn" onclick="spinRoulette()">أدر القرص</button>
     </div>
-
-    <div id="result" class="hidden">
-      <div class="card" id="resultCard">
-        <div class="who" id="playerName"></div>
-        <div class="txt" id="commandText"></div>
-      </div>
+    <div id="result" class="hidden" role="status" aria-live="polite">
+      <div class="card" id="resultCard"><div class="who" id="playerName"></div><div class="txt" id="commandText"></div></div>
     </div>
-
     <div class="row row-3">
-      <button id="btnDone" class="btn btn-cell b-done" onclick="markDone()" disabled>تمّ</button>
-      <button id="btnSkip" class="btn btn-cell b-skip" onclick="skipCurrent()" disabled>تخطّي</button>
-      <button class="btn btn-cell b-next" onclick="changeStage()">المرحلة التالية</button>
+      <button type="button" id="btnDone" class="btn btn-cell b-done" onclick="markDone()" disabled>تمّ</button>
+      <button type="button" id="btnSkip" class="btn btn-cell b-skip" onclick="skipCurrent()" disabled>تخطّي</button>
+      <button type="button" class="btn btn-cell b-next" onclick="changeStage()">المرحلة التالية</button>
     </div>
   </section>
 </div>
-
 <script>
-/* ============================================================
-   1) الصق مصفوفة masterStages الخاصة بك هنا كما هي، بلا تعديل.
-   ============================================================ */
-const masterStages = { 
-      1: [ // أسئلة صريحة
-                { مذكر: "ما هو أكثر خيال جنسي يراودك عندما تلمس قضيبي؟", مؤنث: "ما هو أكثر خيال جنسي يراودك عندما ألمس كسكِ؟" },
-                { مذكر: "هل تفضل نكاح كس زوجتك بقوة وعنف أم ببطء وحنان؟", مؤنث: "هل تفضلين أن أنكح كسكِ بقوة وعنف أم ببطء وحنان؟" },
-                { مذكر: "كم مرة في الليلة تتمنى أن تقذف داخل كسها؟", مؤنث: "كم مرة في الليلة تتمنين أن أقذف داخلكِ؟" },
-                { مذكر: "ما هو الجزء الأكثر إثارة في جسد زوجتك العاري؟", مؤنث: "ما هو الجزء الأكثر إثارة في جسدي العاري بالنسبة لك؟" },
-                { مذكر: "هل تستمتع برؤية زوجتك وهي تلمس كسها أمامك؟", مؤنث: "هل تستمتعين برؤيتي وأنا ألمس كسي أمامك؟" },
-                { مذكر: "ما هي الكلمة القذرة التي تحب أن تسمعها من زوجتك أثناء النكاح؟", مؤنث: "ما هي الكلمة القذرة التي تحب أن تسمعها مني أثناء النكاح؟" },
-                { مذكر: "هل تفضل مص قضيبك أم لحس كس زوجتك أكثر؟", مؤنث: "هل تفضلين مص قضيبي أم أن ألحس كسكِ أكثر؟" },
-                { مذكر: "ما هو العطر المفضل لديك على جسد زوجتك؟", مؤنث: "ما هو العطر الذي يجعلك تريد نكاحي فوراً؟" },
-                { مذكر: "هل تحب رؤية قضيبك وهو ينتصب أمام زوجتك؟", مؤنث: "هل تحبين رؤية قضيبي وهو ينتصب أمامكِ؟" },
-                { مذكر: "ما هو أكثر مكان في المنزل تتمنى نكاح زوجتك فيه؟", مؤنث: "ما هو أكثر مكان في المنزل تتمنين أن أنكحكِ فيه؟" },
-                { مذكر: "هل تفضل أن تكون مسيطراً أثناء النكاح أم منقاداً؟", مؤنث: "هل تفضلين أن أكون مسيطراً أثناء النكاح أم منقاداً لكِ؟" },
-                { مذكر: "كم من الوقت تفضل أن يستمر نكاح الكس قبل القذف؟", مؤنث: "كم من الوقت تفضلين أن يستمر نكاح كسي قبل أن تقذف؟" },
-                { مذكر: "هل تستمتع بسماع صوت صراخ زوجتك وأنت تنكحها؟", مؤنث: "هل تستمتعين بسماع صوت صراخك وأنت تنكحيني؟" },
-                { مذكر: "هل تحب أن تلمس مؤخرة زوجتك وأنت تنكحها؟", مؤنث: "هل تحبين أن ألمس مؤخرتكِ وأنا أنكحكِ؟" },
-                { مذكر: "ما هو تقييمك لشهوتك من 1 إلى 10؟", مؤنث: "ما هو تقييمك لشهوتك من 1 إلى 10؟" },
-                { مذكر: "هل تفضل أن ترى زوجتك عارية تماماً أم بملابس داخلية مثيرة؟", مؤنث: "هل تفضلين أن أراك عارياً تماماً أم بملابس داخلية مثيرة؟" },
-                { مذكر: "هل تحب أن أمسك قضيبك وأفركه أمامك؟", مؤنث: "هل تحبين أن أمسك كسكِ وأفركه أمامكِ؟" },
-                { مذكر: "ما هو أكثر جزء في جسدك تحب أن تلمسه زوجتك؟", مؤنث: "ما هو أكثر جزء في جسدك تحب أن ألمسه؟" },
-                { مذكر: "هل تفضل الاستحمام مع زوجتك قبل النكاح أم بعده؟", مؤنث: "هل تفضلين الاستحمام معي قبل النكاح أم بعده؟" },
-                { مذكر: "هل تحب أن تسمع زوجتك تطلب منك أن تنكحها بوقاحة؟", مؤنث: "هل تحبين أن أطلب منك أن تنكحني بوقاحة؟" },
-                { مذكر: "هل تفضل نكاح الكس وأنت واقف أم مستلقي؟", مؤنث: "هل تفضلين أن أنكحكِ وأنا واقف أم مستلقي؟" },
-                { مذكر: "هل تحب أن تذوق طعم كس زوجتك بعد النكاح؟", مؤنث: "هل تحبين أن تذوق طعم كسي بعد النكاح؟" },
-                { مذكر: "ما هي أكثر ليلة جنسية لا تنسى بالنسبة لك؟", مؤنث: "ما هي أكثر ليلة جنسية لا تنسى بالنسبة لك؟" },
-                { مذكر: "هل تفضل النوم عارياً بجانب زوجتك؟", مؤنث: "هل تفضلين النوم عارية بجانبي؟" },
-                { مذكر: "هل يثيرك أن ترى زوجتك تلمس بظرها أمامك؟", مؤنث: "هل يثيركِ أن تراني ألمس بظري أمامكِ؟" },
-                { مذكر: "هل تحب أن تقذف على صدر زوجتك؟", مؤنث: "هل تحبين أن أقذف على صدركِ؟" },
-                { مذكر: "هل تفضل أن تكون العلاقة الجنسية صامتة أم بكلمات مثيرة؟", مؤنث: "هل تفضلين أن تكون العلاقة صامتة أم بكلمات مثيرة؟" },
-                { مذكر: "ما هو أكثر شيء يثير قضيبك فوراً؟", مؤنث: "ما هو أكثر شيء يثير كسكِ فوراً؟" },
-                { مذكر: "هل تحب أن تلمس شعر زوجتك أثناء النكاح؟", مؤنث: "هل تحبين أن ألمس شعركِ أثناء النكاح؟" },
-                { مذكر: "هل تفضل نكاح الكس في السرير أم على الأرض؟", مؤنث: "هل تفضلين أن أنكحكِ في السرير أم على الأرض؟" },
-                { مذكر: "هل تحب أن تنظر في عيني زوجتك وأنت تقذف؟", مؤنث: "هل تحبين أن تنظر في عيني وأنت تقذف؟" },
-                { مذكر: "ما هو حجم قضيبك الذي تفضل أن تكون عليه؟", مؤنث: "ما هو حجم قضيبي الذي تفضلينه؟" },
-                { مذكر: "هل تفضل إضاءة خافتة أم مظلمة أثناء النكاح؟", مؤنث: "هل تفضلين إضاءة خافتة أم مظلمة أثناء النكاح؟" },
-                { مذكر: "هل تستمتع بفرك قضيبك على كس زوجتك قبل الإدخال؟", مؤنث: "هل تستمتعين بفرك قضيبي على كسكِ قبل الإدخال؟" },
-                { مذكر: "هل تفضل أن تبدأ أنت أم زوجتك بالمبادرة الجنسية؟", مؤنث: "هل تفضلين أن تبدأ أنت أم أنا بالمبادرة؟" },
-                { مذكر: "ما هو شعورك عندما تلمس نهود زوجتك؟", مؤنث: "ما هو شعورك عندما ألمس نهودكِ؟" },
-                { مذكر: "هل تحب أن تسمع زوجتك تئن وأنت تنكحها؟", مؤنث: "هل تحبين أن تسمع أنيني وأنت تنكحيني؟" },
-                { مذكر: "هل تفضل نكاح الكس الطويل أم القصير والمكثف؟", مؤنث: "هل تفضلين نكاح الكس الطويل أم القصير والمكثف؟" },
-                { مذكر: "هل تحب أن تطلب من زوجتك أن ترتدي ملابس مثيرة؟", مؤنث: "هل تحبين أن تطلب مني أن أرتدي ملابس مثيرة؟" },
-                { مذكر: "هل يثيرك النظر إلى كس زوجتك المبلل؟", مؤنث: "هل يثيركِ النظر إلى قضيبي المنتصب؟" },
-                { مذكر: "هل تفضل القذف داخل كس زوجتك أم على بطنها؟", مؤنث: "هل تفضلين أن أقذف داخل كسكِ أم على بطنكِ؟" },
-                { مذكر: "هل تحب أن تشم رائحة كس زوجتك قبل النكاح؟", مؤنث: "هل تحبين أن تشم رائحة كسي قبل النكاح؟" },
-                { مذكر: "هل تفضل أن تكون زوجتك صاخبة أم هادئة أثناء النكاح؟", مؤنث: "هل تفضلين أن أكون صاخباً أم هادئاً أثناء النكاح؟" },
-                { مذكر: "ما هي النظرة التي تثير قضيبك أكثر؟", مؤنث: "ما هي النظرة التي تثير كسكِ أكثر؟" },
-                { مذكر: "هل تفضل أن تلمس زوجتك قضيبك بيديها أم بفمها؟", مؤنث: "هل تفضلين أن ألمس كسكِ بيدي أم بلساني؟" },
-                { مذكر: "هل تحب أن تنام بعد النكاح مباشرة أم ترغب في المزيد؟", مؤنث: "هل تحبين أن تنامي بعد النكاح مباشرة أم ترغبين في المزيد؟" },
-                { مذكر: "ما هو أكثر شيء تتمنى أن تفعله مع زوجتك الآن؟", مؤنث: "ما هو أكثر شيء تتمنى أن أفعله معك الآن؟" },
-                { مذكر: "هل يثيرك أن ترى زوجتك وهي تستمني أمامك؟", مؤنث: "هل يثيركِ أن تراني وأنا أستمني أمامكِ؟" },
-                { مذكر: "هل تحب أن تسمع زوجتك تهمس باسمك أثناء النكاح؟", مؤنث: "هل تحبين أن تسمع اسمك وهمساً أثناء النكاح؟" }
-            ],
-            2: [ // أوامر مثيرة
-                "قبل شريكك قبلة عميقة وبطيئة لمدة دقيقة كاملة دون انقطاع.",
-                "عض شفة شريكك السفلية برفق ومصها وأنت تنظر في عينيه.",
-                "اهمس في أذن شريكك بأكثر جملة قذرة يمكنك تخيلها.",
-                "انزع ملابس شريكك العلوية ببطء باستخدام أسنانك فقط.",
-                "مرر يدك ببطء من صدر شريكك وصولاً إلى منطقة العانة فوق الملابس.",
-                "قبّل رقبة شريكك واترك علامة مص حمراء واضحة.",
-                "اجلس في حضن شريكك وحرك جسمك ببطء ملامساً إياه.",
-                "خذ يد شريكك وضعها على قضيبك المنتصب أو كسكِ المبلل.",
-                "انظر في عيني شريكك لمدة 30 ثانية دون أن ترمش ثم قبله بعنف.",
-                "اربط يدي شريكك بوشاح أو حزام وقبّل جسده بالكامل.",
-                "قم بخلع حذاء وجوارب شريكك ثم قبّل قدميه واصعد ببطء.",
-                "أصدر صوت تأوه عميق في أذن شريكك وأنت تلمس فخذه.",
-                "امسح لعابك على صدر شريكك ثم دلكه بأصابعك.",
-                "دع شريكك يستلقي على بطنه وقم بمساج ظهره ونزولاً لمؤخرته.",
-                "مرر لسانك على طول عمود شريكك الفقري من الرقبة إلى أسفل الظهر.",
-                "أمسك خصر شريكك بقوة وضمه إليك وأنت تقبّل رقبته.",
-                "قم بتقبيل بطن شريكك ومنطقة السرة بلطف ومصها.",
-                "انزع ملابسك الداخلية ببطء وألقها أمام شريكك.",
-                "أغمض عيني شريكك وقبّل 5 أماكن مختلفة في جسده واجعله يخمنها.",
-                "قم بتمرير قطعة ثلج على صدر شريكك ورقبته ثم لحسها.",
-                "اجعل شريكك يجلس على الكرسي واركع أمامه وقبل ركبتيه.",
-                "امسك مؤخرة شريكك بيديك واضغط عليها برفق وأنت تعض أذنه.",
-                "تحدث بصوت خفيض وأخبر شريكك بما تريد أن تفعله به الليلة.",
-                "قم بفك أزرار قميص شريكك بأصابعك ببطء شديد.",
-                "داعب شعر شريكك وشدّه بلطف للخلف ليكشف عن رقبته وصدره وقبلهما.",
-                "أخرج لسانك وامسح به شفتي شريكك المغلقتين ببطء.",
-                "اجعل شريكك يضع يده على صدرك وأنت تتنفس بعمق.",
-                "قبّل مؤخرة رقبة شريكك وصولاً إلى كتفيه.",
-                "أنزل ملابس شريكك الداخلية بقدمك وحركها بعيداً.",
-                "داعب فخذ شريكك الداخلي بأطراف أصابعك بحركات دائرية.",
-                "ارفع وجه شريكك للأعلى وقبّل حنجرته وعنقه.",
-                "اجلس بين ساقي شريكك وقم بتقبيل باطن ركبتيه.",
-                "قم بإصدار أصوات تنفس سريعة قرب أذن شريكك.",
-                "انحني ومرر لسانك على طول ساق شريكك من الكاحل حتى الفخذ.",
-                "امسك رأس شريكك بين يديك وقبله قبلة فرنسية عميقة.",
-                "انزع قطعة واحدة من ملابسك وأنت تنظر في عيني شريكك.",
-                "مرر يدك تحت ملابس شريكك وامسك فخذه برفق.",
-                "قبّل أصابع قدم شريكك واحدة تلو الأخرى ببطء.",
-                "استلقي بجانب شريكك وامسح بيدك على بطنه.",
-                "قل لشريكك أنك تريده الآن بصوت مليء بالشهوة.",
-                "امسك رقبة شريكك بيدك وقبّل صدره بلطف.",
-                "حرك شفتيك ببطء على طول ذراع شريكك.",
-                "دع شريكك يراك وأنت تخلع ملابسك أمامه.",
-                "قبّل كتف شريكك وصولاً إلى رقبته.",
-                "همس بأشياء مثيرة في أذن شريكك وأنت تلمس فخذه.",
-                "قم بتقبيل جبهة شريكك ثم أنزل رأسك لتقبيل صدره.",
-                "اجلس مقابل شريكك وانظر في عينيه بدون كلام لمدة دقيقة.",
-                "استلقي فوق شريكك وقبّل شفتيه بلطف.",
-                "داعب ظهر شريكك بأطراف أصابعك بحركات بطيئة.",
-                "قبّل فخذ شريكك من فوق الملابس.",
-                "امسك يد شريكك وضعها على خدك."
-            ],
-            3: [ // مداعبة مباشرة
-                { مذكر: "مص نهد زوجتك الأيمن وأقرص حلمتها بأسنانك بلطف.", مؤنث: "دعي زوجك يمص نهدكِ الأيمن ويقرص حلمتكِ بأسنانه بلطف." },
-                { مذكر: "أدخل لسانك داخل كس زوجتك وحركه ببطء داخل شفراتها.", مؤنث: "أدخلي قضيب زوجك كاملاً في فمك وحركي رأسك صعوداً ونزولاً." },
-                { مذكر: "العق بظر زوجتك وامتصه بشفتيك حتى ينتفخ.", مؤنث: "دعي زوجك يلعق بظركِ ويمتصه بشفتيه حتى ينتفخ." },
-                { مذكر: "افرك كس زوجتك بإصبعك السبابة بحركات دائرية سريعة.", مؤنث: "افركي كسكِ بإصبعك السبابة بحركات دائرية سريعة أمام زوجك." },
-                { مذكر: "أدخل إصبعين في كس زوجتك وحركهما للداخل برفق.", مؤنث: "دعي زوجك يدخل إصبعين في كسكِ ويحركهما للداخل برفق." },
-                { مذكر: "مص الفخذ الداخلي لزوجتك واترك علامة حمراء.", مؤنث: "دعي زوجك يمص فخذكِ الداخلي ويترك علامة حمراء." },
-                { مذكر: "امسك مؤخرة زوجتك بيديك واعجنها وأنت تنكحها.", مؤنث: "دعي زوجك يمسك مؤخرتكِ ويعجنها وأنت تنكحينه." },
-                { مذكر: "قم بلعق كس زوجتك من الأسفل للأعلى بلسانك المبلل.", مؤنث: "انزلي وأدخلي قضيب زوجك في فمك من القاعدة إلى الرأس." },
-                { مذكر: "داعب شفرتي كس زوجتك بأطراف أصابعك برقة.", مؤنث: "داعبي شفرتي كسكِ بأطراف أصابعك برقة." },
-                { مذكر: "داعب حلمة زوجتك بين إبهامك وسبابتك.", مؤنث: "دعي زوجك يداعب حلمتكِ بين إبهامه وسبابته." },
-                { مذكر: "الحس المنطقة ما بين كس زوجتك وشرجها بلسانك.", مؤنث: "دعي زوجك يلحس المنطقة ما بين كسكِ وشرجكِ." },
-                { مذكر: "اقضِ 5 دقائق في مداعبة وفرك كس زوجتك.", مؤنث: "اقضي 5 دقائق في فرك كسكِ وتدليكه." },
-                { مذكر: "امسك قضيبك وأفركه على كس زوجتك المبلل.", مؤنث: "امسكي قضيبي وافركيه على كسكِ المبلل." },
-                { مذكر: "ضع لعابك على بظر زوجتك وافركه بإصبعك.", مؤنث: "ضعي لعابك على بظركِ وافركيه بإصبعكِ." },
-                { مذكر: "مص رأس قضيبك وأنت تنظر إلى زوجتك.", مؤنث: "مصي رأس قضيبي وأنت تنظرين إلي." },
-                { مذكر: "أدخل لسانك في فم زوجتك وامسك ثديها.", مؤنث: "أدخلي لسانك في فمي وامسكي ثديي." },
-                { مذكر: "قم بنكاح كس زوجتك بإصبعك الأوسط ببطء.", مؤنث: "دعي زوجك ينكح كسكِ بإصبعه الأوسط ببطء." },
-                { مذكر: "افرك قضيبك على مؤخرة زوجتك العارية.", مؤنث: "افركي كسكِ على قضيب زوجك العاري." },
-                { مذكر: "داعب عانة زوجتك بأطراف أصابعك.", مؤنث: "دعي زوجك يداعب عانتكِ بأطراف أصابعه." },
-                { مذكر: "الحس نهود زوجتك ورقبتها.", مؤنث: "دعي زوجك يلحس نهودكِ ورقبتكِ." },
-                { مذكر: "امسك قضيبك بيدك وفركه أمام زوجتك.", مؤنث: "امسكي كسكِ بيدكِ وافركيه أمام زوجك." },
-                { مذكر: "قبّل بظر زوجتك وامتصه.", مؤنث: "دعي زوجك يقبل بظركِ ويمتصه." },
-                { مذكر: "داعب كس زوجتك بأصابعك المبللة بالمزلق.", مؤنث: "داعبي كسكِ بأصابعكِ المبللة بالمزلق." },
-                { مذكر: "مص شفرتي كس زوجتك.", مؤنث: "دعي زوجك يمص شفرتي كسكِ." },
-                { مذكر: "احك قضيبك على بظر زوجتك.", مؤنث: "دعي زوجك يحك قضيبه على بظركِ." },
-                { مذكر: "انزع ملابس زوجتك الداخلية بأسنانك.", مؤنث: "انزعي ملابسي الداخلية بأسنانكِ." },
-                { مذكر: "قم بفرك كس زوجتك بسرعة وبطء بالتبادل.", مؤنث: "دعي زوجك يفرك كسكِ بسرعة وبطء بالتبادل." },
-                { مذكر: "امسك قضيبك وانحني إلى زوجتك.", مؤنث: "امسكي كسكِ وانحني إلى زوجك." },
-                { مذكر: "مساج نهود زوجتك بالزيت الساخن.", مؤنث: "دعي زوجك يدلك نهودكِ بالزيت الساخن." },
-                { مذكر: "مص وامتص حلمة زوجتك بقوة.", مؤنث: "دعي زوجك يمص ويمتص حلمتكِ بقوة." },
-                { مذكر: "أدخل إصبعاً واحداً في كس زوجتك ببطء.", مؤنث: "دعي زوجك يدخل إصبعاً واحداً في كسكِ ببطء." },
-                { مذكر: "عض أذن زوجتك وأنت تفرك كسها.", مؤنث: "دعي زوجك يعض أذنكِ وأنت تفركين كسكِ." },
-                { مذكر: "دلك بظر زوجتك بحركات دائرية.", مؤنث: "دلكي بظركِ بحركات دائرية." },
-                { مذكر: "امسك مؤخرة زوجتك وقبّل كل ردف.", مؤنث: "دعي زوجك يمسك مؤخرتكِ ويقبل كل ردف." },
-                { مذكر: "داعب كس زوجتك بأصابعك المبللة.", مؤنث: "دعي زوجك يداعب كسكِ بأصابعه المبللة." },
-                { مذكر: "مص شفتي زوجتك وأنت تلمس كسها.", مؤنث: "مصي شفتي زوجك وأنت تلمسين كسكِ." },
-                { مذكر: "افرك قضيبك على فخذ زوجتك.", مؤنث: "افركي كسكِ على فخذ زوجك." },
-                { مذكر: "أنزل رأسك بين ثديي زوجتك.", مؤنث: "دعي زوجك ينزل رأسه بين ثدييكِ." },
-                { مذكر: "قم بتقبيل كس زوجتك من الخلف.", مؤنث: "دعي زوجك يقبل كسكِ من الخلف." },
-                { مذكر: "داعب بظر زوجتك بأصابعك وافركه بلطف.", مؤنث: "داعبي بظركِ بأصابعكِ وافركيه بلطف." },
-                { مذكر: "الحس فخذ زوجتك من الداخل وصولاً إلى كسها.", مؤنث: "دعي زوجك يلحس فخذكِ من الداخل وصولاً إلى كسكِ." },
-                { مذكر: "امسك قضيبك وضعه بالقرب من فم زوجتك.", مؤنث: "امسكي قضيبي وضعيه بالقرب من فمكِ." },
-                { مذكر: "مداعبة شفرتي كس زوجتك بأطراف أصابعك.", مؤنث: "دعي زوجك يداعب شفرتي كسكِ بأطراف أصابعه." },
-                { مذكر: "مص حلمة زوجتك وامتصها بلطف.", مؤنث: "دعي زوجك يمص حلمتكِ ويمتصها بلطف." },
-                { مذكر: "افرك كس زوجتك حتى تصل إلى النشوة.", مؤنث: "افركي كسكِ حتى تصلين إلى النشوة." }
-            ],
-            4: [ // وضعيات (وضعية واحدة فقط لكل دورة)
-                { مذكر: "أدخل قضيبك في كس زوجتك ببطء شديد واثبت داخلها دون حركة لمدة دقيقة كاملة.", مؤنث: "استلقي على ظهركِ وافتحي رجليكِ ودعي زوجك يدخل قضيبه ببطء شديد ويثبت داخلكِ دون حركة." },
-                { مذكر: "نكح زوجتك من الخلف وضع رأسك على ظهرها واضرب كسها بقوة.", مؤنث: "اتخذي وضعية السجود على السرير ودعي زوجك ينكحكِ من الخلف ويضرب كسكِ بقوة." },
-                { مذكر: "اجعل زوجتك تركب فوق قضيبك وتتحرك صعوداً ونزولاً.", مؤنث: "اركبي فوق زوجك وادخلي قضيبه بداخل كسكِ وتحركي صعوداً ونزولاً." },
-                { مذكر: "جامع زوجتك وأنت واقف وهي تستند على الحائط.", مؤنث: "قفي واستندي على الحائط ودعي زوجك ينكحكِ وأنت واقفة." },
-                { مذكر: "مارس الجنس مع زوجتك في وضعية الملعقة.", مؤنث: "استلقي على جنبك ودعي زوجك يدخل قضيبه في كسكِ من الخلف." },
-                { مذكر: "ارفع ساقي زوجتك وضعهما على كتفيك وأدخل قضيبك بعمق.", مؤنث: "ارفعي ساقيكِ وضعهما على كتفي زوجك ودعيه يدخل قضيبه بعمق." },
-                { مذكر: "اجلس على الأرض واجعل زوجتك تركب فوقك.", مؤنث: "اجلسي فوق زوجك وهو جالس على الأرض وحركي كسكِ على قضيبه." },
-                { مذكر: "جامع زوجتك وهي على بطنها واركض قضيبك في كسها.", مؤنث: "استلقي على بطنكِ ودعي زوجك يركل قضيبه في كسكِ." }
-                }
-
-/* ============================================================
-   2) الإعدادات
-   ============================================================ */
-const STAGE_LIMITS = {1:8, 2:8, 3:8, 4:1};
-const STAGE_NAMES  = {1:"صريح", 2:"مثير", 3:"مداعبة", 4:"وضعيات"};
-const STAGE_GLYPH  = {1:"g1", 2:"g2", 3:"g3", 4:"g4"};
-const K = { pin:'rt_k', p1:'rt_a', p2:'rt_b', hist:'rt_h', stages:'rt_e' };
-
-/* 3) تخزين لا ينهار عند التلف أو المنع */
-const LS = {
-  read(k, f){ try{ const v = localStorage.getItem(k); return v === null ? f : JSON.parse(v); }catch(e){ return f; } },
-  write(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
-  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+/* كل بطاقة لها نصان مكتوبان ومدققان بشكل مستقل؛ لا تحويل نحوي آلي. */
+const masterStages = {
+  1: [
+    {مذكر:"ما أكثر خيال جنسي يراودك عندما تلمس قضيبي؟",مؤنث:"ما أكثر خيال جنسي يراودكِ عندما ألمس كسكِ؟"},
+    {مذكر:"هل تفضل نكاح كس زوجتك بقوة أم ببطء وحنان؟",مؤنث:"هل تفضلين أن أنكح كسكِ بقوة أم ببطء وحنان؟"},
+    {مذكر:"كم مرة في الليلة تتمنى أن تقذف داخل كس زوجتك؟",مؤنث:"كم مرة في الليلة تتمنين أن أقذف داخل كسكِ؟"},
+    {مذكر:"ما الجزء الأكثر إثارة في جسد زوجتك العاري؟",مؤنث:"ما الجزء الأكثر إثارة في جسدي العاري بالنسبة إليكِ؟"},
+    {مذكر:"هل تستمتع برؤية زوجتك وهي تلمس كسها أمامك؟",مؤنث:"هل تستمتعين برؤيتي وأنا ألمس قضيبي أمامكِ؟"},
+    {مذكر:"ما الكلمة الجريئة التي تحب أن تسمعها من زوجتك أثناء النكاح؟",مؤنث:"ما الكلمة الجريئة التي تحبين سماعها مني أثناء النكاح؟"},
+    {مذكر:"هل تفضل أن تمص زوجتك قضيبك أم أن تلحس كسها أكثر؟",مؤنث:"هل تفضلين أن تمصي قضيبي أم أن ألحس كسكِ أكثر؟"},
+    {مذكر:"ما العطر المفضل لديك على جسد زوجتك؟",مؤنث:"ما العطر الذي يجعلكِ ترغبين في نكاحي فوراً؟"},
+    {مذكر:"هل تحب رؤية قضيبك وهو ينتصب أمام زوجتك؟",مؤنث:"هل تحبين رؤية قضيبي وهو ينتصب أمامكِ؟"},
+    {مذكر:"ما أكثر مكان في المنزل تتمنى نكاح زوجتك فيه؟",مؤنث:"ما أكثر مكان في المنزل تتمنين أن أنكحكِ فيه؟"},
+    {مذكر:"هل تفضل أن تكون مسيطراً أثناء النكاح أم منقاداً؟",مؤنث:"هل تفضلين أن تكوني مسيطرة أثناء النكاح أم منقادة؟"},
+    {مذكر:"كم من الوقت تفضل أن يستمر نكاح كس زوجتك قبل القذف؟",مؤنث:"كم من الوقت تفضلين أن يستمر نكاح كسكِ قبل أن أقذف؟"},
+    {مذكر:"هل تستمتع بسماع صراخ زوجتك وأنت تنكحها؟",مؤنث:"هل تستمتعين بسماع صراخي وأنا أنكحكِ؟"},
+    {مذكر:"هل تحب أن تلمس مؤخرة زوجتك وأنت تنكحها؟",مؤنث:"هل تحبين أن ألمس مؤخرتكِ وأنا أنكحكِ؟"},
+    {مذكر:"ما تقييمك لشهوتك الآن من 1 إلى 10؟",مؤنث:"ما تقييمكِ لشهوتك الآن من 1 إلى 10؟"},
+    {مذكر:"هل تفضل أن ترى زوجتك عارية تماماً أم بملابس داخلية مثيرة؟",مؤنث:"هل تفضلين أن ترين زوجك عارياً تماماً أم بملابس داخلية مثيرة؟"},
+    {مذكر:"هل تحب أن أمسك قضيبك وأفركه أمامك؟",مؤنث:"هل تحبين أن أمسك كسكِ وأداعبه أمامكِ؟"},
+    {مذكر:"ما أكثر جزء في جسدك تحب أن تلمسه زوجتك؟",مؤنث:"ما أكثر جزء في جسدكِ تحبين أن ألمسه؟"},
+    {مذكر:"هل تفضل الاستحمام مع زوجتك قبل النكاح أم بعده؟",مؤنث:"هل تفضلين الاستحمام معي قبل النكاح أم بعده؟"},
+    {مذكر:"هل تحب أن تسمع زوجتك تطلب منك نكاحها بجرأة؟",مؤنث:"هل تحبين أن أطلب منك نكاحي بجرأة؟"},
+    {مذكر:"هل تفضل نكاح زوجتك وأنت واقف أم مستلقٍ؟",مؤنث:"هل تفضلين أن أنكحكِ وأنا واقف أم مستلقٍ؟"},
+    {مذكر:"هل تحب تذوّق كس زوجتك بعد النكاح؟",مؤنث:"هل تحبين أن أتذوّق كسكِ بعد النكاح؟"},
+    {مذكر:"ما أكثر ليلة جنسية لا تُنسى بالنسبة إليك؟",مؤنث:"ما أكثر ليلة جنسية لا تُنسى بالنسبة إليكِ؟"},
+    {مذكر:"هل تفضل النوم عارياً بجانب زوجتك؟",مؤنث:"هل تفضلين النوم عارية بجانبي؟"},
+    {مذكر:"هل يثيرك أن ترى زوجتك تلمس بظرها أمامك؟",مؤنث:"هل يثيركِ أن ترين زوجك يلمس قضيبه أمامكِ؟"},
+    {مذكر:"هل تحب أن تقذف على صدر زوجتك؟",مؤنث:"هل تحبين أن أقذف على صدركِ؟"},
+    {مذكر:"هل تفضل أن تكون العلاقة الجنسية صامتة أم مصحوبة بكلمات مثيرة؟",مؤنث:"هل تفضلين أن تكون العلاقة الجنسية صامتة أم مصحوبة بكلمات مثيرة؟"},
+    {مذكر:"ما أكثر شيء يثير قضيبك فوراً؟",مؤنث:"ما أكثر شيء يثير كسكِ فوراً؟"},
+    {مذكر:"هل تحب أن تلمس شعر زوجتك أثناء النكاح؟",مؤنث:"هل تحبين أن ألمس شعركِ أثناء النكاح؟"},
+    {مذكر:"هل تفضل نكاح زوجتك في السرير أم على الأرض؟",مؤنث:"هل تفضلين أن أنكحكِ في السرير أم على الأرض؟"},
+    {مذكر:"هل تحب أن تنظر في عيني زوجتك وأنت تقذف؟",مؤنث:"هل تحبين أن تنظري في عينيّ وأنا أقذف؟"},
+    {مذكر:"ما حجم قضيبك الذي تفضل أن يكون عليه؟",مؤنث:"ما حجم قضيبي الذي تفضلينه؟"},
+    {مذكر:"هل تفضل إضاءة خافتة أم ظلاماً أثناء النكاح؟",مؤنث:"هل تفضلين إضاءة خافتة أم ظلاماً أثناء النكاح؟"},
+    {مذكر:"هل تستمتع بفرك قضيبك على كس زوجتك قبل الإدخال؟",مؤنث:"هل تستمتعين بفرك قضيبي على كسكِ قبل الإدخال؟"},
+    {مذكر:"هل تفضل أن تبدأ أنت أم زوجتك بالمبادرة الجنسية؟",مؤنث:"هل تفضلين أن تبدئي أنتِ أم أبدأ أنا بالمبادرة الجنسية؟"},
+    {مذكر:"ما شعورك عندما تلمس ثديي زوجتك؟",مؤنث:"ما شعوركِ عندما ألمس ثدييكِ؟"},
+    {مذكر:"هل تحب سماع أنين زوجتك وأنت تنكحها؟",مؤنث:"هل تحبين سماع أنيني وأنا أنكحكِ؟"},
+    {مذكر:"هل تفضل النكاح الطويل أم القصير والمكثف؟",مؤنث:"هل تفضلين النكاح الطويل أم القصير والمكثف؟"},
+    {مذكر:"هل تحب أن تطلب من زوجتك ارتداء ملابس مثيرة؟",مؤنث:"هل تحبين أن تطلبي مني ارتداء ملابس مثيرة؟"},
+    {مذكر:"هل يثيرك النظر إلى كس زوجتك المبلل؟",مؤنث:"هل يثيركِ النظر إلى قضيبي المنتصب؟"},
+    {مذكر:"هل تفضل القذف داخل كس زوجتك أم على بطنها؟",مؤنث:"هل تفضلين أن أقذف داخل كسكِ أم على بطنكِ؟"},
+    {مذكر:"هل تحب شم رائحة كس زوجتك قبل النكاح؟",مؤنث:"هل تحبين أن أشم رائحة كسكِ قبل النكاح؟"},
+    {مذكر:"هل تفضل أن تكون زوجتك صاخبة أم هادئة أثناء النكاح؟",مؤنث:"هل تفضلين أن أكون صاخباً أم هادئاً أثناء النكاح؟"},
+    {مذكر:"ما النظرة التي تثير قضيبك أكثر؟",مؤنث:"ما النظرة التي تثير كسكِ أكثر؟"},
+    {مذكر:"هل تفضل أن تلمس زوجتك قضيبك بيديها أم بفمها؟",مؤنث:"هل تفضلين أن أداعب كسكِ بيدي أم بلساني؟"},
+    {مذكر:"هل تحب النوم بعد النكاح مباشرة أم ترغب في المزيد؟",مؤنث:"هل تحبين النوم بعد النكاح مباشرة أم ترغبين في المزيد؟"},
+    {مذكر:"ما أكثر شيء تتمنى أن أفعله بك الآن؟",مؤنث:"ما أكثر شيء تتمنين أن أفعله بكِ الآن؟"},
+    {مذكر:"هل يثيرك أن ترى زوجتك وهي تستمني أمامك؟",مؤنث:"هل يثيركِ أن تراني وأنا أستمني أمامكِ؟"},
+    {مذكر:"هل تحب أن تسمع زوجتك تهمس باسمك أثناء النكاح؟",مؤنث:"هل تحبين أن تسمعيني أهمس باسمكِ أثناء النكاح؟"}
+  ],
+  2: [
+    {مذكر:"قبّل زوجتك قبلة عميقة وبطيئة لمدة دقيقة كاملة دون انقطاع.",مؤنث:"قبّلي زوجك قبلة عميقة وبطيئة لمدة دقيقة كاملة دون انقطاع."},
+    {مذكر:"اعضض شفة زوجتك السفلية برفق ثم قبّلها وأنت تنظر في عينيها.",مؤنث:"اعضضي شفة زوجك السفلية برفق ثم قبّليه وأنت تنظرين في عينيه."},
+    {مذكر:"اهمس في أذن زوجتك بأكثر جملة جريئة تخطر ببالك.",مؤنث:"اهمسي في أذن زوجك بأكثر جملة جريئة تخطر ببالكِ."},
+    {مذكر:"انزع ملابس زوجتك العلوية ببطء باستخدام أسنانك فقط.",مؤنث:"انزعي ملابس زوجك العلوية ببطء باستخدام أسنانكِ فقط."},
+    {مذكر:"مرّر يدك ببطء من صدر زوجتك وصولاً إلى عانتها فوق الملابس.",مؤنث:"مرّري يدكِ ببطء من صدر زوجك وصولاً إلى عانته فوق الملابس."},
+    {مذكر:"قبّل رقبة زوجتك واترك علامة خفيفة إن كانت ترغب في ذلك.",مؤنث:"قبّلي رقبة زوجك واتركي علامة خفيفة إن كان يرغب في ذلك."},
+    {مذكر:"اجلس في حضن زوجتك وحرّك جسمك ببطء ملامساً جسدها.",مؤنث:"اجلسي في حضن زوجك وحرّكي جسمكِ ببطء ملامسةً جسده."},
+    {مذكر:"خذ يد زوجتك وضعها على قضيبك المنتصب.",مؤنث:"خذي يد زوجك وضعيها على كسكِ المبلل."},
+    {مذكر:"انظر في عيني زوجتك لمدة 30 ثانية ثم قبّلها بشغف.",مؤنث:"انظري في عيني زوجك لمدة 30 ثانية ثم قبّليه بشغف."},
+    {مذكر:"اربط يدي زوجتك بوشاح برفق إن وافقت، ثم قبّل جسدها.",مؤنث:"اربطي يدي زوجك بوشاح برفق إن وافق، ثم قبّلي جسده."},
+    {مذكر:"اخلع حذاء زوجتك وجواربها ثم قبّل قدميها واصعد ببطء.",مؤنث:"اخلعي حذاء زوجك وجواربه ثم قبّلي قدميه واصعدي ببطء."},
+    {مذكر:"أصدر تأوهًا خافتًا قرب أذن زوجتك وأنت تداعب فخذها.",مؤنث:"أصدري تأوهًا خافتًا قرب أذن زوجك وأنت تداعبين فخذه."},
+    {مذكر:"مرّر لسانك على صدر زوجتك ثم دلّكه بأطراف أصابعك.",مؤنث:"مرّري لسانكِ على صدر زوجك ثم دلّكيه بأطراف أصابعكِ."},
+    {مذكر:"دع زوجتك تستلقي على بطنها ودلّك ظهرها نزولاً إلى مؤخرتها.",مؤنث:"دعي زوجك يستلقي على بطنه ودلّكي ظهره نزولاً إلى مؤخرته."},
+    {مذكر:"مرّر لسانك على عمود زوجتك الفقري من الرقبة إلى أسفل الظهر.",مؤنث:"مرّري لسانكِ على عمود زوجك الفقري من الرقبة إلى أسفل الظهر."},
+    {مذكر:"أمسك خصر زوجتك وضمّها إليك وأنت تقبّل رقبتها.",مؤنث:"أمسكي خصر زوجك وضمّيه إليكِ وأنت تقبّلين رقبته."},
+    {مذكر:"قبّل بطن زوجتك وسرتها بلطف.",مؤنث:"قبّلي بطن زوجك وسرته بلطف."},
+    {مذكر:"انزع ملابسك الداخلية ببطء أمام زوجتك.",مؤنث:"انزعي ملابسكِ الداخلية ببطء أمام زوجك."},
+    {مذكر:"أغمض عيني زوجتك وقبّل خمسة مواضع من جسدها واجعلها تخمّنها.",مؤنث:"أغمضي عيني زوجك وقبّلي خمسة مواضع من جسده واجعليه يخمّنها."},
+    {مذكر:"مرّر قطعة ثلج على صدر زوجتك ورقبتها ثم أتبعها بقبلات دافئة.",مؤنث:"مرّري قطعة ثلج على صدر زوجك ورقبته ثم أتبعيها بقبلات دافئة."},
+    {مذكر:"اجعل زوجتك تجلس على كرسٍ واركع أمامها وقبّل ركبتيها.",مؤنث:"اجعلي زوجك يجلس على كرسٍ واركعي أمامه وقبّلي ركبتيه."},
+    {مذكر:"أمسك مؤخرة زوجتك بيديك ودلّكها برفق وأنت تعض أذنها.",مؤنث:"أمسكي مؤخرة زوجك بيديكِ ودلّكيها برفق وأنت تعضين أذنه."},
+    {مذكر:"بصوت خفيض، أخبر زوجتك بما تريد أن تفعله بها الليلة.",مؤنث:"بصوت خفيض، أخبري زوجك بما تريدين أن تفعليه به الليلة."},
+    {مذكر:"فك أزرار قميص زوجتك بأصابعك ببطء شديد.",مؤنث:"فكّي أزرار قميص زوجك بأصابعكِ ببطء شديد."},
+    {مذكر:"داعب شعر زوجتك وشدّه بلطف للخلف ثم قبّل رقبتها.",مؤنث:"داعبي شعر زوجك وشدّيه بلطف للخلف ثم قبّلي رقبته."},
+    {مذكر:"مرّر لسانك ببطء على شفتي زوجتك المغلقتين.",مؤنث:"مرّري لسانكِ ببطء على شفتي زوجك المغلقتين."},
+    {مذكر:"ضع يد زوجتك على صدرك وخذ نفسًا عميقًا وأنت تنظر إليها.",مؤنث:"ضعي يد زوجك على صدركِ وخذي نفسًا عميقًا وأنت تنظرين إليه."},
+    {مذكر:"قبّل مؤخرة رقبة زوجتك وصولاً إلى كتفيها.",مؤنث:"قبّلي مؤخرة رقبة زوجك وصولاً إلى كتفيه."},
+    {مذكر:"أنزل ملابس زوجتك الداخلية ببطء ثم أبعدها بقدمك.",مؤنث:"أنزلي ملابس زوجك الداخلية ببطء ثم أبعديها بقدمكِ."},
+    {مذكر:"داعب فخذ زوجتك الداخلي بأطراف أصابعك بحركات دائرية.",مؤنث:"داعبي فخذ زوجك الداخلي بأطراف أصابعكِ بحركات دائرية."},
+    {مذكر:"ارفع وجه زوجتك بلطف وقبّل عنقها.",مؤنث:"ارفعي وجه زوجك بلطف وقبّلي عنقه."},
+    {مذكر:"اجلس بين ساقي زوجتك وقبّل باطن ركبتيها.",مؤنث:"اجلسي بين ساقي زوجك وقبّلي باطن ركبتيه."},
+    {مذكر:"تنفّس ببطء قرب أذن زوجتك دون أن تلمسها لبضع ثوانٍ.",مؤنث:"تنفّسي ببطء قرب أذن زوجك دون أن تلمسيه لبضع ثوانٍ."},
+    {مذكر:"مرّر لسانك على ساق زوجتك من الكاحل حتى الفخذ.",مؤنث:"مرّري لسانكِ على ساق زوجك من الكاحل حتى الفخذ."},
+    {مذكر:"أمسك رأس زوجتك بين يديك وقبّلها قبلة فرنسية عميقة.",مؤنث:"أمسكي رأس زوجك بين يديكِ وقبّليه قبلة فرنسية عميقة."},
+    {مذكر:"انزع قطعة واحدة من ملابسك وأنت تنظر في عيني زوجتك.",مؤنث:"انزعي قطعة واحدة من ملابسكِ وأنت تنظرين في عيني زوجك."},
+    {مذكر:"مرّر يدك تحت ملابس زوجتك وداعب فخذها برفق.",مؤنث:"مرّري يدكِ تحت ملابس زوجك وداعبي فخذه برفق."},
+    {مذكر:"قبّل أصابع قدمي زوجتك واحدًا تلو الآخر ببطء.",مؤنث:"قبّلي أصابع قدمي زوجك واحدًا تلو الآخر ببطء."},
+    {مذكر:"استلقِ بجانب زوجتك ومرّر يدك على بطنها.",مؤنث:"استلقي بجانب زوجك ومرّري يدكِ على بطنه."},
+    {مذكر:"قل لزوجتك إنك تريدها الآن بصوت مليء بالشهوة.",مؤنث:"قولي لزوجك إنكِ تريدينه الآن بصوت مليء بالشهوة."},
+    {مذكر:"أمسك رقبة زوجتك برفق وقبّل صدرها.",مؤنث:"أمسكي رقبة زوجك برفق وقبّلي صدره."},
+    {مذكر:"حرّك شفتيك ببطء على طول ذراع زوجتك.",مؤنث:"حرّكي شفتيكِ ببطء على طول ذراع زوجك."},
+    {مذكر:"دع زوجتك تراقبك وأنت تخلع ملابسك أمامها.",مؤنث:"دعي زوجك يراقبكِ وأنت تخلعين ملابسكِ أمامه."},
+    {مذكر:"قبّل كتف زوجتك ثم انتقل ببطء إلى رقبتها.",مؤنث:"قبّلي كتف زوجك ثم انتقلي ببطء إلى رقبته."},
+    {مذكر:"اهمس بكلمات مثيرة في أذن زوجتك وأنت تداعب فخذها.",مؤنث:"اهمسي بكلمات مثيرة في أذن زوجك وأنت تداعبين فخذه."},
+    {مذكر:"قبّل جبهة زوجتك ثم انزل ببطء لتقبيل صدرها.",مؤنث:"قبّلي جبهة زوجك ثم انزلي ببطء لتقبيل صدره."},
+    {مذكر:"اجلس مقابل زوجتك وانظر في عينيها دون كلام لمدة دقيقة.",مؤنث:"اجلسي مقابل زوجك وانظري في عينيه دون كلام لمدة دقيقة."},
+    {مذكر:"استلقِ فوق زوجتك برفق وقبّل شفتيها.",مؤنث:"استلقي فوق زوجك برفق وقبّلي شفتيه."},
+    {مذكر:"داعب ظهر زوجتك بأطراف أصابعك بحركات بطيئة.",مؤنث:"داعبي ظهر زوجك بأطراف أصابعكِ بحركات بطيئة."},
+    {مذكر:"قبّل فخذ زوجتك من فوق الملابس ثم امسك يدها وضعها على خدك.",مؤنث:"قبّلي فخذ زوجك من فوق الملابس ثم امسكي يده وضعيها على خدكِ."}
+  ],
+  3: [
+    {مذكر:"مص ثدي زوجتك وداعب حلمتها بلسانك بلطف.",مؤنث:"قبّلي صدر زوجك وداعبي حلمتيه بأطراف أصابعكِ بلطف."},
+    {مذكر:"أدخل لسانك بين شفرتي كس زوجتك وحرّكه ببطء.",مؤنث:"أدخلي قضيب زوجك في فمكِ وحرّكي رأسكِ صعوداً ونزولاً ببطء."},
+    {مذكر:"العق بظر زوجتك وامتصه بشفتيك بلطف.",مؤنث:"العقي رأس قضيب زوجك وداعبيه بلسانكِ بلطف."},
+    {مذكر:"افرك كس زوجتك بإصبعك بحركات دائرية متدرجة السرعة.",مؤنث:"داعبي قضيب زوجك بيدكِ بحركات متدرجة السرعة."},
+    {مذكر:"أدخل إصبعين في كس زوجتك برفق إن كانت مستعدة، وحرّكهما ببطء.",مؤنث:"أمسكي قضيب زوجك بيدكِ وحرّكيها ببطء مع استخدام مزلّق."},
+    {مذكر:"قبّل فخذ زوجتك الداخلي واترك علامة خفيفة إن رغبت.",مؤنث:"قبّلي فخذ زوجك الداخلي واتركي علامة خفيفة إن رغب."},
+    {مذكر:"أمسك مؤخرة زوجتك بيديك ودلّكها وأنت تنكحها.",مؤنث:"أمسكي مؤخرة زوجك بيديكِ ودلّكيها وأنت تنكحينه."},
+    {مذكر:"العق كس زوجتك من الأسفل إلى الأعلى بلسانك ببطء.",مؤنث:"مرّري لسانكِ على قضيب زوجك من القاعدة إلى الرأس ببطء."},
+    {مذكر:"داعب شفرتي كس زوجتك بأطراف أصابعك برفق.",مؤنث:"داعبي قضيب زوجك وخصيتيه بأطراف أصابعكِ برفق."},
+    {مذكر:"داعب حلمة زوجتك بين إبهامك وسبابتك بلطف.",مؤنث:"داعبي حلمة زوجك بين إبهامكِ وسبابتكِ بلطف."},
+    {مذكر:"الحس المنطقة بين كس زوجتك وشرجها إن كانت ترغب في ذلك.",مؤنث:"الحسي المنطقة بين قضيب زوجك وشرجه إن كان يرغب في ذلك."},
+    {مذكر:"اقضِ خمس دقائق في مداعبة كس زوجتك وبظرها برفق.",مؤنث:"اقضي خمس دقائق في مداعبة قضيب زوجك بيديكِ ولسانكِ."},
+    {مذكر:"أمسك قضيبك وافركه على كس زوجتك المبلل قبل الإدخال.",مؤنث:"أمسكي قضيب زوجك وافركيه على كسكِ المبلل قبل الإدخال."},
+    {مذكر:"ضع مزلّقاً على بظر زوجتك وداعبه بإصبعك برفق.",مؤنث:"ضعي مزلّقاً على قضيب زوجك وداعبيه بيدكِ برفق."},
+    {مذكر:"داعب رأس قضيبك بيدك وأنت تنظر إلى زوجتك.",مؤنث:"داعبي بظركِ بيدكِ وأنت تنظرين إلى زوجك."},
+    {مذكر:"أدخل لسانك في فم زوجتك وأنت تداعب ثديها.",مؤنث:"أدخلي لسانكِ في فم زوجك وأنت تداعبين صدره."},
+    {مذكر:"داعب كس زوجتك بإصبعك الأوسط ببطء وبرفق.",مؤنث:"داعبي قضيب زوجك بيدكِ ببطء وبرفق."},
+    {مذكر:"افرك قضيبك على مؤخرة زوجتك العارية.",مؤنث:"افركي كسكِ على قضيب زوجك العاري."},
+    {مذكر:"داعب عانة زوجتك بأطراف أصابعك.",مؤنث:"داعبي عانة زوجك بأطراف أصابعكِ."},
+    {مذكر:"قبّل ثديي زوجتك ورقبتها بالتناوب.",مؤنث:"قبّلي صدر زوجك ورقبته بالتناوب."},
+    {مذكر:"أمسك قضيبك وداعبه أمام زوجتك.",مؤنث:"داعبي كسكِ أمام زوجك."},
+    {مذكر:"قبّل بظر زوجتك وامتصه بلطف.",مؤنث:"قبّلي رأس قضيب زوجك وامتصيه بلطف."},
+    {مذكر:"داعب كس زوجتك بأصابعك مع مزلّق مناسب.",مؤنث:"داعبي قضيب زوجك بيدكِ مع مزلّق مناسب."},
+    {مذكر:"مرّر لسانك على شفرتي كس زوجتك ببطء.",مؤنث:"مرّري لسانكِ على طول قضيب زوجك ببطء."},
+    {مذكر:"احكك قضيبك على بظر زوجتك بحركات لطيفة.",مؤنث:"احككي كسكِ على قضيب زوجك بحركات لطيفة."},
+    {مذكر:"انزع ملابس زوجتك الداخلية بأسنانك برفق.",مؤنث:"انزعي ملابس زوجك الداخلية بأسنانكِ برفق."},
+    {مذكر:"داعب كس زوجتك بسرعة وبطء بالتبادل.",مؤنث:"داعبي قضيب زوجك بسرعة وبطء بالتبادل."},
+    {مذكر:"اقترب من زوجتك وداعب قضيبك أمامها.",مؤنث:"اقتربي من زوجك وداعبي كسكِ أمامه."},
+    {مذكر:"دلّك ثديي زوجتك بزيت مساج فاتر ومخصص للجسم.",مؤنث:"دلّكي صدر زوجك بزيت مساج فاتر ومخصص للجسم."},
+    {مذكر:"مص حلمة زوجتك وامتصها بلطف وبالقدر الذي يريحها.",مؤنث:"مصي حلمة زوجك وامتصيها بلطف وبالقدر الذي يريحه."},
+    {مذكر:"أدخل إصبعاً واحداً في كس زوجتك ببطء إن كانت مستعدة.",مؤنث:"أمسكي قضيب زوجك وحرّكي يدكِ عليه ببطء."},
+    {مذكر:"اعضض أذن زوجتك برفق وأنت تداعب كسها.",مؤنث:"اعضضي أذن زوجك برفق وأنت تداعبين قضيبه."},
+    {مذكر:"دلّك بظر زوجتك بحركات دائرية لطيفة.",مؤنث:"دلّكي رأس قضيب زوجك بحركات دائرية لطيفة."},
+    {مذكر:"أمسك مؤخرة زوجتك وقبّل كل ردف.",مؤنث:"أمسكي مؤخرة زوجك وقبّلي كل ردف."},
+    {مذكر:"داعب كس زوجتك بأصابعك المبللة بالمزلّق.",مؤنث:"داعبي قضيب زوجك بيدكِ المبللة بالمزلّق."},
+    {مذكر:"قبّل شفتي زوجتك وأنت تداعب كسها.",مؤنث:"قبّلي شفتي زوجك وأنت تداعبين قضيبه."},
+    {مذكر:"افرك قضيبك على فخذ زوجتك.",مؤنث:"افركي كسكِ على فخذ زوجك."},
+    {مذكر:"ضع رأسك بين ثديي زوجتك وقبّلهما.",مؤنث:"قرّبي رأس زوجك إلى صدركِ ودعيه يقبّل ثدييكِ."},
+    {مذكر:"قبّل كس زوجتك من الخلف إن كانت مرتاحة للوضعية.",مؤنث:"قبّلي قضيب زوجك وهو مستلقٍ على بطنه إن كان مرتاحاً للوضعية."},
+    {مذكر:"داعب بظر زوجتك بأصابعك وافركه بلطف.",مؤنث:"داعبي قضيب زوجك بيدكِ وافركيه بلطف."},
+    {مذكر:"الحس فخذ زوجتك من الداخل وصولاً إلى كسها.",مؤنث:"الحسي فخذ زوجك من الداخل وصولاً إلى قضيبه."},
+    {مذكر:"أمسك قضيبك ووجّهه بالقرب من فم زوجتك إن رغبت.",مؤنث:"أمسكي قضيب زوجك ووجّهيه بالقرب من فمكِ إن رغبتِ."},
+    {مذكر:"داعب شفرتي كس زوجتك بأطراف أصابعك.",مؤنث:"داعبي قضيب زوجك بأطراف أصابعكِ."},
+    {مذكر:"مص حلمة زوجتك وداعبها بلسانك بلطف.",مؤنث:"مصي حلمة زوجك وداعبيها بلسانكِ بلطف."},
+    {مذكر:"داعب كس زوجتك حتى تصل إلى النشوة، مع التوقف متى طلبت.",مؤنث:"داعبي قضيب زوجك حتى يصل إلى النشوة، مع التوقف متى طلب."}
+  ],
+  4: [
+    {مذكر:"أدخل قضيبك في كس زوجتك ببطء شديد واثبت داخلها دون حركة لمدة دقيقة إن كانت مرتاحة.",مؤنث:"استلقي على ظهركِ وافتحي رجليكِ ودعي زوجك يدخل قضيبه ببطء ويثبت داخلكِ دون حركة إن كنتِ مرتاحة."},
+    {مذكر:"جامع زوجتك من الخلف بحركات متدرجة، وضع رأسك على ظهرها وقبّل رقبتها.",مؤنث:"اتخذي وضعية السجود على السرير ودعي زوجك يجامعكِ من الخلف بحركات متدرجة."},
+    {مذكر:"استلقِ ودع زوجتك تركب فوق قضيبك وتتحرك صعوداً ونزولاً بالإيقاع الذي يريحها.",مؤنث:"اركبي فوق زوجك وأدخلي قضيبه في كسكِ وتحركي صعوداً ونزولاً بالإيقاع الذي يريحكِ."},
+    {مذكر:"جامع زوجتك وأنتما واقفان وهي تستند إلى الحائط، مع ثبات واتزان.",مؤنث:"قفي واستندي إلى الحائط ودعي زوجك يجامعكِ وأنتما واقفان، مع ثبات واتزان."},
+    {مذكر:"جامع زوجتك في وضعية الملعقة، وأنتما مستلقيان على الجانب.",مؤنث:"استلقي على جنبكِ ودعي زوجك يدخل قضيبه في كسكِ من الخلف في وضعية الملعقة."},
+    {مذكر:"ارفع ساقي زوجتك وضعهما على كتفيك إن كانتا مرتاحتين، ثم أدخل قضيبك ببطء.",مؤنث:"ارفعي ساقيكِ وضعيهما على كتفي زوجك إن كان ذلك مريحاً، ودعيه يدخل قضيبه ببطء."},
+    {مذكر:"اجلس على الأرض بظهر مستند، ودع زوجتك تجلس فوقك وتتحرك بالإيقاع الذي يريحكما.",مؤنث:"اجلسي فوق زوجك وهو جالس على الأرض بظهر مستند، وتحركي بالإيقاع الذي يريحكما."},
+    {مذكر:"جامع زوجتك وهي مستلقية على بطنها، وأدخل قضيبك ببطء وتحرك برفق.",مؤنث:"استلقي على بطنكِ ودعي زوجك يدخل قضيبه في كسكِ ببطء ويتحرك برفق."}
+  ]
 };
 
-/* 4) الحالة */
+const STAGE_LIMITS = {1:8,2:8,3:8,4:1};
+const STAGE_NAMES = {1:"صريح",2:"مثير",3:"مداعبة",4:"وضعيات"};
+const STAGE_GLYPH = {1:"g1",2:"g2",3:"g3",4:"g4"};
+const K = {pin:'rt_k',p1:'rt_a',p2:'rt_b',hist:'rt_h',stages:'rt_e'};
+
+function validateMasterStages(){
+  for(let s=1;s<=4;s++){
+    const cards = masterStages[s];
+    if(!Array.isArray(cards) || !cards.length) throw new Error(`المرحلة ${s} بلا بطاقات`);
+    cards.forEach((card,index)=>{
+      if(!card || typeof card.مذكر !== 'string' || !card.مذكر.trim() ||
+         typeof card.مؤنث !== 'string' || !card.مؤنث.trim())
+        throw new Error(`صياغة ناقصة في المرحلة ${s}، البطاقة ${index+1}`);
+    });
+  }
+}
+
+const LS = {
+  read(k,f){try{const v=localStorage.getItem(k);return v===null?f:JSON.parse(v);}catch(e){return f;}},
+  write(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){return false;}},
+  del(k){try{localStorage.removeItem(k);}catch(e){}}
+};
+
+function readEnabledStages(){
+  const saved = LS.read(K.stages,null), clean = {1:true,2:true,3:true,4:true};
+  if(saved && typeof saved==='object'){
+    for(let s=1;s<=4;s++) if(typeof saved[s]==='boolean') clean[s]=saved[s];
+  }
+  if(![1,2,3,4].some(s=>clean[s])) return {1:true,2:true,3:true,4:true};
+  return clean;
+}
+
 let dailyStages = {1:[],2:[],3:[],4:[]};
 let usedInDaily = {1:new Set(),2:new Set(),3:new Set(),4:new Set()};
-let enabledStages = LS.read(K.stages, {1:true,2:true,3:true,4:true});
+let enabledStages = readEnabledStages();
 let players = [], currentStage = 1, currentPlayerIndex = 0;
 let isSpinning = false, poolReady = false, currentPick = null;
 let dialRotation = 0, pinBuffer = '', pinConfirm = null;
 
-/* 5) خلط عادل */
-function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
 function readHistory(){
-  const h = LS.read(K.hist, null), safe = {1:[],2:[],3:[],4:[]};
-  if (h && typeof h === 'object') for (let s=1;s<=4;s++) if (Array.isArray(h[s])) safe[s] = h[s];
+  const h=LS.read(K.hist,null), safe={1:[],2:[],3:[],4:[]};
+  if(h && typeof h==='object') for(let s=1;s<=4;s++){
+    if(Array.isArray(h[s])) safe[s]=[...new Set(h[s].filter(i=>Number.isInteger(i)&&i>=0&&i<masterStages[s].length))];
+  }
   return safe;
 }
-
-/* 6) الباقة */
-function generateDailyPool(forget = false){
-  let history = forget ? {1:[],2:[],3:[],4:[]} : readHistory();
-  for (let s=1; s<=4; s++){
-    const all = masterStages[s] || [];
-    const limit = Math.min(STAGE_LIMITS[s], all.length);
-    let unplayed = all.map((_,i)=>i).filter(i => !history[s].includes(i));
-    if (unplayed.length < limit){ history[s] = []; unplayed = all.map((_,i)=>i); }
-    dailyStages[s] = shuffle(unplayed).slice(0, limit).map(i => ({ originalIndex:i, content:all[i] }));
+function generateDailyPool(forget=false){
+  const history=forget?{1:[],2:[],3:[],4:[]}:readHistory();
+  for(let s=1;s<=4;s++){
+    const all=masterStages[s], limit=Math.min(STAGE_LIMITS[s],all.length);
+    let unplayed=all.map((_,i)=>i).filter(i=>!history[s].includes(i));
+    if(unplayed.length<limit){history[s]=[];unplayed=all.map((_,i)=>i);}
+    dailyStages[s]=shuffle(unplayed).slice(0,limit).map(i=>({originalIndex:i,content:all[i]}));
     usedInDaily[s].clear();
   }
-  LS.write(K.hist, history);
-  poolReady = true;
+  LS.write(K.hist,history);poolReady=true;
 }
 function topUp(stage){
-  const all = masterStages[stage] || [], history = readHistory();
-  const inBatch = new Set(dailyStages[stage].map(x => x.originalIndex));
-  const cand = all.map((_,i)=>i).filter(i => !inBatch.has(i) && !history[stage].includes(i));
-  if (!cand.length) return false;
-  const i = cand[Math.floor(Math.random()*cand.length)];
-  dailyStages[stage].push({ originalIndex:i, content:all[i] });
-  return true;
+  const all=masterStages[stage], history=readHistory();
+  const inBatch=new Set(dailyStages[stage].map(x=>x.originalIndex));
+  const candidates=all.map((_,i)=>i).filter(i=>!inBatch.has(i)&&!history[stage].includes(i));
+  if(!candidates.length)return false;
+  const i=candidates[Math.floor(Math.random()*candidates.length)];
+  dailyStages[stage].push({originalIndex:i,content:all[i]});return true;
 }
 
-/* ============================================================
-   7) التوقيع — القرص الذي يحترق
-   كل قطاع = عنصر حقيقي في باقة المرحلة. المستهلَك يتحوّل رماداً،
-   والمؤشر يقف فعلاً على القطاع المختار (لا دوران تزييني).
-   ============================================================ */
-const CX = 125, CY = 125, R_OUT = 118, R_IN = 62;
-function polar(a, r){ const rad = (a-90) * Math.PI/180; return [CX + r*Math.cos(rad), CY + r*Math.sin(rad)]; }
-function segPath(a0, a1){
-  if (a1 - a0 >= 359.99){                                  // قطاع واحد = حلقة كاملة
-    return `M ${CX-R_OUT} ${CY} A ${R_OUT} ${R_OUT} 0 1 0 ${CX+R_OUT} ${CY}`
-         + ` A ${R_OUT} ${R_OUT} 0 1 0 ${CX-R_OUT} ${CY} Z`;
-  }
-  const [x0,y0] = polar(a0, R_OUT), [x1,y1] = polar(a1, R_OUT);
-  const [x2,y2] = polar(a1, R_IN),  [x3,y3] = polar(a0, R_IN);
-  const large = (a1 - a0) > 180 ? 1 : 0;
-  return `M ${x0} ${y0} A ${R_OUT} ${R_OUT} 0 ${large} 1 ${x1} ${y1}`
-       + ` L ${x2} ${y2} A ${R_IN} ${R_IN} 0 ${large} 0 ${x3} ${y3} Z`;
+const CX=125,CY=125,R_OUT=118,R_IN=62;
+function polar(a,r){const rad=(a-90)*Math.PI/180;return [CX+r*Math.cos(rad),CY+r*Math.sin(rad)];}
+function segPath(a0,a1){
+  if(a1-a0>=359.99)return `M ${CX-R_OUT} ${CY} A ${R_OUT} ${R_OUT} 0 1 0 ${CX+R_OUT} ${CY} A ${R_OUT} ${R_OUT} 0 1 0 ${CX-R_OUT} ${CY} Z`;
+  const [x0,y0]=polar(a0,R_OUT),[x1,y1]=polar(a1,R_OUT),[x2,y2]=polar(a1,R_IN),[x3,y3]=polar(a0,R_IN);
+  const large=(a1-a0)>180?1:0;
+  return `M ${x0} ${y0} A ${R_OUT} ${R_OUT} 0 ${large} 1 ${x1} ${y1} L ${x2} ${y2} A ${R_IN} ${R_IN} 0 ${large} 0 ${x3} ${y3} Z`;
 }
 function drawDial(){
-  const g = document.getElementById('dialRot');
-  const pool = dailyStages[currentStage] || [];
-  const n = Math.max(pool.length, 1);
-  const seg = 360 / n;
-  let out = '';
-  for (let i = 0; i < n; i++){
-    const burnt = usedInDaily[currentStage].has(i);
-    out += `<path d="${segPath(i*seg, (i+1)*seg)}" class="seg-line ${burnt?'seg-ash':'seg-live'}"/>`;
+  const pool=dailyStages[currentStage]||[],n=Math.max(pool.length,1),seg=360/n;
+  let out='';
+  for(let i=0;i<n;i++){
+    const burnt=usedInDaily[currentStage].has(i);
+    out+=`<path d="${segPath(i*seg,(i+1)*seg)}" class="seg-line ${burnt?'seg-ash':'seg-live'}"/>`;
   }
-  g.innerHTML = out;
-  const left = pool.length - usedInDaily[currentStage].size;
-  document.getElementById('hubNum').textContent = left;
+  document.getElementById('dialRot').innerHTML=out;
+  document.getElementById('hubNum').textContent=pool.length-usedInDaily[currentStage].size;
 }
-function aimAt(index, total){
-  const seg = 360 / Math.max(total,1);
-  const jitter = (Math.random() - .5) * seg * .55;
-  const target = -(index * seg + seg/2) + jitter;          // نريده أعلى القرص عند المؤشر
-  const delta = ((target - (dialRotation % 360)) % 360 + 360) % 360;
-  dialRotation += delta + 360 * (4 + Math.floor(Math.random()*3));
-  document.getElementById('dialRot').style.transform = `rotate(${dialRotation}deg)`;
+function aimAt(index,total){
+  const seg=360/Math.max(total,1),jitter=(Math.random()-.5)*seg*.55;
+  const target=-(index*seg+seg/2)+jitter;
+  const delta=((target-(dialRotation%360))%360+360)%360;
+  dialRotation+=delta+360*(4+Math.floor(Math.random()*3));
+  document.getElementById('dialRot').style.transform=`rotate(${dialRotation}deg)`;
 }
+function spinDuration(){return window.matchMedia('(prefers-reduced-motion: reduce)').matches?350:3500;}
 
-/* 8) الشاشات */
-function show(id){ ['lock','setup','game'].forEach(s =>
-  document.getElementById(s).classList.toggle('hidden', s !== id)); }
-function gl(s, cls){ return `<svg class="glyph ${cls||''}"><use href="#${STAGE_GLYPH[s]}"/></svg>`; }
+function show(id){['lock','setup','game'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));}
+function gl(s,cls){return `<svg class="glyph ${cls||''}" aria-hidden="true"><use href="#${STAGE_GLYPH[s]}"/></svg>`;}
 function renderToggles(){
-  document.getElementById('stageToggles').innerHTML = [1,2,3,4].map(s => `
-    <label class="stage-row">
-      <input type="checkbox" data-stage="${s}" ${enabledStages[s]?'checked':''}>
-      <span class="gl">${gl(s)}</span>
-      <span class="nm">${STAGE_NAMES[s]}</span>
-      <span class="ct">${STAGE_LIMITS[s]}</span>
-    </label>`).join('');
-  document.querySelectorAll('#stageToggles input').forEach(cb =>
-    cb.addEventListener('change', () => {
-      const s = +cb.dataset.stage, on = [1,2,3,4].filter(x => enabledStages[x]);
-      if (!cb.checked && on.length === 1 && on[0] === s){ cb.checked = true; return; }
-      enabledStages[s] = cb.checked; LS.write(K.stages, enabledStages);
-    }));
+  document.getElementById('stageToggles').innerHTML=[1,2,3,4].map(s=>`
+    <label class="stage-row"><input type="checkbox" data-stage="${s}" ${enabledStages[s]?'checked':''}>
+    <span class="gl">${gl(s)}</span><span class="nm">${STAGE_NAMES[s]}</span>
+    <span class="ct">${STAGE_LIMITS[s]} ${STAGE_LIMITS[s]===1?'بطاقة':'بطاقات'}</span></label>`).join('');
+  document.querySelectorAll('#stageToggles input').forEach(cb=>cb.addEventListener('change',()=>{
+    const s=+cb.dataset.stage,on=[1,2,3,4].filter(x=>enabledStages[x]);
+    if(!cb.checked&&on.length===1&&on[0]===s){cb.checked=true;return;}
+    enabledStages[s]=cb.checked;LS.write(K.stages,enabledStages);
+  }));
 }
-function showSetup(){ if (!isSpinning) show('setup'); }
-
-/* 9) بدء / استئناف */
-function firstEnabledStage(){ return [1,2,3,4].find(s => enabledStages[s]) || 1; }
+function showSetup(){if(!isSpinning)show('setup');}
+function firstEnabledStage(){return [1,2,3,4].find(s=>enabledStages[s])||1;}
 function startGame(){
-  players = [
-    { name: document.getElementById('p1name').value.trim() || "الزوج",  gender:"مذكر" },
-    { name: document.getElementById('p2name').value.trim() || "الزوجة", gender:"مؤنث" }
+  players=[
+    {name:document.getElementById('p1name').value.trim()||"الزوج",gender:"مذكر"},
+    {name:document.getElementById('p2name').value.trim()||"الزوجة",gender:"مؤنث"}
   ];
-  LS.write(K.p1, players[0]); LS.write(K.p2, players[1]);
-  if (!poolReady){
-    generateDailyPool(false);
-    currentStage = firstEnabledStage();
-    currentPlayerIndex = Math.floor(Math.random()*2);
-  }
-  show('game'); clearResult(); refresh();
+  LS.write(K.p1,players[0]);LS.write(K.p2,players[1]);
+  if(!poolReady){generateDailyPool(false);currentPlayerIndex=Math.floor(Math.random()*2);}
+  if(!enabledStages[currentStage])currentStage=firstEnabledStage();
+  show('game');clearResult();refresh();
 }
 function freshBatch(){
-  if (!confirm("سحب باقة جديدة؟ لن يتكرر ما لُعب سابقاً.")) return;
-  generateDailyPool(false);
-  currentStage = firstEnabledStage();
-  clearResult(); refresh();
+  if(!confirm("سحب باقة جديدة؟ لن يتكرر ما لُعب سابقاً."))return;
+  generateDailyPool(false);currentStage=firstEnabledStage();clearResult();refresh();
 }
 function wipeAll(){
-  if (!confirm("مسح كل شيء: الرمز، الأسماء، السجل. لا يمكن التراجع.")) return;
-  Object.values(K).forEach(LS.del); location.reload();
+  if(!confirm("مسح كل شيء: الرمز، الأسماء، السجل. لا يمكن التراجع."))return;
+  Object.values(K).forEach(k=>LS.del(k));location.reload();
 }
-
-/* 10) العرض */
 function refresh(){
-  document.getElementById('stageTag').innerHTML = `${gl(currentStage)}<span>${STAGE_NAMES[currentStage]}</span>`;
-  const p = players[currentPlayerIndex];
-  if (p) document.getElementById('turnName').textContent = p.name;
+  document.getElementById('stageTag').innerHTML=`${gl(currentStage)}<span>${STAGE_NAMES[currentStage]}</span>`;
+  const p=players[currentPlayerIndex];
+  if(p)document.getElementById('turnName').textContent=p.name;
   drawDial();
 }
 function clearResult(){
-  const r = document.getElementById('result');
-  r.classList.add('hidden');
+  document.getElementById('result').classList.add('hidden');
   document.getElementById('resultCard').classList.remove('warn');
-  document.getElementById('playerName').textContent = '';
-  document.getElementById('commandText').textContent = '';
-  currentPick = null;
-  document.getElementById('btnDone').disabled = true;
-  document.getElementById('btnSkip').disabled = true;
+  document.getElementById('playerName').textContent='';document.getElementById('commandText').textContent='';
+  currentPick=null;document.getElementById('btnDone').disabled=true;document.getElementById('btnSkip').disabled=true;
 }
 
-/* 11) اختيار النص حسب الجنس (تصريف الأفعال لا يُستنتج برمجياً) */
-function getCommandForPlayer(cmd, player){
-  if (cmd && typeof cmd === 'object')
-    return player.gender === "مذكر" ? (cmd.مذكر ?? cmd.مؤنث ?? '') : (cmd.مؤنث ?? cmd.مذكر ?? '');
-  const t = String(cmd ?? '');
-  return player.gender === "مذكر"
-    ? t.replace(/شريكك/g,"زوجتك").replace(/زوجك/g,"زوجتك")
-    : t.replace(/شريكك/g,"زوجك").replace(/زوجتك/g,"زوجك");
+/* اختيار مباشر للنص المخصص للاعب؛ لا استبدال كلمات ولا قلب للأدوار. */
+function getCommandForPlayer(card,player){
+  if(!card||!player||!(player.gender in card))return '';
+  return card[player.gender];
 }
-
-/* 12) الإدارة */
 function spinRoulette(){
-  if (isSpinning || !players.length) return;
-  const pool = dailyStages[currentStage];
-  const remaining = pool.map((_,i)=>i).filter(i => !usedInDaily[currentStage].has(i));
-
-  if (!remaining.length){
-    clearResult();
-    document.getElementById('resultCard').classList.add('warn');
-    document.getElementById('playerName').textContent = 'انتهت المرحلة';
-    document.getElementById('commandText').textContent = 'انتقلا إلى المرحلة التالية.';
-    document.getElementById('result').classList.remove('hidden');
-    return;
+  if(isSpinning||!players.length)return;
+  const pool=dailyStages[currentStage];
+  const remaining=pool.map((_,i)=>i).filter(i=>!usedInDaily[currentStage].has(i));
+  if(!remaining.length){
+    clearResult();document.getElementById('resultCard').classList.add('warn');
+    document.getElementById('playerName').textContent='انتهت المرحلة';
+    document.getElementById('commandText').textContent='انتقلا إلى المرحلة التالية.';
+    document.getElementById('result').classList.remove('hidden');return;
   }
-
-  isSpinning = true;
-  const btn = document.getElementById('spinBtn');
-  btn.disabled = true; btn.textContent = 'يدور…';
-  clearResult();
-
-  const poolIndex = remaining[Math.floor(Math.random()*remaining.length)];
-  const item = pool[poolIndex];
-  const player = players[currentPlayerIndex];
-  const text = getCommandForPlayer(item.content, player);
-
-  aimAt(poolIndex, pool.length);
-  if ('vibrate' in navigator) setTimeout(() => navigator.vibrate([90,40,90]), 3000);
-
-  setTimeout(() => {
-    currentPick = { stage: currentStage, poolIndex, originalIndex: item.originalIndex };
-    document.getElementById('playerName').textContent = player.name;
-    document.getElementById('commandText').textContent = text;
+  isSpinning=true;
+  const btn=document.getElementById('spinBtn');btn.disabled=true;btn.textContent='يدور…';clearResult();
+  const poolIndex=remaining[Math.floor(Math.random()*remaining.length)],item=pool[poolIndex],player=players[currentPlayerIndex];
+  const text=getCommandForPlayer(item.content,player);
+  if(!text){isSpinning=false;btn.disabled=false;btn.textContent='أدر القرص';return;}
+  const duration=spinDuration();aimAt(poolIndex,pool.length);
+  if('vibrate' in navigator)setTimeout(()=>navigator.vibrate([90,40,90]),Math.max(0,duration-500));
+  setTimeout(()=>{
+    currentPick={stage:currentStage,poolIndex,originalIndex:item.originalIndex};
+    document.getElementById('playerName').textContent=player.name;
+    document.getElementById('commandText').textContent=text;
     document.getElementById('result').classList.remove('hidden');
-    const f = document.getElementById('flare');
-    f.classList.remove('on'); void f.offsetWidth; f.classList.add('on');
-    document.getElementById('btnDone').disabled = false;
-    document.getElementById('btnSkip').disabled = false;
-    isSpinning = false; btn.disabled = false; btn.textContent = 'أدر القرص';
-  }, 3500);
+    const f=document.getElementById('flare');f.classList.remove('on');void f.offsetWidth;f.classList.add('on');
+    document.getElementById('btnDone').disabled=false;document.getElementById('btnSkip').disabled=false;
+    isSpinning=false;btn.disabled=false;btn.textContent='أدر القرص';
+  },duration);
 }
 function markDone(){
-  if (isSpinning || !currentPick) return;
-  const { stage, poolIndex, originalIndex } = currentPick;
+  if(isSpinning||!currentPick)return;
+  const {stage,poolIndex,originalIndex}=currentPick;
   usedInDaily[stage].add(poolIndex);
-  const h = readHistory();
-  if (!h[stage].includes(originalIndex)){ h[stage].push(originalIndex); LS.write(K.hist, h); }
-  currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
-  clearResult(); refresh();
+  const h=readHistory();if(!h[stage].includes(originalIndex)){h[stage].push(originalIndex);LS.write(K.hist,h);}
+  currentPlayerIndex=currentPlayerIndex===0?1:0;clearResult();refresh();
 }
 function skipCurrent(){
-  if (isSpinning || !currentPick) return;
-  const { stage, poolIndex } = currentPick;
-  usedInDaily[stage].add(poolIndex);
-  topUp(stage);
-  clearResult(); refresh();
+  if(isSpinning||!currentPick)return;
+  const {stage,poolIndex}=currentPick;usedInDaily[stage].add(poolIndex);topUp(stage);clearResult();refresh();
 }
 function changeStage(){
-  if (isSpinning) return;
-  const on = [1,2,3,4].filter(s => enabledStages[s]);
-  if (!on.length) return;
-  currentStage = on[(on.indexOf(currentStage) + 1) % on.length];
-  clearResult(); refresh();
+  if(isSpinning)return;
+  const on=[1,2,3,4].filter(s=>enabledStages[s]);if(!on.length)return;
+  currentStage=on[(on.indexOf(currentStage)+1)%on.length];clearResult();refresh();
 }
-
-/* 13) القفل */
 function renderDots(){
-  document.getElementById('pinDots').innerHTML =
-    [0,1,2,3].map(i => `<span class="dot ${i < pinBuffer.length ? 'on':''}"></span>`).join('');
+  document.getElementById('pinDots').innerHTML=[0,1,2,3].map(i=>`<span class="dot ${i<pinBuffer.length?'on':''}"></span>`).join('');
 }
 function pinKey(k){
-  document.getElementById('pinErr').textContent = '';
-  if (k === 'del') pinBuffer = pinBuffer.slice(0,-1);
-  else if (k === 'clr') pinBuffer = '';
-  else if (pinBuffer.length < 4) pinBuffer += k;
-  renderDots();
-  if (pinBuffer.length === 4) setTimeout(submitPin, 160);
+  document.getElementById('pinErr').textContent='';
+  if(k==='del')pinBuffer=pinBuffer.slice(0,-1);
+  else if(k==='clr')pinBuffer='';
+  else if(/^[0-9]$/.test(k)&&pinBuffer.length<4)pinBuffer+=k;
+  renderDots();if(pinBuffer.length===4)setTimeout(submitPin,160);
 }
 function submitPin(){
-  const stored = LS.read(K.pin, null), err = document.getElementById('pinErr');
-  if (stored === null){
-    if (pinConfirm === null){
-      pinConfirm = pinBuffer; pinBuffer = ''; renderDots();
-      document.getElementById('lockTitle').textContent = 'أعد إدخال الرمز'; return;
-    }
-    if (pinConfirm !== pinBuffer){
-      pinConfirm = null; pinBuffer = ''; renderDots();
-      document.getElementById('lockTitle').textContent = 'اختر رمزاً من ٤ أرقام';
-      err.textContent = 'الرمزان غير متطابقين'; return;
-    }
-    LS.write(K.pin, pinBuffer); unlock(); return;
+  if(pinBuffer.length!==4)return;
+  const stored=LS.read(K.pin,null),err=document.getElementById('pinErr');
+  if(stored===null){
+    if(pinConfirm===null){pinConfirm=pinBuffer;pinBuffer='';renderDots();document.getElementById('lockTitle').textContent='أعد إدخال الرمز';return;}
+    if(pinConfirm!==pinBuffer){pinConfirm=null;pinBuffer='';renderDots();document.getElementById('lockTitle').textContent='اختر رمزاً من ٤ أرقام';err.textContent='الرمزان غير متطابقين';return;}
+    LS.write(K.pin,pinBuffer);unlock();return;
   }
-  if (pinBuffer === stored) unlock();
-  else { pinBuffer = ''; renderDots(); err.textContent = 'رمز غير صحيح'; }
+  if(pinBuffer===stored)unlock();
+  else{pinBuffer='';renderDots();err.textContent='رمز غير صحيح';}
 }
 function unlock(){
-  pinBuffer = ''; pinConfirm = null;
-  const a = LS.read(K.p1, null), b = LS.read(K.p2, null);
-  if (a && a.name) document.getElementById('p1name').value = a.name;
-  if (b && b.name) document.getElementById('p2name').value = b.name;
-  renderToggles(); show('setup');
+  pinBuffer='';pinConfirm=null;
+  const a=LS.read(K.p1,null),b=LS.read(K.p2,null);
+  if(a&&typeof a.name==='string')document.getElementById('p1name').value=a.name;
+  if(b&&typeof b.name==='string')document.getElementById('p2name').value=b.name;
+  enabledStages=readEnabledStages();renderToggles();show('setup');
 }
 
-/* 14) الإقلاع */
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.key').forEach(b =>
-    b.addEventListener('click', () => pinKey(b.dataset.k)));
-  document.addEventListener('keydown', e => {
-    if (document.getElementById('lock').classList.contains('hidden')) return;
-    if (/^[0-9]$/.test(e.key)) pinKey(e.key);
-    else if (e.key === 'Backspace') pinKey('del');
+document.addEventListener('DOMContentLoaded',()=>{
+  validateMasterStages();
+  document.querySelectorAll('.key').forEach(b=>b.addEventListener('click',()=>pinKey(b.dataset.k)));
+  document.addEventListener('keydown',e=>{
+    if(document.getElementById('lock').classList.contains('hidden'))return;
+    if(/^[0-9]$/.test(e.key)){e.preventDefault();pinKey(e.key);}
+    else if(e.key==='Backspace'){e.preventDefault();pinKey('del');}
+    else if(e.key==='Escape')pinKey('clr');
   });
-  if (LS.read(K.pin, null) === null)
-    document.getElementById('lockTitle').textContent = 'اختر رمزاً من ٤ أرقام';
-  renderDots(); show('lock');
+  if(LS.read(K.pin,null)===null)document.getElementById('lockTitle').textContent='اختر رمزاً من ٤ أرقام';
+  renderDots();show('lock');
 });
 </script>
 </body>
