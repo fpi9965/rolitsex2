@@ -1,0 +1,15 @@
+{
+  "name": "روليت الإثارة",
+  "short_name": "روليت",
+  "description": "غرفة خاصة للزوجين للعب من جهازين",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1b0e14",
+  "theme_color": "#1b0e14",
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
