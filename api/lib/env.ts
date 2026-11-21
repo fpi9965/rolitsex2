@@ -8,9 +8,11 @@ function required(name: string): string {
   return value ?? "";
 }
 
+// APP_ID / APP_SECRET are not used by the game; requiring them crashed the
+// production server at boot whenever the platform did not set them.
 export const env = {
-  appId: required("APP_ID"),
-  appSecret: required("APP_SECRET"),
+  appId: process.env.APP_ID ?? "",
+  appSecret: process.env.APP_SECRET ?? "",
   isProduction: process.env.NODE_ENV === "production",
   databaseUrl: required("DATABASE_URL"),
 };
