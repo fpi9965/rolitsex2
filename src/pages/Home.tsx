@@ -7,7 +7,10 @@ import "./Home.css";
 
 type Session = { code: string; token: string };
 const STAGE_NAMES: Record<number, string> = { 1: "صريح", 2: "مثير", 3: "مداعبة", 4: "وضعيات" };
-const roomFromUrl = (new URLSearchParams(window.location.search).get("room") || "").toUpperCase();
+const urlParams = new URLSearchParams(window.location.search);
+const roomFromUrl = (urlParams.get("join") || urlParams.get("room") || "").toUpperCase();
+const invitationUrl = (code: string) =>
+  `${window.location.origin}${window.location.pathname}?join=${code}`;
 const initialRoomCode = /^[A-Z2-9]{6}$/.test(roomFromUrl)
   ? roomFromUrl
   : localStorage.getItem("rolit-last-room") || "";
@@ -48,7 +51,7 @@ export default function Home() {
   function acceptSession(next: Session) {
     localStorage.setItem(`rolit-token-${next.code}`, next.token);
     localStorage.setItem("rolit-last-room", next.code);
-    window.history.replaceState(null, "", `${window.location.pathname}?room=${next.code}`);
+    window.history.replaceState(null, "", `${window.location.pathname}?join=${next.code}`);
     setSession(next);
   }
 
@@ -67,9 +70,7 @@ export default function Home() {
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
   });
 
-  const inviteUrl = session
-    ? `${window.location.origin}${window.location.pathname}?room=${session.code}`
-    : "";
+  const inviteUrl = session ? invitationUrl(session.code) : "";
 
   async function copyInvite() {
     if (!inviteUrl) return;
