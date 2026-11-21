@@ -111,7 +111,7 @@ function roomState(room: Room, roomPlayers: Player[], me: Player) {
     me: { id: me.id, name: me.name, gender: me.gender, isTurn: turnPlayer?.id === me.id },
     partner: partner ? { name: partner.name, gender: partner.gender } : null,
     card: card && turnPlayer ? {
-      text: card[me.gender as Gender],
+      text: card[turnPlayer.gender as Gender],
       forName: turnPlayer.name,
       slot: pools[String(room.stage)].indexOf(room.currentCard ?? -1),
     } : null,

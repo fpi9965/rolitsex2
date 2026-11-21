@@ -246,7 +246,7 @@ export default function Home() {
 
             {state.card && (
               <article ref={cardRef} className="question-card" aria-live="polite">
-                <p className="card-owner">{state.me.isTurn ? "بطاقتك" : `بطاقة ${state.card.forName}`} · بصياغتك {state.me.gender}</p>
+                <p className="card-owner">{state.me.isTurn ? "بطاقتك" : `بطاقة ${state.card.forName}`} · بصياغة صاحب الدور</p>
                 <p className="question-text">{state.card.text}</p>
               </article>
             )}
