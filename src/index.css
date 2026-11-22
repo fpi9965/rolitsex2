@@ -43,3 +43,14 @@ button:disabled { cursor: not-allowed; }
 button, a, input { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 ::selection { background: var(--wine); color: var(--cream); }
+
+/* Staggered suspenseful card reveal */
+.suspense-card { position: relative; overflow: hidden; }
+.suspense-cover { min-height: 190px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; text-align: center; padding: 18px 8px; }
+.suspense-cover strong { font-size: 1.15rem; line-height: 1.7; }
+.suspense-cover p { opacity: .75; margin: 0; }
+.suspense-symbol { font-size: 2.5rem; animation: suspense-pulse 1.15s ease-in-out infinite alternate; }
+.suspense-content { animation: suspense-appear .7s ease-out both; }
+@keyframes suspense-pulse { from { opacity: .45; transform: scale(.85) rotate(-10deg); } to { opacity: 1; transform: scale(1.16) rotate(10deg); } }
+@keyframes suspense-appear { from { opacity: 0; transform: translateY(14px); filter: blur(5px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@media (prefers-reduced-motion: reduce) { .suspense-symbol, .suspense-content { animation: none; } }

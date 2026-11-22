@@ -203,23 +203,22 @@ function scheduleEffect(effect: SoundEffect, audio: AudioContext, output: GainNo
       tone(audio, output, 659.25, 0.22, 0.38, 0.045);
       break;
     case "done":
-      breath(audio, output, 0.05, 0.55, 0.02);
-      heartbeat(audio, output, 0, 0.075);
-      tone(audio, output, 392, 0, 0.3, 0.055, "triangle");
-      tone(audio, output, 523.25, 0.08, 0.32, 0.05, "triangle");
-      tone(audio, output, 659.25, 0.16, 0.36, 0.05, "triangle");
-      tone(audio, output, 783.99, 0.28, 0.4, 0.04);
+      // Warm, understated transition instead of a game-show victory jingle.
+      breath(audio, output, 0, 0.9, 0.035);
+      heartbeat(audio, output, 0.05, 0.055);
+      glide(audio, output, 190, 125, 0.25, 0.5, 0.03);
       break;
     case "skip":
       glide(audio, output, 280, 150, 0, 0.28, 0.065);
       tone(audio, output, 180, 0.15, 0.2, 0.035, "triangle");
       break;
     case "tick":
-      tone(audio, output, 620, 0, 0.06, 0.028, "sine");
+      // No quiz-show beeps: a soft, low-frequency pulse.
+      glide(audio, output, 75, 48, 0, 0.16, 0.025);
       break;
     case "tickFinal":
-      heartbeat(audio, output, 0, 0.055);
-      tone(audio, output, 880, 0.04, 0.07, 0.03, "sine");
+      heartbeat(audio, output, 0, 0.045);
+      breath(audio, output, 0.04, 0.32, 0.012);
       break;
     case "expire":
       breath(audio, output, 0, 0.5, 0.02);
