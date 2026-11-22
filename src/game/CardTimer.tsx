@@ -5,6 +5,8 @@ import { CARD_DURATION_MS } from "@contracts/game";
 type CardTimerProps = {
   endsAt: number;
   serverTime: number;
+  onTick: (second: number) => void;
+  onExpire: () => void;
 };
 
 function formatTime(totalSeconds: number) {
@@ -13,9 +15,10 @@ function formatTime(totalSeconds: number) {
   return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
-export function CardTimer({ endsAt, serverTime }: CardTimerProps) {
+export function CardTimer({ endsAt, serverTime, onTick, onExpire }: CardTimerProps) {
   const [now, setNow] = useState(Date.now());
   const clockOffset = useRef(0);
+  const previousSeconds = useRef<number | null>(null);
 
   useEffect(() => {
     clockOffset.current = serverTime - Date.now();
@@ -27,11 +30,26 @@ export function CardTimer({ endsAt, serverTime }: CardTimerProps) {
     return () => window.clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    previousSeconds.current = null;
+  }, [endsAt]);
+
   const remainingMs = Math.max(0, endsAt - (now + clockOffset.current));
   const seconds = Math.ceil(remainingMs / 1000);
   const expired = remainingMs === 0;
   const urgent = !expired && seconds <= 10;
   const progress = Math.min(1, remainingMs / CARD_DURATION_MS);
+
+  useEffect(() => {
+    const previous = previousSeconds.current;
+    if (previous === seconds) return;
+    if (expired) {
+      if (previous !== null && previous > 0) onExpire();
+    } else if (seconds > 0 && seconds <= 10 && (previous === null || seconds < previous)) {
+      onTick(seconds);
+    }
+    previousSeconds.current = seconds;
+  }, [expired, onExpire, onTick, seconds]);
 
   return (
     <div

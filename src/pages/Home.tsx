@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { Flame, RefreshCw, Share2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Flame, RefreshCw, Share2, Volume2, VolumeX } from "lucide-react";
 import type { Gender } from "@contracts/cards";
 import type { Session } from "@contracts/game";
 import { trpc } from "@/providers/trpc";
 import { EntryScreen } from "@/game/EntryScreen";
 import { GameScreen } from "@/game/GameScreen";
 import { InvitePanel } from "@/game/InvitePanel";
+import { isSoundMuted, playSound, playSoundFromGesture, setSoundMuted, unlockAudio } from "@/game/audio";
 import { clearSession, invitationCode, invitationUrl, loadSession, saveSession } from "@/game/session";
 import "./Home.css";
 
@@ -13,6 +14,9 @@ export default function Home() {
   const [entryCode, setEntryCode] = useState(invitationCode);
   const [session, setSession] = useState<Session | null>(loadSession);
   const [notice, setNotice] = useState("");
+  const [soundMuted, setMuted] = useState(isSoundMuted);
+  const previousCardVersion = useRef<number | null>(null);
+  const previousRevealedSecret = useRef<number | null>(null);
   const utils = trpc.useUtils();
 
   const stateQuery = trpc.room.state.useQuery(
@@ -25,6 +29,36 @@ export default function Home() {
       retry: 1,
     },
   );
+
+  const activeCardVersion = stateQuery.data?.card ? stateQuery.data.version : null;
+  const currentSecret = stateQuery.data?.secret;
+  const revealedSecretId = currentSecret?.status === "revealed" ? currentSecret.id : null;
+
+  useEffect(() => {
+    const unlock = () => {
+      if (!isSoundMuted()) void unlockAudio();
+    };
+    window.addEventListener("pointerdown", unlock, { passive: true });
+    window.addEventListener("keydown", unlock);
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (activeCardVersion !== null && activeCardVersion !== previousCardVersion.current) {
+      playSound("card");
+    }
+    previousCardVersion.current = activeCardVersion;
+  }, [activeCardVersion]);
+
+  useEffect(() => {
+    if (revealedSecretId !== null && revealedSecretId !== previousRevealedSecret.current) {
+      playSound("reveal");
+    }
+    previousRevealedSecret.current = revealedSecretId;
+  }, [revealedSecretId]);
 
   function acceptSession(next: Session) {
     saveSession(next);
@@ -39,8 +73,18 @@ export default function Home() {
   const createRoom = trpc.room.create.useMutation({ onSuccess: acceptSession });
   const joinRoom = trpc.room.join.useMutation({ onSuccess: acceptSession });
   const spin = trpc.room.spin.useMutation({ onSuccess: updateRoom });
-  const done = trpc.room.done.useMutation({ onSuccess: updateRoom });
-  const skip = trpc.room.skip.useMutation({ onSuccess: updateRoom });
+  const done = trpc.room.done.useMutation({
+    onSuccess: (data) => {
+      updateRoom(data);
+      playSound("done");
+    },
+  });
+  const skip = trpc.room.skip.useMutation({
+    onSuccess: (data) => {
+      updateRoom(data);
+      playSound("skip");
+    },
+  });
   const nextStage = trpc.room.nextStage.useMutation({ onSuccess: updateRoom });
   const submitAnswer = trpc.room.submitAnswer.useMutation({ onSuccess: updateRoom });
   const finishSecret = trpc.room.finishSecret.useMutation({ onSuccess: updateRoom });
@@ -58,6 +102,13 @@ export default function Home() {
     window.history.replaceState(null, "", window.location.pathname);
     setEntryCode("");
     joinRoom.reset();
+  }
+
+  function toggleSound() {
+    const nextMuted = !soundMuted;
+    setSoundMuted(nextMuted);
+    setMuted(nextMuted);
+    if (!nextMuted) void unlockAudio();
   }
 
   async function shareRoom() {
@@ -128,6 +179,16 @@ export default function Home() {
           <header className="game-topbar">
             <div className="room-chip"><span className="online-dot" /> غرفة <bdi>{state.code}</bdi></div>
             <div className="topbar-actions">
+              <button
+                className="icon-button"
+                type="button"
+                onClick={toggleSound}
+                aria-label={soundMuted ? "تشغيل المؤثرات الصوتية" : "كتم المؤثرات الصوتية"}
+                aria-pressed={soundMuted}
+                title={soundMuted ? "تشغيل المؤثرات الصوتية" : "كتم المؤثرات الصوتية"}
+              >
+                {soundMuted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+              </button>
               <button className="icon-button" type="button" onClick={() => void shareRoom()} aria-label="مشاركة رابط الغرفة"><Share2 aria-hidden="true" /></button>
               <button className="text-button leave-waiting" type="button" onClick={leaveRoom}>خروج</button>
             </div>
@@ -149,12 +210,19 @@ export default function Home() {
       connected={!stateQuery.isError}
       refreshing={stateQuery.isRefetching}
       notice={notice}
-      onSpin={() => spin.mutate(session)}
+      soundMuted={soundMuted}
+      onToggleSound={toggleSound}
+      onSpin={() => {
+        void playSoundFromGesture("spin");
+        spin.mutate(session);
+      }}
       onDone={() => done.mutate(session)}
       onSkip={() => skip.mutate(session)}
       onNextStage={() => nextStage.mutate(session)}
       onSubmitAnswer={(answer) => submitAnswer.mutate({ ...session, answer })}
       onFinishSecret={() => finishSecret.mutate(session)}
+      onTimerTick={(second) => playSound(second <= 3 ? "tickFinal" : "tick")}
+      onTimerExpire={() => playSound("expire")}
       onShare={() => void shareRoom()}
       onLeave={leaveRoom}
     />

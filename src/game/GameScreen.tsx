@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Flame, LogOut, RefreshCw, Share2, WifiOff } from "lucide-react";
+import { Flame, LogOut, RefreshCw, Share2, Volume2, VolumeX, WifiOff } from "lucide-react";
 import type { RoomState } from "@contracts/game";
 import { CARD_HEAT, SKIP_HEAT, STAGES } from "@contracts/game";
 import { Dial } from "./Dial";
@@ -15,12 +15,16 @@ type GameScreenProps = {
   connected: boolean;
   refreshing: boolean;
   notice?: string;
+  soundMuted: boolean;
+  onToggleSound: () => void;
   onSpin: () => void;
   onDone: () => void;
   onSkip: () => void;
   onNextStage: () => void;
   onSubmitAnswer: (answer: string) => void;
   onFinishSecret: () => void;
+  onTimerTick: (second: number) => void;
+  onTimerExpire: () => void;
   onShare: () => void;
   onLeave: () => void;
 };
@@ -62,6 +66,16 @@ export function GameScreen(props: GameScreenProps) {
             </span>
           </div>
           <div className="topbar-actions">
+            <button
+              className="icon-button"
+              type="button"
+              onClick={props.onToggleSound}
+              aria-label={props.soundMuted ? "تشغيل المؤثرات الصوتية" : "كتم المؤثرات الصوتية"}
+              aria-pressed={props.soundMuted}
+              title={props.soundMuted ? "تشغيل المؤثرات الصوتية" : "كتم المؤثرات الصوتية"}
+            >
+              {props.soundMuted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+            </button>
             <button className="icon-button" type="button" onClick={props.onShare} aria-label="مشاركة رابط الغرفة" title="مشاركة رابط الغرفة"><Share2 aria-hidden="true" /></button>
             <button className="icon-button" type="button" onClick={props.onLeave} aria-label="الخروج على هذا الجهاز" title="الخروج على هذا الجهاز"><LogOut aria-hidden="true" /></button>
           </div>
@@ -127,7 +141,12 @@ export function GameScreen(props: GameScreenProps) {
 
               {state.card && (
                 <article ref={cardRef} className="question-card" aria-live="polite">
-                  <CardTimer endsAt={state.card.endsAt} serverTime={state.serverTime} />
+                  <CardTimer
+                    endsAt={state.card.endsAt}
+                    serverTime={state.serverTime}
+                    onTick={props.onTimerTick}
+                    onExpire={props.onTimerExpire}
+                  />
                   <p className="card-owner">بطاقة {state.card.forName} · {state.me.isTurn ? "تكليفك أنت" : "تكليفك مع صاحب الدور"}</p>
                   <p className="question-text">{state.card.text}</p>
                   <p className="card-tease">لكل جهاز نص مختلف؛ نفّذا ما يظهر لكل منكما بما يريحكما، ثم سجّلا النتيجة من جهاز صاحب الدور.</p>
