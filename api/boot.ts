@@ -9,8 +9,12 @@ import { log } from "./lib/logger";
 import { handleClientLog } from "./lib/clientlog";
 import { REQUEST_ID_HEADER, runWithRequestId } from "./lib/requestcontext";
 import { healthRoutes } from "./routes/health";
+import { privateAccess } from "./lib/privateAccess";
 
 const app = new Hono<{ Bindings: HttpBindings }>();
+
+// Gate both the static frontend and every API route before any other handlers.
+app.use("*", privateAccess());
 
 // One middleware for both halves of request observability, because they need the
 // same scope and the same id:
