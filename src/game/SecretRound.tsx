@@ -1,22 +1,15 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Eye, LockKeyhole, PenLine, Sparkles } from "lucide-react";
-
-type SecretRoundData = {
-  status: "writing" | "countdown" | "revealed";
-  title: string;
-  question: string;
-  partnerQuestion: string | null;
-  myAnswer: string | null;
-  partnerAnswer: string | null;
-  mySubmitted: boolean;
-  partnerSubmitted: boolean;
-  revealAt: number | null;
-};
+import type { SecretState } from "@contracts/game";
+import { draftKey } from "./session";
 
 type SecretRoundProps = {
-  secret: SecretRoundData;
+  secret: SecretState;
+  roomCode: string;
+  meId: number;
   meName: string;
   partnerName: string;
+  serverTime: number;
   isPending: boolean;
   error?: string;
   onSubmit: (answer: string) => void;
@@ -25,45 +18,70 @@ type SecretRoundProps = {
 
 export function SecretRound({
   secret,
+  roomCode,
+  meId,
   meName,
   partnerName,
+  serverTime,
   isPending,
   error,
   onSubmit,
   onFinish,
 }: SecretRoundProps) {
-  const [answer, setAnswer] = useState(secret.myAnswer ?? "");
-  // The parent remounts this component per round (key), so the draft answer
-  // resets with each new question without a state-syncing effect.
-  const [now, setNow] = useState(() => Date.now());
+  const storageKey = draftKey(roomCode, secret.id, meId);
+  const [answer, setAnswer] = useState(() => secret.myAnswer ?? localStorage.getItem(storageKey) ?? "");
+  const [now, setNow] = useState(Date.now());
+  const clockOffset = useRef(0);
+
+  useEffect(() => {
+    setAnswer(secret.myAnswer ?? localStorage.getItem(storageKey) ?? "");
+  }, [secret.id, secret.myAnswer, storageKey]);
+
+  useEffect(() => {
+    if (secret.mySubmitted) {
+      localStorage.removeItem(storageKey);
+    } else if (answer.trim()) {
+      localStorage.setItem(storageKey, answer);
+    } else {
+      localStorage.removeItem(storageKey);
+    }
+  }, [answer, secret.mySubmitted, storageKey]);
+
+  useEffect(() => {
+    clockOffset.current = serverTime - Date.now();
+  }, [serverTime]);
 
   useEffect(() => {
     if (secret.status !== "countdown") return;
-    const timer = window.setInterval(() => setNow(Date.now()), 200);
+    setNow(Date.now());
+    const timer = window.setInterval(() => setNow(Date.now()), 150);
     return () => window.clearInterval(timer);
   }, [secret.status, secret.revealAt]);
+
+  useEffect(() => {
+    if (secret.status === "revealed") localStorage.removeItem(storageKey);
+  }, [secret.status, storageKey]);
 
   function submit(event: FormEvent) {
     event.preventDefault();
     const trimmed = answer.trim();
-    if (trimmed) onSubmit(trimmed);
+    if (trimmed && !isPending) onSubmit(trimmed);
   }
 
-  const countdown = secret.revealAt
-    ? Math.max(1, Math.ceil((secret.revealAt - now) / 1000))
-    : 3;
+  const remainingMs = secret.revealAt ? secret.revealAt - (now + clockOffset.current) : 0;
+  const countdown = Math.max(0, Math.ceil(remainingMs / 1000));
 
   return (
-    <section className={`secret-round secret-${secret.status}`} aria-live="polite">
+    <section className={`secret-round secret-${secret.status}`}>
       <div className="secret-kicker">
         <LockKeyhole aria-hidden="true" />
-        <span>جولة همسة سرية</span>
-        <span className="secret-number">لكلٍّ منكما سؤال</span>
+        <span>همسة سرية</span>
+        <span className="secret-number">سؤالان · كشف واحد</span>
       </div>
 
       {secret.status === "writing" && !secret.mySubmitted && (
         <form onSubmit={submit} className="secret-compose">
-          <p className="secret-overline">سؤالك وحدك · اكتب بحرية</p>
+          <p className="secret-overline">على جهازك فقط</p>
           <h2>{secret.title}</h2>
           <p className="secret-question">{secret.question}</p>
           <label htmlFor="secret-answer">إجابتك المخفية</label>
@@ -73,16 +91,16 @@ export function SecretRound({
             onChange={(event) => setAnswer(event.target.value)}
             maxLength={300}
             rows={5}
-            placeholder="اكتب بصراحة… لن تظهر إجابتك للطرف الآخر قبل أن يرسل إجابته"
+            placeholder="اكتب بصراحة… تبقى مسودتك على جهازك إذا أعدت تحميل الصفحة"
             required
           />
           <div className="answer-meta">
-            <span><LockKeyhole aria-hidden="true" /> لا يمكن للطرف الآخر رؤيتها الآن</span>
+            <span><LockKeyhole aria-hidden="true" /> محجوبة عن {partnerName}</span>
             <bdi>{answer.length}/300</bdi>
           </div>
           <button className="primary-button seal-button" type="submit" disabled={!answer.trim() || isPending}>
             <PenLine aria-hidden="true" />
-            {isPending ? "جارٍ إخفاء الإجابة…" : "احفظ إجابتي سراً"}
+            {isPending ? "جارٍ إغلاق الإجابة…" : "احفظ إجابتي سراً"}
           </button>
         </form>
       )}
@@ -90,23 +108,25 @@ export function SecretRound({
       {secret.status === "writing" && secret.mySubmitted && (
         <div className="sealed-waiting">
           <span className="sealed-icon"><LockKeyhole aria-hidden="true" /></span>
-          <p className="secret-overline">أُغلقت إجابتك</p>
-          <h2>{secret.partnerSubmitted ? "وصلت الإجابتان" : `بانتظار إجابة ${partnerName}`}</h2>
+          <p className="secret-overline">وصلت إجابتك وأُغلقت</p>
+          <h2>{secret.partnerSubmitted ? "اكتملت الإجابتان" : `بانتظار إجابة ${partnerName}`}</h2>
           <p className="secret-question">سؤالك كان: {secret.question}</p>
           <blockquote>{secret.myAnswer}</blockquote>
           <div className="waiting-indicator" role="status">
             <span className="pulse-dot" />
-            {secret.partnerSubmitted ? "استعدا للكشف…" : "الطرف الآخر ما زال يكتب؛ لا يستطيع رؤية ما كتبت."}
+            {secret.partnerSubmitted ? "استعدا للكشف…" : "لا تصل إجابتك إلى الجهاز الآخر قبل الكشف."}
           </div>
         </div>
       )}
 
       {secret.status === "countdown" && (
-        <div className="countdown-view">
+        <div className="countdown-view" role="status" aria-live="polite">
           <Sparkles aria-hidden="true" className="countdown-spark" />
-          <p className="secret-overline">اكتملت الإجابتان وأُغلقتا</p>
-          <h2>لا تستعجلا… الكشف بعد</h2>
-          <div className="countdown-number" key={countdown} aria-label={`${countdown} ثوانٍ`}>{countdown}</div>
+          <p className="secret-overline">أُغلقت الإجابتان</p>
+          <h2>لا تستعجلا…</h2>
+          <div className="countdown-number" key={countdown} aria-label={countdown ? `${countdown} ثوانٍ` : "الكشف الآن"}>
+            {countdown || "الآن"}
+          </div>
           <p>ضعا الجوالين بينكما، واقرأا الإجابتين معاً.</p>
         </div>
       )}
@@ -115,10 +135,7 @@ export function SecretRound({
         <div className="reveal-view">
           <div className="reveal-heading">
             <Eye aria-hidden="true" />
-            <div>
-              <p className="secret-overline">انكشف السر</p>
-              <h2>{secret.title}</h2>
-            </div>
+            <div><p className="secret-overline">حان الكشف</p><h2>{secret.title}</h2></div>
           </div>
           <article className="answer-reveal mine">
             <p className="answer-author">إجابتك · {meName}</p>
@@ -130,9 +147,9 @@ export function SecretRound({
             <p className="answer-question">{secret.partnerQuestion}</p>
             <p className="answer-text">{secret.partnerAnswer}</p>
           </article>
-          <p className="reveal-challenge">اختارا الآن تفصيلاً واحداً من الإجابتين ونفّذاه، أو احتفظا به للجولة القادمة.</p>
+          <p className="reveal-challenge">اختارا تفصيلاً واحداً من الإجابتين ونفّذاه بما يريحكما، ثم عودا إلى القرص.</p>
           <button className="primary-button" type="button" onClick={onFinish} disabled={isPending}>
-            {isPending ? "جارٍ العودة…" : "العودة إلى القرص"}
+            {isPending ? "جارٍ العودة…" : "احتفظنا بالفكرة؛ عودة إلى القرص"}
           </button>
         </div>
       )}
