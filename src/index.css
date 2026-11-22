@@ -32,7 +32,7 @@ body {
   line-height: 1.65;
   -webkit-tap-highlight-color: transparent;
 }
-button, input { font: inherit; }
+button, input, textarea { font: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
 button, a, input { -webkit-tap-highlight-color: transparent; }

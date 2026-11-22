@@ -234,7 +234,71 @@ h2 { margin-bottom: 4px; font-size: 19px; line-height: 1.5; }
 .next-button { border: 0; background: var(--wine); color: var(--cream); }
 .turn-hint { margin: 14px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
 
+.card-tease { margin: 14px 0 0; color: var(--muted); font-size: 11px; text-align: center; }
+
+.heat-panel { margin: 0 0 22px; }
+.heat-heading { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px; }
+.heat-heading > span:first-child { display: inline-flex; align-items: center; gap: 7px; color: var(--gold); font-size: 13px; font-weight: 700; }
+.heat-heading svg { width: 17px; height: 17px; color: var(--ember); fill: oklch(0.68 0.19 38 / 0.18); }
+.heat-heading strong { color: var(--cream); font-size: 15px; }
+.streak-chip { padding: 3px 9px; border: 1px solid oklch(0.77 0.11 70 / 0.18); border-radius: 999px; color: var(--muted); font-size: 10px; }
+.streak-chip.hot { border-color: oklch(0.68 0.19 38 / 0.45); background: oklch(0.68 0.19 38 / 0.1); color: var(--gold); }
+.heat-track { height: 5px; margin-top: 9px; overflow: hidden; border-radius: 99px; background: var(--surface-raised); }
+.heat-track > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--wine), var(--ember), var(--gold)); box-shadow: 0 0 14px var(--ember); transition: width 700ms cubic-bezier(.2,.8,.2,1); }
+.secret-progress { margin: 7px 0 0; color: var(--muted); font-size: 10px; text-align: center; }
+
+.secret-round {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 18px;
+  border: 1px solid oklch(0.77 0.11 70 / 0.26);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse 100% 55% at 50% 0%, oklch(0.68 0.19 38 / 0.14), transparent 72%),
+    linear-gradient(180deg, oklch(0.19 0.04 12), oklch(0.15 0.025 12));
+  box-shadow: 0 22px 70px oklch(0.08 0.02 12 / 0.38);
+  animation: secret-arrive 420ms ease-out both;
+}
+.secret-round::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 25%, oklch(0.93 0.025 55 / 0.035) 45%, transparent 65%); transform: translateX(100%); animation: secret-sheen 5s ease-in-out infinite; }
+.secret-kicker { position: relative; display: flex; align-items: center; gap: 8px; margin-bottom: 24px; color: var(--gold); font-size: 12px; font-weight: 700; }
+.secret-kicker svg { width: 16px; height: 16px; }
+.secret-number { margin-inline-start: auto; color: var(--muted); font-size: 9px; font-weight: 400; }
+.secret-compose, .sealed-waiting, .countdown-view, .reveal-view { position: relative; }
+.secret-overline { margin: 0 0 7px; color: var(--ember); font-size: 10px; font-weight: 700; letter-spacing: .04em; }
+.secret-round h2 { margin: 0 0 12px; color: var(--cream); font-size: 27px; line-height: 1.45; }
+.secret-question { margin: 0 0 22px; color: var(--cream); font-size: 17px; line-height: 1.95; }
+.secret-compose > label { display: block; margin-bottom: 8px; color: var(--gold); font-size: 12px; }
+.secret-compose textarea { width: 100%; min-height: 150px; resize: vertical; padding: 14px; border: 1px solid oklch(0.77 0.11 70 / 0.25); border-radius: 14px; outline: none; background: oklch(0.12 0.02 12 / 0.72); color: var(--cream); font: inherit; font-size: 16px; line-height: 1.85; transition: border-color 180ms ease-out; }
+.secret-compose textarea:focus { border-color: var(--ember); }
+.secret-compose textarea::placeholder { color: oklch(0.61 0.025 45); }
+.answer-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 8px 0 18px; color: var(--muted); font-size: 9px; }
+.answer-meta > span { display: inline-flex; align-items: center; gap: 5px; }
+.answer-meta svg { width: 12px; height: 12px; }
+.seal-button svg { width: 17px; height: 17px; }
+.sealed-waiting { text-align: center; }
+.sealed-icon { display: inline-flex; align-items: center; justify-content: center; width: 62px; height: 62px; margin-bottom: 18px; border: 1px solid oklch(0.77 0.11 70 / 0.28); border-radius: 50%; color: var(--gold); background: oklch(0.77 0.11 70 / 0.06); }
+.sealed-icon svg { width: 26px; height: 26px; }
+.sealed-waiting blockquote { margin: 0; padding: 14px; border-right: 2px solid var(--wine); background: oklch(0.12 0.02 12 / 0.5); color: var(--muted); font-size: 13px; line-height: 1.9; text-align: right; white-space: pre-wrap; overflow-wrap: anywhere; }
+.sealed-waiting .waiting-indicator { margin-top: 20px; font-size: 11px; line-height: 1.8; }
+.countdown-view { padding: 18px 0 10px; text-align: center; }
+.countdown-spark { width: 26px; height: 26px; margin-bottom: 16px; color: var(--gold); }
+.countdown-number { margin: 12px 0; color: var(--cream); font-size: 108px; font-weight: 800; line-height: 1.2; text-shadow: 0 0 45px oklch(0.68 0.19 38 / 0.35); animation: count-pulse 700ms ease-out both; }
+.countdown-view > p:last-child { margin: 0; color: var(--muted); font-size: 12px; }
+.reveal-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.reveal-heading > svg { width: 28px; height: 28px; color: var(--ember); }
+.reveal-heading h2 { margin: 0; }
+.answer-reveal { padding: 17px 0; border-top: 1px solid oklch(0.77 0.11 70 / 0.2); animation: reveal-answer 600ms ease-out both; }
+.answer-reveal.partner { animation-delay: 180ms; }
+.answer-author { margin: 0 0 5px; color: var(--gold); font-size: 11px; font-weight: 700; }
+.answer-question { margin: 0 0 12px; color: var(--muted); font-size: 11px; line-height: 1.8; }
+.answer-text { margin: 0; color: var(--cream); font-size: 18px; line-height: 1.95; white-space: pre-wrap; overflow-wrap: anywhere; }
+.reveal-challenge { margin: 16px 0 20px; padding: 13px; border-right: 2px solid var(--ember); background: oklch(0.68 0.19 38 / 0.06); color: var(--gold); font-size: 11px; line-height: 1.9; }
+
 @keyframes breathe { from { opacity: 0.45; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+@keyframes secret-arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes secret-sheen { 0%, 55% { transform: translateX(100%); } 85%, 100% { transform: translateX(-100%); } }
+@keyframes count-pulse { from { opacity: .2; transform: scale(1.25); } to { opacity: 1; transform: scale(1); } }
+@keyframes reveal-answer { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (min-width: 768px) {
   .entry-layout, .game-wrap { padding-top: 44px; }

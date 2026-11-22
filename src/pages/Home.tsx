@@ -3,6 +3,7 @@ import { Copy, Flame, Link2, RefreshCw, Share2, Users } from "lucide-react";
 import type { Gender } from "@contracts/cards";
 import { trpc } from "@/providers/trpc";
 import { Dial } from "@/game/Dial";
+import { SecretRound } from "@/game/SecretRound";
 import "./Home.css";
 
 type Session = { code: string; token: string };
@@ -31,7 +32,8 @@ export default function Home() {
     session ?? { code: "AAAAAA", token: "0".repeat(64) },
     {
       enabled: Boolean(session),
-      refetchInterval: 1800,
+      refetchInterval: (query) =>
+        query.state.data?.secret?.status === "countdown" ? 400 : 1800,
       refetchIntervalInBackground: true,
       retry: 1,
     },
@@ -67,6 +69,12 @@ export default function Home() {
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
   });
   const nextStage = trpc.room.nextStage.useMutation({
+    onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+  });
+  const submitAnswer = trpc.room.submitAnswer.useMutation({
+    onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+  });
+  const finishSecret = trpc.room.finishSecret.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
   });
 
@@ -190,8 +198,9 @@ export default function Home() {
   }
 
   const state = stateQuery.data;
-  const isBusy = spin.isPending || done.isPending || skip.isPending || nextStage.isPending;
+  const isBusy = spin.isPending || done.isPending || skip.isPending || nextStage.isPending || submitAnswer.isPending || finishSecret.isPending;
   const actionError = spin.error?.message || done.error?.message || skip.error?.message || nextStage.error?.message;
+  const secretError = submitAnswer.error?.message || finishSecret.error?.message;
   const actionInput = () => ({ ...session, version: state.version });
 
   return (
@@ -228,39 +237,75 @@ export default function Home() {
               <span className="stage-chip">{STAGE_NAMES[state.stage]}</span>
               <span>{state.partner?.name}</span>
             </div>
-            <div className={state.me.isTurn ? "turn-banner my-turn" : "turn-banner"} role="status">
-              <span>{state.me.isTurn ? "دورك الآن" : `الدور على ${state.partner?.name}`}</span>
-              <small>{state.me.isTurn ? "أدر القرص عندما تكونان مستعدين" : "ستظهر لك البطاقة هنا فور اختيارها"}</small>
+
+            <div className="heat-panel">
+              <div className="heat-heading">
+                <span><Flame aria-hidden="true" /> اللهيب</span>
+                <strong>{state.heat}%</strong>
+                <span className={state.streak > 1 ? "streak-chip hot" : "streak-chip"}>
+                  {state.streak > 0 ? `سلسلة ×${state.streak}` : "ابدآ سلسلة"}
+                </span>
+              </div>
+              <div className="heat-track" role="progressbar" aria-label="مؤشر اللهيب" aria-valuemin={0} aria-valuemax={100} aria-valuenow={state.heat}>
+                <span style={{ width: `${state.heat}%` }} />
+              </div>
+              <p className="secret-progress">
+                {state.secret
+                  ? "توقف القرص مؤقتاً؛ حان وقت الإجابات السرية"
+                  : state.secretIn === 1
+                    ? "بطاقة واحدة تفصلكما عن همسة سرية"
+                    : "بطاقتان حتى جولة الهمسة السرية"}
+              </p>
             </div>
 
-            <div className="dial-box">
-              <Dial slots={state.slots} cardSlot={state.card?.slot ?? null} version={state.version} />
-              <button
-                className="spin-button"
-                onClick={() => spin.mutate(actionInput())}
-                disabled={!state.me.isTurn || Boolean(state.card) || isBusy || state.remaining === 0}
-              >
-                {spin.isPending ? "جارٍ الاختيار…" : state.card ? "البطاقة ظاهرة" : "أدر القرص"}
-              </button>
-            </div>
+            {state.secret ? (
+              <SecretRound
+                secret={state.secret}
+                meName={state.me.name}
+                partnerName={state.partner?.name ?? "الطرف الآخر"}
+                isPending={submitAnswer.isPending || finishSecret.isPending}
+                error={secretError}
+                onSubmit={(answer) => submitAnswer.mutate({ ...actionInput(), answer })}
+                onFinish={() => finishSecret.mutate(actionInput())}
+              />
+            ) : (
+              <>
+                <div className={state.me.isTurn ? "turn-banner my-turn" : "turn-banner"} role="status">
+                  <span>{state.me.isTurn ? "دورك الآن" : `الدور على ${state.partner?.name}`}</span>
+                  <small>{state.me.isTurn ? "أدر القرص عندما تكونان مستعدين" : "ستظهر لك البطاقة هنا فور اختيارها"}</small>
+                </div>
 
-            {state.card && (
-              <article ref={cardRef} className="question-card" aria-live="polite">
-                <p className="card-owner">{state.me.isTurn ? "بطاقتك" : `بطاقة ${state.card.forName}`} · بصياغة صاحب الدور</p>
-                <p className="question-text">{state.card.text}</p>
-              </article>
+                <div className="dial-box">
+                  <Dial slots={state.slots} cardSlot={state.card?.slot ?? null} version={state.version} />
+                  <button
+                    className="spin-button"
+                    onClick={() => spin.mutate(actionInput())}
+                    disabled={!state.me.isTurn || Boolean(state.card) || isBusy || state.remaining === 0}
+                  >
+                    {spin.isPending ? "جارٍ الاختيار…" : state.card ? "البطاقة ظاهرة" : "أدر القرص"}
+                  </button>
+                </div>
+
+                {state.card && (
+                  <article ref={cardRef} className="question-card" aria-live="polite">
+                    <p className="card-owner">{state.me.isTurn ? "بطاقتك" : `بطاقة ${state.card.forName}`} · بصياغة صاحب الدور</p>
+                    <p className="question-text">{state.card.text}</p>
+                    <p className="card-tease">نفّذا بما يريحكما… ثم اضغط «تمّ» لرفع اللهيب.</p>
+                  </article>
+                )}
+                {!state.card && state.remaining === 0 && (
+                  <p className="empty-stage" role="status">انتهت بطاقات المرحلة. انتقلا إلى المرحلة التالية.</p>
+                )}
+
+                {actionError && <p className="error-message" role="alert">{actionError}</p>}
+                <div className="game-actions">
+                  <button className="done-button" onClick={() => done.mutate(actionInput())} disabled={!state.me.isTurn || !state.card || isBusy}>تمّ +١٢</button>
+                  <button className="skip-button" onClick={() => skip.mutate(actionInput())} disabled={!state.me.isTurn || !state.card || isBusy}>تخطّي −١٢</button>
+                  <button className="next-button" onClick={() => nextStage.mutate(actionInput())} disabled={!state.me.isTurn || isBusy}>المرحلة التالية</button>
+                </div>
+                {!state.me.isTurn && <p className="turn-hint">الأزرار تعمل على جهاز صاحب الدور، والتحديث يصل إلى جهازك تلقائياً.</p>}
+              </>
             )}
-            {!state.card && state.remaining === 0 && (
-              <p className="empty-stage" role="status">انتهت بطاقات المرحلة. انتقلا إلى المرحلة التالية.</p>
-            )}
-
-            {actionError && <p className="error-message" role="alert">{actionError}</p>}
-            <div className="game-actions">
-              <button className="done-button" onClick={() => done.mutate(actionInput())} disabled={!state.me.isTurn || !state.card || isBusy}>تمّ</button>
-              <button className="skip-button" onClick={() => skip.mutate(actionInput())} disabled={!state.me.isTurn || !state.card || isBusy}>تخطّي</button>
-              <button className="next-button" onClick={() => nextStage.mutate(actionInput())} disabled={!state.me.isTurn || isBusy}>المرحلة التالية</button>
-            </div>
-            {!state.me.isTurn && <p className="turn-hint">الأزرار تعمل على جهاز صاحب الدور، والتحديث يصل إلى جهازك تلقائياً.</p>}
           </section>
         )}
       </div>

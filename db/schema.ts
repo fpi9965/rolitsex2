@@ -20,6 +20,16 @@ export const rooms = mysqlTable("rooms", {
   pools: text("pools").notNull(),
   used: text("used").notNull(),
   history: text("history").notNull(),
+  heat: int("heat").notNull().default(12),
+  streak: int("streak").notNull().default(0),
+  completedCards: int("completed_cards").notNull().default(0),
+  secretStatus: mysqlEnum("secret_status", ["none", "writing", "countdown"])
+    .notNull()
+    .default("none"),
+  secretPrompt: int("secret_prompt"),
+  secretAnswers: text("secret_answers").notNull(),
+  secretHistory: text("secret_history").notNull(),
+  secretRevealAt: timestamp("secret_reveal_at"),
   version: int("version").notNull().default(0),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),

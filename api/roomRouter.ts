@@ -3,6 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { masterStages, type Gender } from "@contracts/cards";
+import { secretPrompts } from "@contracts/secret";
 import { players, rooms, type Player, type Room } from "@db/schema";
 import { createRouter, publicQuery } from "./middleware";
 import { getDb } from "./queries/connection";
@@ -14,8 +15,12 @@ const codeSchema = z.string().trim().toUpperCase().regex(/^[A-Z2-9]{6}$/, "رم�
 const nameSchema = z.string().trim().min(1, "اكتب اسمك").max(20, "الاسم طويل");
 const sessionSchema = z.object({ code: codeSchema, token: z.string().length(64) });
 const actionSchema = sessionSchema.extend({ version: z.number().int().nonnegative() });
+const answerSchema = actionSchema.extend({
+  answer: z.string().trim().min(1, "اكتب إجابتك أولاً").max(300, "الإجابة طويلة؛ اختصرها إلى 300 حرف"),
+});
 
 type NumberMap = Record<string, number[]>;
+type SecretAnswers = Record<string, string>;
 type Db = ReturnType<typeof getDb>;
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
 
@@ -33,6 +38,49 @@ function parseMap(value: string): NumberMap {
   } catch {
     return emptyMap();
   }
+}
+
+function parseAnswers(value: string): SecretAnswers {
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+    return Object.fromEntries(
+      Object.entries(parsed).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
+    );
+  } catch {
+    return {};
+  }
+}
+
+function parseSecretHistory(value: string): NumberMap {
+  try {
+    const parsed = JSON.parse(value) as NumberMap;
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function prepareSecretRound(room: Room, completedCards: number) {
+  if (completedCards % 2 !== 0) return {};
+  const stageKey = String(room.stage);
+  const history = parseSecretHistory(room.secretHistory);
+  const prompts = secretPrompts[room.stage];
+  let used = Array.isArray(history[stageKey]) ? history[stageKey] : [];
+  let candidates = prompts.map((_, index) => index).filter((index) => !used.includes(index));
+  if (!candidates.length) {
+    used = [];
+    candidates = prompts.map((_, index) => index);
+  }
+  const prompt = candidates[randomInt(candidates.length)];
+  history[stageKey] = [...used, prompt];
+  return {
+    secretStatus: "writing" as const,
+    secretPrompt: prompt,
+    secretAnswers: "{}",
+    secretHistory: JSON.stringify(history),
+    secretRevealAt: null,
+  };
 }
 
 function shuffle(values: number[]): number[] {
@@ -101,11 +149,29 @@ function roomState(room: Room, roomPlayers: Player[], me: Player) {
   const partner = roomPlayers.find((player) => player.id !== me.id) ?? null;
   const turnPlayer = roomPlayers.find((player) => player.id === room.turnPlayerId) ?? null;
   const card = room.currentCard === null ? null : masterStages[room.stage]?.[room.currentCard];
+  const answers = parseAnswers(room.secretAnswers);
+  const prompt = room.secretPrompt === null ? null : secretPrompts[room.stage]?.[room.secretPrompt];
+  const revealAt = room.secretRevealAt?.getTime() ?? null;
+  const revealed = room.secretStatus === "countdown" && revealAt !== null && Date.now() >= revealAt;
+  const secret = room.secretStatus !== "none" && prompt && partner ? {
+    status: revealed ? "revealed" as const : room.secretStatus === "countdown" ? "countdown" as const : "writing" as const,
+    title: prompt.title,
+    question: prompt[me.gender as Gender],
+    partnerQuestion: revealed ? prompt[partner.gender as Gender] : null,
+    myAnswer: answers[String(me.id)] ?? null,
+    partnerAnswer: revealed ? answers[String(partner.id)] ?? null : null,
+    mySubmitted: Boolean(answers[String(me.id)]),
+    partnerSubmitted: Boolean(answers[String(partner.id)]),
+    revealAt,
+  } : null;
   return {
     code: room.code,
     status: room.status,
     stage: room.stage,
     version: room.version,
+    heat: room.heat,
+    streak: room.streak,
+    secretIn: 2 - (room.completedCards % 2),
     remaining: Math.max(0, pools[String(room.stage)].length - used[String(room.stage)].length),
     slots: pools[String(room.stage)].map((index) => ({ used: used[String(room.stage)].includes(index) })),
     me: { id: me.id, name: me.name, gender: me.gender, isTurn: turnPlayer?.id === me.id },
@@ -115,18 +181,26 @@ function roomState(room: Room, roomPlayers: Player[], me: Player) {
       forName: turnPlayer.name,
       slot: pools[String(room.stage)].indexOf(room.currentCard ?? -1),
     } : null,
+    secret,
   };
 }
 
-function assertTurn(room: Room, me: Player, version: number) {
+function assertActiveVersion(room: Room, version: number) {
   if (room.status !== "active") {
     throw new TRPCError({ code: "PRECONDITION_FAILED", message: "بانتظار انضمام الطرف الآخر" });
   }
-  if (room.turnPlayerId !== me.id) {
-    throw new TRPCError({ code: "FORBIDDEN", message: "الدور على الطرف الآخر" });
-  }
   if (room.version !== version) {
     throw new TRPCError({ code: "CONFLICT", message: "تغيّرت الغرفة؛ انتظر لحظة وحاول مجدداً" });
+  }
+}
+
+function assertTurn(room: Room, me: Player, version: number) {
+  assertActiveVersion(room, version);
+  if (room.secretStatus !== "none") {
+    throw new TRPCError({ code: "PRECONDITION_FAILED", message: "أكملا جولة الإجابات السرية أولاً" });
+  }
+  if (room.turnPlayerId !== me.id) {
+    throw new TRPCError({ code: "FORBIDDEN", message: "الدور على الطرف الآخر" });
   }
 }
 
@@ -152,7 +226,7 @@ export const roomRouter = createRouter({
       await db.transaction(async (tx) => {
         const [{ id: roomId }] = await tx
           .insert(rooms)
-          .values({ code, pools: JSON.stringify(pools), used: JSON.stringify(emptyMap()), history: JSON.stringify(history) })
+          .values({ code, pools: JSON.stringify(pools), used: JSON.stringify(emptyMap()), history: JSON.stringify(history), secretAnswers: "{}", secretHistory: "{}" })
           .$returningId();
         const [{ id: playerId }] = await tx
           .insert(players)
@@ -229,21 +303,21 @@ export const roomRouter = createRouter({
       if (!history[stageKey].includes(room.currentCard)) history[stageKey].push(room.currentCard);
       const partner = roomPlayers.find((player) => player.id !== me.id);
       if (!partner) throw new TRPCError({ code: "PRECONDITION_FAILED", message: "الطرف الآخر غير موجود" });
-      await tx
-        .update(rooms)
-        .set({
-          currentCard: null,
-          used: JSON.stringify(used),
-          history: JSON.stringify(history),
-          turnPlayerId: partner.id,
-          version: room.version + 1,
-        })
-        .where(eq(rooms.id, room.id));
-      return roomState(
-        { ...room, currentCard: null, used: JSON.stringify(used), history: JSON.stringify(history), turnPlayerId: partner.id, version: room.version + 1 },
-        roomPlayers,
-        me,
-      );
+      const completedCards = room.completedCards + 1;
+      const secretRound = prepareSecretRound(room, completedCards);
+      const patch = {
+        currentCard: null,
+        used: JSON.stringify(used),
+        history: JSON.stringify(history),
+        turnPlayerId: partner.id,
+        completedCards,
+        heat: Math.min(100, room.heat + 12),
+        streak: room.streak + 1,
+        ...secretRound,
+        version: room.version + 1,
+      };
+      await tx.update(rooms).set(patch).where(eq(rooms.id, room.id));
+      return roomState({ ...room, ...patch }, roomPlayers, me);
     });
   }),
 
@@ -263,20 +337,62 @@ export const roomRouter = createRouter({
         .map((_, index) => index)
         .filter((index) => !pools[stageKey].includes(index) && !history[stageKey].includes(index));
       if (replacements.length) pools[stageKey].push(replacements[randomInt(replacements.length)]);
-      await tx
-        .update(rooms)
-        .set({
-          currentCard: null,
-          pools: JSON.stringify(pools),
-          used: JSON.stringify(used),
-          version: room.version + 1,
-        })
-        .where(eq(rooms.id, room.id));
-      return roomState(
-        { ...room, currentCard: null, pools: JSON.stringify(pools), used: JSON.stringify(used), version: room.version + 1 },
-        roomPlayers,
-        me,
-      );
+      const patch = {
+        currentCard: null,
+        pools: JSON.stringify(pools),
+        used: JSON.stringify(used),
+        heat: Math.max(0, room.heat - 12),
+        streak: 0,
+        version: room.version + 1,
+      };
+      await tx.update(rooms).set(patch).where(eq(rooms.id, room.id));
+      return roomState({ ...room, ...patch }, roomPlayers, me);
+    });
+  }),
+
+  submitAnswer: publicQuery.input(answerSchema).mutation(async ({ input }) => {
+    return getDb().transaction(async (tx) => {
+      const { room, roomPlayers, me } = await getSession(input, tx, true);
+      assertActiveVersion(room, input.version);
+      if (room.secretStatus !== "writing") {
+        throw new TRPCError({ code: "CONFLICT", message: "لا يمكن إرسال إجابة في هذه اللحظة" });
+      }
+      const answers = parseAnswers(room.secretAnswers);
+      if (answers[String(me.id)]) {
+        throw new TRPCError({ code: "CONFLICT", message: "تم حفظ إجابتك بالفعل" });
+      }
+      const partner = roomPlayers.find((player) => player.id !== me.id);
+      if (!partner) throw new TRPCError({ code: "PRECONDITION_FAILED", message: "الطرف الآخر غير موجود" });
+      answers[String(me.id)] = input.answer;
+      const bothSubmitted = Boolean(answers[String(partner.id)]);
+      const patch = {
+        secretAnswers: JSON.stringify(answers),
+        secretStatus: bothSubmitted ? "countdown" as const : "writing" as const,
+        secretRevealAt: bothSubmitted ? new Date(Date.now() + 4000) : null,
+        heat: Math.min(100, room.heat + 6),
+        version: room.version + 1,
+      };
+      await tx.update(rooms).set(patch).where(eq(rooms.id, room.id));
+      return roomState({ ...room, ...patch }, roomPlayers, me);
+    });
+  }),
+
+  finishSecret: publicQuery.input(actionSchema).mutation(async ({ input }) => {
+    return getDb().transaction(async (tx) => {
+      const { room, roomPlayers, me } = await getSession(input, tx, true);
+      assertActiveVersion(room, input.version);
+      if (room.secretStatus !== "countdown" || !room.secretRevealAt || Date.now() < room.secretRevealAt.getTime()) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "انتظرا لحظة الكشف أولاً" });
+      }
+      const patch = {
+        secretStatus: "none" as const,
+        secretPrompt: null,
+        secretAnswers: "{}",
+        secretRevealAt: null,
+        version: room.version + 1,
+      };
+      await tx.update(rooms).set(patch).where(eq(rooms.id, room.id));
+      return roomState({ ...room, ...patch }, roomPlayers, me);
     });
   }),
 
