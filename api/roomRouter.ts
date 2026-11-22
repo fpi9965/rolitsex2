@@ -16,7 +16,8 @@ import { createRouter, publicQuery } from "./middleware";
 import { getDb } from "./queries/connection";
 
 const STAGE_IDS = [1, 2, 3, 4] as const;
-const STAGE_LIMITS: Record<number, number> = { 1: 8, 2: 8, 3: 8, 4: 1 };
+const STAGE_LIMITS: Record<number, number> = { 1: 10, 2: 10, 3: 10, 4: 2 };
+const NEW_CARD_START: Record<number, number> = { 1: 49, 2: 50, 3: 45, 4: 8 };
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const genderSchema = z.enum(["مذكر", "مؤنث"]);
 const codeSchema = z.string().trim().toUpperCase().regex(/^[A-Z2-9]{6}$/, "رمز الغرفة غير صحيح");
@@ -85,7 +86,11 @@ function makeStagePool(stage: number, history: IndexMap): number[] {
     history[key] = [];
     candidates = Array.from({ length: count }, (_, index) => index);
   }
-  return shuffle(candidates).slice(0, limit);
+  const fresh = shuffle(candidates.filter((index) => index >= NEW_CARD_START[stage]));
+  const classic = shuffle(candidates.filter((index) => index < NEW_CARD_START[stage]));
+  const selected = fresh.splice(0, Math.min(fresh.length, Math.ceil(limit / 2)));
+  const remainder = shuffle([...fresh, ...classic]).slice(0, limit - selected.length);
+  return shuffle([...selected, ...remainder]);
 }
 
 function buildPools(history: IndexMap): IndexMap {
@@ -195,7 +200,7 @@ function toRoomState(room: Room, roomPlayers: Player[], me: Player): RoomState {
     me: { id: me.id, name: me.name, gender: me.gender, isTurn: turnPlayer?.id === me.id },
     partner: partner ? { name: partner.name, gender: partner.gender } : null,
     card: card && turnPlayer ? {
-      text: card[turnPlayer.gender as Gender],
+      text: card[me.gender as Gender],
       forName: turnPlayer.name,
       slot: pools[stageKey].indexOf(room.currentCard ?? -1),
     } : null,

@@ -12,7 +12,7 @@ const forbiddenReverseWording = [
 
 describe("مكتبة البطاقات", () => {
   it("تحافظ على المراحل والأعداد المعتمدة", () => {
-    expect(Object.values(masterStages).map((cards) => cards.length)).toEqual([49, 50, 45, 8]);
+    expect(Object.values(masterStages).map((cards) => cards.length)).toEqual([57, 58, 53, 16]);
   });
 
   it("تحتوي كل بطاقة على صياغتين واضحتين", () => {
@@ -21,6 +21,16 @@ describe("مكتبة البطاقات", () => {
         expect(card.مذكر.trim().length).toBeGreaterThan(0);
         expect(card.مؤنث.trim().length).toBeGreaterThan(0);
       }
+    }
+  });
+
+  it("تمنح الإضافات الجديدة كل جهاز نصاً مختلفاً وغير مكرر", () => {
+    for (const cards of Object.values(masterStages)) {
+      const additions = cards.slice(-8);
+      expect(additions).toHaveLength(8);
+      expect(new Set(additions.map((card) => card.مذكر)).size).toBe(8);
+      expect(new Set(additions.map((card) => card.مؤنث)).size).toBe(8);
+      for (const card of additions) expect(card.مذكر).not.toEqual(card.مؤنث);
     }
   });
 
