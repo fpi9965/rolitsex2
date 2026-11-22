@@ -41,6 +41,19 @@ function heatLabel(heat: number) {
 export function GameScreen(props: GameScreenProps) {
   const { state, busy, actionError, secretError, connected, refreshing } = props;
   const cardRef = useRef<HTMLElement>(null);
+  const [atmosphere, setAtmosphere] = useState<"soft" | "romantic" | "bold">(() => {
+    try {
+      const saved = localStorage.getItem("rolit-atmosphere");
+      return saved === "soft" || saved === "romantic" || saved === "bold" ? saved : "bold";
+    } catch {
+      return "bold";
+    }
+  });
+  function chooseAtmosphere(value: "soft" | "romantic" | "bold") {
+    setAtmosphere(value);
+    try { localStorage.setItem("rolit-atmosphere", value); } catch { /* Storage unavailable. */ }
+    playSound("reveal");
+  }
   const stage = STAGES.find((item) => item.id === state.stage) ?? STAGES[0];
   const cardVersion = state.card ? state.version : null;
   const [revealedVersion, setRevealedVersion] = useState<number | null>(null);
@@ -67,7 +80,7 @@ export function GameScreen(props: GameScreenProps) {
   }, [cardVersion]);
 
   return (
-    <main className="app-shell game-screen">
+    <main className={`app-shell game-screen atmosphere-${atmosphere}`}>
       <div className="ambient" aria-hidden="true" />
       {props.notice && <div className="toast" role="status">{props.notice}</div>}
       <div className="game-wrap">
@@ -110,6 +123,15 @@ export function GameScreen(props: GameScreenProps) {
             ))}
           </ol>
 
+          <section className="atmosphere-picker" aria-label="مستوى الأجواء">
+            <p>أجواء ليلتكما <span aria-hidden="true">✦</span></p>
+            <div className="atmosphere-options" role="group" aria-label="اختيار الأجواء">
+              <button type="button" aria-pressed={atmosphere === "soft"} onClick={() => chooseAtmosphere("soft")}>هادئة</button>
+              <button type="button" aria-pressed={atmosphere === "romantic"} onClick={() => chooseAtmosphere("romantic")}>رومانسية</button>
+              <button type="button" aria-pressed={atmosphere === "bold"} onClick={() => chooseAtmosphere("bold")}>جريئة جدًا</button>
+            </div>
+            <small>{atmosphere === "bold" ? "وهج دافئ وأنفاس اصطناعية وإيقاع متصاعد" : atmosphere === "romantic" ? "إضاءة ناعمة وانتقالات حالمة" : "أجواء هادئة ومؤثرات خفيفة"}</small>
+          </section>
           <div className="heat-panel">
             <div className="heat-heading">
               <span><Flame aria-hidden="true" /> {heatLabel(state.heat)}</span>
