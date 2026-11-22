@@ -1,5 +1,6 @@
 import mysql from "mysql2/promise";
 import { log } from "./logger";
+import { mysqlOptions } from "./dbConfig";
 
 // The server creates its own tables at startup, so a fresh hosted MySQL works
 // without anyone running `drizzle-kit push` from a terminal. Every statement is
@@ -59,7 +60,7 @@ const LATER_ROOM_COLUMNS: [string, string][] = [
 ];
 
 export async function ensureSchema(databaseUrl: string): Promise<void> {
-  const connection = await mysql.createConnection(databaseUrl);
+  const connection = await mysql.createConnection(mysqlOptions(databaseUrl));
   try {
     await connection.query(CREATE_ROOMS);
     await connection.query(CREATE_PLAYERS);
