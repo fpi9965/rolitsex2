@@ -25,9 +25,11 @@ export function buildInvitationUrl(
   location: InvitationLocation,
   configuredPublicUrl = "",
 ): string {
-  const url = isPrivatePreviewHost(location.hostname)
+  const privatePreview = isPrivatePreviewHost(location.hostname);
+  const url = privatePreview
     ? validPublicBase(configuredPublicUrl) ?? new URL(DEFAULT_PUBLIC_APP_URL)
-    : new URL(location.pathname, location.origin);
+    : new URL(location.origin);
+  if (!privatePreview) url.pathname = location.pathname;
   url.pathname = url.pathname.replace(/\/+$/, "") + "/";
   url.searchParams.set("join", code);
   url.hash = "";

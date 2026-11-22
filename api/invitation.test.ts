@@ -41,6 +41,15 @@ describe("روابط الدعوة", () => {
       .toBe("https://example.com/play/?lang=ar&join=ABC234");
   });
 
+  it("يحافظ على النطاق عندما يبدأ المسار بشرطتين", () => {
+    const invite = buildInvitationUrl("ABC234", {
+      hostname: "example.com",
+      origin: "https://example.com",
+      pathname: "//another.example/play",
+    });
+    expect(new URL(invite).origin).toBe("https://example.com");
+  });
+
   it("يحافظ على روابط الاختبار المحلية", () => {
     expect(buildInvitationUrl("ABC234", {
       hostname: "localhost",
