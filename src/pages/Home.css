@@ -308,3 +308,5 @@ h2 { margin-bottom: 4px; font-size: 19px; line-height: 1.5; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+.join-by-code { display: grid; gap: 8px; margin-top: 8px; }
+.join-by-code .invite-actions .text-input { flex: 1; min-width: 0; letter-spacing: 0.12em; text-align: center; }
