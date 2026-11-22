@@ -1,0 +1,12 @@
+# One-click deploy on Render's free plan: the "Deploy to Render" button in
+# DEPLOY.md reads this file and asks only for DATABASE_URL.
+services:
+  - type: web
+    name: rolit
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
