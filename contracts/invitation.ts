@@ -11,12 +11,12 @@ export function isPrivatePreviewHost(hostname: string): boolean {
   return /(^|\.)kimi\.ai$/i.test(hostname);
 }
 
-function validPublicBase(value: string): string {
+function validPublicBase(value: string): URL | null {
   try {
     const url = new URL(value.trim());
-    return url.protocol === "https:" || url.protocol === "http:" ? url.toString().replace(/\/+$/, "") : "";
+    return url.protocol === "https:" || url.protocol === "http:" ? url : null;
   } catch {
-    return "";
+    return null;
   }
 }
 
@@ -25,9 +25,13 @@ export function buildInvitationUrl(
   location: InvitationLocation,
   configuredPublicUrl = "",
 ): string {
-  const publicBase = validPublicBase(configuredPublicUrl) || DEFAULT_PUBLIC_APP_URL;
-  const base = isPrivatePreviewHost(location.hostname)
-    ? publicBase
-    : `${location.origin}${location.pathname}`.replace(/\/+$/, "");
-  return `${base}/?join=${code}`;
+  const privatePreview = isPrivatePreviewHost(location.hostname);
+  const url = privatePreview
+    ? validPublicBase(configuredPublicUrl) ?? new URL(DEFAULT_PUBLIC_APP_URL)
+    : new URL(location.origin);
+  if (!privatePreview) url.pathname = location.pathname;
+  url.pathname = url.pathname.replace(/\/+$/, "") + "/";
+  url.searchParams.set("join", code);
+  url.hash = "";
+  return url.toString();
 }

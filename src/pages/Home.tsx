@@ -216,11 +216,11 @@ export default function Home() {
         void playSoundFromGesture("spin");
         spin.mutate(session);
       }}
-      onDone={() => done.mutate(session)}
-      onSkip={() => skip.mutate(session)}
-      onNextStage={() => nextStage.mutate(session)}
+      onDone={() => done.mutate({ ...session, version: state.version })}
+      onSkip={() => skip.mutate({ ...session, version: state.version })}
+      onNextStage={() => nextStage.mutate({ ...session, version: state.version })}
       onSubmitAnswer={(answer) => submitAnswer.mutate({ ...session, answer })}
-      onFinishSecret={() => finishSecret.mutate(session)}
+      onFinishSecret={() => finishSecret.mutate({ ...session, version: state.version })}
       onTimerTick={(second) => playSound(second <= 3 ? "tickFinal" : "tick")}
       onTimerExpire={() => playSound("expire")}
       onShare={() => void shareRoom()}

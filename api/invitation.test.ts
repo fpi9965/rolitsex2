@@ -36,6 +36,20 @@ describe("روابط الدعوة", () => {
     );
   });
 
+  it("يحافظ على معاملات رابط النشر ويستبدل رمز الدعوة القديم", () => {
+    expect(buildInvitationUrl("ABC234", previewLocation, "https://example.com/play?lang=ar&join=OLD234#top"))
+      .toBe("https://example.com/play/?lang=ar&join=ABC234");
+  });
+
+  it("يحافظ على النطاق عندما يبدأ المسار بشرطتين", () => {
+    const invite = buildInvitationUrl("ABC234", {
+      hostname: "example.com",
+      origin: "https://example.com",
+      pathname: "//another.example/play",
+    });
+    expect(new URL(invite).origin).toBe("https://example.com");
+  });
+
   it("يحافظ على روابط الاختبار المحلية", () => {
     expect(buildInvitationUrl("ABC234", {
       hostname: "localhost",
