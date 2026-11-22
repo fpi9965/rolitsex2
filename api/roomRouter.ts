@@ -371,7 +371,13 @@ export const roomRouter = createRouter({
   submitAnswer: publicQuery.input(answerSchema).mutation(async ({ input }) => {
     return getDb().transaction(async (tx) => {
       const { room, roomPlayers, me } = await getSession(input, tx, true);
-      assertActiveVersion(room, input.version);
+      // Each player writes only their own answer under a row lock, so the room
+      // version is not checked here: when both answered within one poll
+      // interval, the second answer was rejected as a conflict and the round
+      // never reached the reveal.
+      if (room.status !== "active") {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "بانتظار انضمام الطرف الآخر" });
+      }
       if (room.secretStatus !== "writing") {
         throw new TRPCError({ code: "CONFLICT", message: "لا يمكن إرسال إجابة في هذه اللحظة" });
       }
@@ -398,7 +404,9 @@ export const roomRouter = createRouter({
   finishSecret: publicQuery.input(actionSchema).mutation(async ({ input }) => {
     return getDb().transaction(async (tx) => {
       const { room, roomPlayers, me } = await getSession(input, tx, true);
-      assertActiveVersion(room, input.version);
+      // Either player may close the round; if the other already did, just
+      // return the current state instead of a conflict error.
+      if (room.secretStatus === "none") return roomState(room, roomPlayers, me);
       if (room.secretStatus !== "countdown" || !room.secretRevealAt || Date.now() < room.secretRevealAt.getTime()) {
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "انتظرا لحظة الكشف أولاً" });
       }

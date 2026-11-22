@@ -36,6 +36,9 @@ app.use("*", async (c, next) => {
     // c.header() called before dispatch is dropped on that path. Setting it on
     // the resolved c.res covers every route, including the tRPC one.
     c.res.headers.set(REQUEST_ID_HEADER, requestId);
+    // Live room state must never be served from a browser, proxy or CDN cache;
+    // a cached GET /api/trpc/room.state freezes the game on the other phone.
+    if (c.req.path.startsWith("/api/")) c.res.headers.set("Cache-Control", "no-store");
     // Only /api/* is logged. In production serveStaticFiles() registers a
     // catch-all AFTER this middleware, so a page load pulls in every asset as
     // its own request — logging those would bury the API calls the agent reads

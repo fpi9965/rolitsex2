@@ -33,15 +33,12 @@ export function SecretRound({
   onFinish,
 }: SecretRoundProps) {
   const [answer, setAnswer] = useState(secret.myAnswer ?? "");
-  const [now, setNow] = useState(Date.now());
-
-  useEffect(() => {
-    setAnswer(secret.myAnswer ?? "");
-  }, [secret.title, secret.myAnswer]);
+  // The parent remounts this component per round (key), so the draft answer
+  // resets with each new question without a state-syncing effect.
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     if (secret.status !== "countdown") return;
-    setNow(Date.now());
     const timer = window.setInterval(() => setNow(Date.now()), 200);
     return () => window.clearInterval(timer);
   }, [secret.status, secret.revealAt]);

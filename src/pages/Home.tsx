@@ -62,21 +62,27 @@ export default function Home() {
   const joinRoom = trpc.room.join.useMutation({ onSuccess: acceptSession });
   const spin = trpc.room.spin.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const done = trpc.room.done.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const skip = trpc.room.skip.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const nextStage = trpc.room.nextStage.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const submitAnswer = trpc.room.submitAnswer.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const finishSecret = trpc.room.finishSecret.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
 
   const inviteUrl = session ? invitationUrl(session.code) : "";
@@ -276,6 +282,7 @@ export default function Home() {
 
             {state.secret ? (
               <SecretRound
+                key={`${state.stage}-${state.secret.title}`}
                 secret={state.secret}
                 meName={state.me.name}
                 partnerName={state.partner?.name ?? "الطرف الآخر"}
