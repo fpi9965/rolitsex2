@@ -26,7 +26,7 @@ export function privateAccess(): MiddlewareHandler {
     throw new Error("ACCESS_PASSWORD must be set to at least 16 characters in production");
   }
   return async (c, next) => {
-    // Railway health probes must work without browser credentials.
+    // Hosting health probes must work without browser credentials.
     if (c.req.path === "/api/health" || c.req.path === "/api/health/") return next();
     if (!password || validPrivateAccess(c.req.header("authorization"), username, password)) {
       await next();
