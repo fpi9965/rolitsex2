@@ -146,46 +146,95 @@ function glide(
   oscillator.stop(end + 0.025);
 }
 
+function heartbeat(audio: AudioContext, output: GainNode, delay: number, volume: number) {
+  glide(audio, output, 95, 55, delay, 0.13, volume);
+  glide(audio, output, 75, 50, delay + 0.17, 0.11, volume * 0.72);
+}
+
+/** نَفَس صناعي هادئ من ضوضاء مرشّحة؛ لا يستخدم تسجيلاً بشرياً أو ملفاً خارجياً. */
+function breath(audio: AudioContext, output: GainNode, delay: number, duration: number, volume: number) {
+  const frameCount = Math.ceil(audio.sampleRate * duration);
+  const buffer = audio.createBuffer(1, frameCount, audio.sampleRate);
+  const data = buffer.getChannelData(0);
+  let seed = 0x6d2b79f5;
+  for (let index = 0; index < frameCount; index += 1) {
+    seed += 0x6d2b79f5;
+    let value = seed;
+    value = Math.imul(value ^ (value >>> 15), value | 1);
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+    data[index] = (((value ^ (value >>> 14)) >>> 0) / 4294967296) * 2 - 1;
+  }
+
+  const start = audio.currentTime + delay;
+  const end = start + duration;
+  const source = audio.createBufferSource();
+  const filter = audio.createBiquadFilter();
+  const envelope = audio.createGain();
+  source.buffer = buffer;
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(1050, start);
+  filter.frequency.exponentialRampToValueAtTime(430, end);
+  filter.Q.value = 0.55;
+  envelope.gain.setValueAtTime(MIN_GAIN, start);
+  envelope.gain.exponentialRampToValueAtTime(volume, start + duration * 0.42);
+  envelope.gain.exponentialRampToValueAtTime(MIN_GAIN, end);
+  source.connect(filter);
+  filter.connect(envelope);
+  envelope.connect(output);
+  source.start(start);
+  source.stop(end + 0.025);
+}
+
 function scheduleEffect(effect: SoundEffect, audio: AudioContext, output: GainNode) {
   switch (effect) {
     case "spin":
-      glide(audio, output, 170, 520, 0, 0.48, 0.035);
-      for (let index = 0; index < 8; index += 1) {
-        tone(audio, output, 260 + index * 32, index * 0.058, 0.055, 0.045, "triangle");
+      breath(audio, output, 0, 0.62, 0.028);
+      heartbeat(audio, output, 0.06, 0.045);
+      for (let index = 0; index < 6; index += 1) {
+        tone(audio, output, 300 + index * 28, 0.08 + index * 0.075, 0.055, 0.026, "triangle");
       }
-      tone(audio, output, 620, 0.48, 0.18, 0.06, "triangle");
+      tone(audio, output, 520, 0.5, 0.24, 0.045);
       break;
     case "card":
-      tone(audio, output, 523.25, 0, 0.24, 0.07);
-      tone(audio, output, 659.25, 0.08, 0.26, 0.065);
-      tone(audio, output, 783.99, 0.17, 0.34, 0.06);
+      breath(audio, output, 0, 0.46, 0.024);
+      heartbeat(audio, output, 0.02, 0.035);
+      tone(audio, output, 392, 0.05, 0.32, 0.05);
+      tone(audio, output, 523.25, 0.12, 0.34, 0.05);
+      tone(audio, output, 659.25, 0.22, 0.38, 0.045);
       break;
     case "done":
-      tone(audio, output, 523.25, 0, 0.26, 0.065, "triangle");
-      tone(audio, output, 659.25, 0.07, 0.28, 0.06, "triangle");
-      tone(audio, output, 783.99, 0.14, 0.32, 0.06, "triangle");
-      tone(audio, output, 1046.5, 0.24, 0.36, 0.05);
+      breath(audio, output, 0.05, 0.55, 0.02);
+      heartbeat(audio, output, 0, 0.075);
+      tone(audio, output, 392, 0, 0.3, 0.055, "triangle");
+      tone(audio, output, 523.25, 0.08, 0.32, 0.05, "triangle");
+      tone(audio, output, 659.25, 0.16, 0.36, 0.05, "triangle");
+      tone(audio, output, 783.99, 0.28, 0.4, 0.04);
       break;
     case "skip":
       glide(audio, output, 280, 150, 0, 0.28, 0.065);
       tone(audio, output, 180, 0.15, 0.2, 0.035, "triangle");
       break;
     case "tick":
-      tone(audio, output, 760, 0, 0.055, 0.04, "sine");
+      tone(audio, output, 620, 0, 0.06, 0.028, "sine");
       break;
     case "tickFinal":
-      tone(audio, output, 980, 0, 0.07, 0.065, "triangle");
+      heartbeat(audio, output, 0, 0.055);
+      tone(audio, output, 880, 0.04, 0.07, 0.03, "sine");
       break;
     case "expire":
-      tone(audio, output, 330, 0, 0.18, 0.065, "triangle");
-      tone(audio, output, 220, 0.15, 0.34, 0.06, "sine");
+      breath(audio, output, 0, 0.5, 0.02);
+      tone(audio, output, 330, 0, 0.18, 0.05, "triangle");
+      tone(audio, output, 220, 0.15, 0.34, 0.045, "sine");
       break;
     case "reveal":
-      tone(audio, output, 392, 0, 0.42, 0.05);
-      tone(audio, output, 523.25, 0.09, 0.44, 0.055);
-      tone(audio, output, 659.25, 0.18, 0.46, 0.055);
-      tone(audio, output, 783.99, 0.3, 0.48, 0.05);
-      tone(audio, output, 1046.5, 0.42, 0.5, 0.04);
+      breath(audio, output, 0, 1.05, 0.035);
+      heartbeat(audio, output, 0, 0.05);
+      heartbeat(audio, output, 0.38, 0.04);
+      tone(audio, output, 392, 0.08, 0.44, 0.045);
+      tone(audio, output, 523.25, 0.18, 0.46, 0.05);
+      tone(audio, output, 659.25, 0.3, 0.48, 0.05);
+      tone(audio, output, 783.99, 0.42, 0.5, 0.045);
+      tone(audio, output, 1046.5, 0.56, 0.52, 0.032);
       break;
   }
 }

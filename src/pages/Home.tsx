@@ -48,16 +48,16 @@ export default function Home() {
 
   useEffect(() => {
     if (activeCardVersion !== null && activeCardVersion !== previousCardVersion.current) {
+      previousCardVersion.current = activeCardVersion;
       playSound("card");
     }
-    previousCardVersion.current = activeCardVersion;
   }, [activeCardVersion]);
 
   useEffect(() => {
     if (revealedSecretId !== null && revealedSecretId !== previousRevealedSecret.current) {
+      previousRevealedSecret.current = revealedSecretId;
       playSound("reveal");
     }
-    previousRevealedSecret.current = revealedSecretId;
   }, [revealedSecretId]);
 
   function acceptSession(next: Session) {
