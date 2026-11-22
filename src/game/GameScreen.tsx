@@ -171,9 +171,9 @@ export function GameScreen(props: GameScreenProps) {
                     </div>
                   ) : (
                     <div className="suspense-content">
-                  <p className="card-owner">بطاقة {state.card.forName} · {state.me.isTurn ? "تكليفك أنت" : "تكليفك مع صاحب الدور"}</p>
+                  <p className="card-owner">بطاقة {state.card.forName} · دورك الخاص</p>
                   <p className="question-text">{state.card.text}</p>
-                  <p className="card-tease">لكل جهاز نص مختلف؛ نفّذا ما يظهر لكل منكما بما يريحكما، ثم سجّلا النتيجة من جهاز صاحب الدور.</p>
+                  <p className="card-tease">هذه بطاقتك وحدك الآن. بعد إنهائها يأتي دور الطرف الآخر بمفاجأة مختلفة. يمكنكما التخطي متى شئتما.</p>
                     </div>
                   )}
                 </article>
