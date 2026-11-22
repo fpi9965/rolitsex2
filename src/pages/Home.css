@@ -308,3 +308,13 @@ h2 { margin-bottom: 4px; font-size: 19px; line-height: 1.5; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+.join-by-code { display: grid; gap: 8px; margin-top: 8px; }
+.join-by-code .invite-actions .text-input { flex: 1; min-width: 0; letter-spacing: 0.12em; text-align: center; }
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.leave-button {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px;
+  border: 1px solid oklch(0.78 0.11 75 / 0.35); border-radius: 999px;
+  background: transparent; color: var(--gold); font: inherit; font-size: 0.9rem; cursor: pointer;
+}
+.leave-button svg { width: 18px; height: 18px; }
+.leave-button.confirm { border-color: var(--ember); color: var(--cream); background: oklch(0.68 0.19 38 / 0.18); }

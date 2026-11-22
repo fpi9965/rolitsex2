@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Copy, Flame, Link2, RefreshCw, Share2, Users } from "lucide-react";
+import { Copy, Flame, Link2, LogOut, RefreshCw, Share2, Users } from "lucide-react";
 import type { Gender } from "@contracts/cards";
 import { trpc } from "@/providers/trpc";
 import { Dial } from "@/game/Dial";
@@ -10,9 +10,18 @@ type Session = { code: string; token: string };
 const STAGE_NAMES: Record<number, string> = { 1: "صريح", 2: "مثير", 3: "مداعبة", 4: "وضعيات" };
 const urlParams = new URLSearchParams(window.location.search);
 const roomFromUrl = (urlParams.get("join") || urlParams.get("room") || "").toUpperCase();
+// Kimi's in-app preview runs on statics.kimi.ai, which is private to the owner:
+// an invite built from that origin opens "403 Access Denied" on the partner's
+// phone, so the partner never joins and the game never starts. Invites always
+// point at the public deployment instead (override with VITE_PUBLIC_URL).
+const PUBLIC_APP_URL = (import.meta.env.VITE_PUBLIC_URL || "https://u5walep5vxzzu.kimi.place").replace(/\/+$/, "");
+const isPrivatePreview = /(^|\.)kimi\.ai$/.test(window.location.hostname);
 const invitationUrl = (code: string) =>
-  `${window.location.origin}${window.location.pathname}?join=${code}`;
-const initialRoomCode = /^[A-Z2-9]{6}$/.test(roomFromUrl)
+  isPrivatePreview
+    ? `${PUBLIC_APP_URL}/?join=${code}`
+    : `${window.location.origin}${window.location.pathname}?join=${code}`;
+const CODE_PATTERN = /^[A-Z2-9]{6}$/;
+const initialRoomCode = CODE_PATTERN.test(roomFromUrl)
   ? roomFromUrl
   : localStorage.getItem("rolit-last-room") || "";
 
@@ -27,6 +36,8 @@ export default function Home() {
   const [gender, setGender] = useState<Gender>("مذكر");
   const [session, setSession] = useState<Session | null>(savedSession);
   const [entryCode, setEntryCode] = useState(initialRoomCode);
+  const [typedCode, setTypedCode] = useState("");
+  const [confirmLeave, setConfirmLeave] = useState(false);
   const [copyLabel, setCopyLabel] = useState("نسخ الرابط");
   const utils = trpc.useUtils();
   const stateQuery = trpc.room.state.useQuery(
@@ -125,6 +136,19 @@ export default function Home() {
     startNewRoom();
   }
 
+  // From inside a room there was no way out: the app reopened the last room on
+  // every visit. Leaving forgets it as the last room (the token is kept, so the
+  // room's own invite link can still resume it) and shows the create screen.
+  function leaveRoom() {
+    if (!confirmLeave) {
+      setConfirmLeave(true);
+      window.setTimeout(() => setConfirmLeave(false), 4000);
+      return;
+    }
+    setConfirmLeave(false);
+    startNewRoom();
+  }
+
   function startNewRoom() {
     localStorage.removeItem("rolit-last-room");
     window.history.replaceState(null, "", window.location.pathname);
@@ -191,6 +215,32 @@ export default function Home() {
             {entryCode && (
               <button className="text-button" type="button" onClick={startNewRoom}>إنشاء غرفة جديدة بدلاً من ذلك</button>
             )}
+            {!entryCode && (
+              <div className="join-by-code">
+                <label htmlFor="room-code">عندك رمز غرفة من الطرف الآخر؟</label>
+                <div className="invite-actions">
+                  <input
+                    id="room-code"
+                    className="text-input"
+                    value={typedCode}
+                    onChange={(event) => setTypedCode(event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6))}
+                    placeholder="مثال: ABC234"
+                    dir="ltr"
+                    autoCapitalize="characters"
+                    autoComplete="off"
+                    inputMode="text"
+                  />
+                  <button
+                    className="secondary-button"
+                    type="button"
+                    disabled={!CODE_PATTERN.test(typedCode)}
+                    onClick={() => { createRoom.reset(); setEntryCode(typedCode); }}
+                  >
+                    انضمام بالرمز
+                  </button>
+                </div>
+              </div>
+            )}
             <p className="privacy-note">لا تحتاجان إلى تسجيل حساب. احتفظا بالرابط ورمز الغرفة للعودة من الجهاز نفسه.</p>
           </form>
         </section>
@@ -231,9 +281,14 @@ export default function Home() {
       <div className="game-wrap">
         <header className="game-topbar">
           <div className="room-chip"><span className="online-dot" /> غرفة <bdi>{state.code}</bdi></div>
-          <button className="icon-button" onClick={() => void shareInvite()} aria-label="مشاركة رابط الغرفة" title="مشاركة رابط الغرفة">
-            <Share2 aria-hidden="true" />
-          </button>
+          <div className="topbar-actions">
+            <button className={confirmLeave ? "leave-button confirm" : "leave-button"} onClick={leaveRoom}>
+              <LogOut aria-hidden="true" /> {confirmLeave ? "اضغط للتأكيد" : "غرفة جديدة"}
+            </button>
+            <button className="icon-button" onClick={() => void shareInvite()} aria-label="مشاركة رابط الغرفة" title="مشاركة رابط الغرفة">
+              <Share2 aria-hidden="true" />
+            </button>
+          </div>
         </header>
 
         {state.status === "waiting" ? (
@@ -249,6 +304,7 @@ export default function Home() {
                 <button className="secondary-button" onClick={() => void shareInvite()}><Share2 aria-hidden="true" /> مشاركة</button>
               </div>
             </div>
+            <p className="privacy-note">أو يفتح الطرف الآخر رابط اللعبة ويكتب رمز الغرفة: <bdi dir="ltr"><strong>{state.code}</strong></bdi></p>
             <div className="waiting-indicator" role="status"><span className="pulse-dot" /> بانتظار دخول الطرف الآخر…</div>
             <p className="privacy-note">الرابط خاص بكما؛ لا ترسلاه إلى أي شخص آخر.</p>
           </section>
