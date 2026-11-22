@@ -10,10 +10,12 @@ import { handleClientLog } from "./lib/clientlog";
 import { REQUEST_ID_HEADER, runWithRequestId } from "./lib/requestcontext";
 import { healthRoutes } from "./routes/health";
 import { privateAccess } from "./lib/privateAccess";
+import { ensureSchemaWithRetry } from "./lib/ensureSchema";
 
 const app = new Hono<{ Bindings: HttpBindings }>();
 
-// Gate both the static frontend and every API route before any other handlers.
+// Optional shared password (off unless ACCESS_PASSWORD is set). Gates both the
+// static frontend and every API route before any other handlers.
 app.use("*", privateAccess());
 
 // One middleware for both halves of request observability, because they need the
@@ -105,6 +107,11 @@ if (env.isProduction) {
   const { serve } = await import("@hono/node-server");
   const { serveStaticFiles } = await import("./lib/vite");
   serveStaticFiles(app);
+
+  // Create or upgrade the tables before taking traffic, so a fresh database
+  // needs no manual migration step. On failure the server still starts and
+  // /api/health reports the database as unavailable.
+  await ensureSchemaWithRetry(env.databaseUrl);
 
   const port = parseInt(process.env.PORT || "3000");
   serve({ fetch: app.fetch, port }, () => {
