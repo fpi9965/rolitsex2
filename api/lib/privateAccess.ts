@@ -31,7 +31,7 @@ export function privateAccess(): MiddlewareHandler {
     log.warn("ACCESS_PASSWORD is shorter than 16 characters; use a longer one");
   }
   return async (c, next) => {
-    // Railway health probes must work without browser credentials.
+    // Hosting health probes must work without browser credentials.
     if (c.req.path === "/api/health" || c.req.path === "/api/health/") return next();
     if (!password || validPrivateAccess(c.req.header("authorization"), username, password)) {
       await next();
