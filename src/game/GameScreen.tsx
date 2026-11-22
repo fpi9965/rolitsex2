@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Flame, LogOut, RefreshCw, Share2, Volume2, VolumeX, WifiOff } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Flame, Heart, LogOut, RefreshCw, Share2, Volume2, VolumeX, WifiOff } from "lucide-react";
 import type { RoomState } from "@contracts/game";
 import { CARD_HEAT, SKIP_HEAT, STAGES } from "@contracts/game";
 import { Dial } from "./Dial";
@@ -40,6 +40,7 @@ function heatLabel(heat: number) {
 export function GameScreen(props: GameScreenProps) {
   const { state, busy, actionError, secretError, connected, refreshing } = props;
   const cardRef = useRef<HTMLElement>(null);
+  const [romanticMode, setRomanticMode] = useState(false);
   const stage = STAGES.find((item) => item.id === state.stage) ?? STAGES[0];
   const cardVersion = state.card ? state.version : null;
 
@@ -53,7 +54,7 @@ export function GameScreen(props: GameScreenProps) {
   }, [cardVersion]);
 
   return (
-    <main className="app-shell game-screen">
+    <main className={`app-shell game-screen${romanticMode ? " romantic-mode" : ""}`}>
       <div className="ambient" aria-hidden="true" />
       {props.notice && <div className="toast" role="status">{props.notice}</div>}
       <div className="game-wrap">
@@ -66,6 +67,9 @@ export function GameScreen(props: GameScreenProps) {
             </span>
           </div>
           <div className="topbar-actions">
+            <button className="icon-button" type="button" onClick={() => setRomanticMode((value) => !value)} aria-label={romanticMode ? "إيقاف الأجواء الرومانسية" : "تشغيل الأجواء الرومانسية"} aria-pressed={romanticMode} title="أجواء رومانسية">
+              <Heart aria-hidden="true" fill={romanticMode ? "currentColor" : "none"} />
+            </button>
             <button
               className="icon-button"
               type="button"
@@ -96,6 +100,7 @@ export function GameScreen(props: GameScreenProps) {
             ))}
           </ol>
 
+          {romanticMode && <p className="romantic-note" role="status">✨ أجواء رومانسية: خذا وقتكما، وتجاوزا أي بطاقة لا تناسبكما.</p>}
           <div className="heat-panel">
             <div className="heat-heading">
               <span><Flame aria-hidden="true" /> {heatLabel(state.heat)}</span>
