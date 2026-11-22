@@ -43,3 +43,29 @@ button:disabled { cursor: not-allowed; }
 button, a, input { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 ::selection { background: var(--wine); color: var(--cream); }
+
+/* Optional, accessible romantic atmosphere */
+.game-screen.romantic-mode {
+  background: radial-gradient(ellipse at 50% 20%, rgba(171, 45, 97, .22), transparent 58%), var(--ink);
+}
+.game-screen.romantic-mode .ambient {
+  filter: saturate(1.35) hue-rotate(-12deg);
+  animation: romantic-glow 5s ease-in-out infinite alternate;
+}
+.romantic-note {
+  margin: 0.75rem auto;
+  max-width: 34rem;
+  padding: 0.7rem 1rem;
+  text-align: center;
+  border: 1px solid rgba(255, 190, 215, .35);
+  border-radius: 1rem;
+  background: rgba(115, 26, 65, .24);
+  color: var(--cream);
+}
+@keyframes romantic-glow {
+  from { opacity: .65; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-screen.romantic-mode .ambient { animation: none; }
+}
