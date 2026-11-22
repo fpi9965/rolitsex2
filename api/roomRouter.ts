@@ -183,8 +183,7 @@ function getActiveCardIndices(room: Room, roomPlayers: Player[]): number[] {
   if (room.currentCard === null) return [];
   const turnPlayer = roomPlayers.find((player) => player.id === room.turnPlayerId);
   if (!turnPlayer) return [room.currentCard];
-  const partnerCard = getPartnerCardIndex(room, roomPlayers, turnPlayer);
-  return partnerCard === null ? [room.currentCard] : [room.currentCard, partnerCard];
+  return [room.currentCard];
 }
 
 function toRoomState(room: Room, roomPlayers: Player[], me: Player): RoomState {
@@ -194,8 +193,8 @@ function toRoomState(room: Room, roomPlayers: Player[], me: Player): RoomState {
   const partner = roomPlayers.find((player) => player.id !== me.id) ?? null;
   const turnPlayer = roomPlayers.find((player) => player.id === room.turnPlayerId) ?? null;
   const isMyTurn = turnPlayer?.id === me.id;
-  const partnerCardIndex = turnPlayer ? getPartnerCardIndex(room, roomPlayers, turnPlayer) : null;
-  const myCardIndex = room.currentCard === null ? null : isMyTurn ? room.currentCard : partnerCardIndex;
+  // A card belongs only to the active player; the partner waits for their own turn.
+  const myCardIndex = room.currentCard === null || !isMyTurn ? null : room.currentCard;
   const card = myCardIndex === null ? null : masterStages[room.stage]?.[myCardIndex];
   const answers = parseAnswers(room.secretAnswers);
   const prompt = room.secretPrompt === null ? null : secretPrompts[room.stage]?.[room.secretPrompt];
