@@ -56,32 +56,32 @@ export function SecretRound({
     <section className={`secret-round secret-${secret.status}`}>
       <div className="secret-kicker">
         <LockKeyhole aria-hidden="true" />
-        <span>همسة سرية</span>
-        <span className="secret-number">سؤالان · كشف واحد</span>
+        <span>بينك وبينه</span>
+        <span className="secret-number">رسالتان خاصتان · لحظة كشف واحدة</span>
       </div>
 
       {secret.status === "writing" && !secret.mySubmitted && (
         <form onSubmit={submit} className="secret-compose">
-          <p className="secret-overline">على جهازك فقط</p>
+          <p className="secret-overline">الرسالة هذي لك وحدك</p>
           <h2>{secret.title}</h2>
           <p className="secret-question">{secret.question}</p>
-          <label htmlFor="secret-answer">إجابتك المخفية</label>
+          <label htmlFor="secret-answer">رسالتك الخاصة</label>
           <textarea
             id="secret-answer"
             value={answer}
             onChange={(event) => setAnswer(event.target.value)}
             maxLength={300}
             rows={5}
-            placeholder="اكتب بصراحة… تبقى مسودتك على جهازك إذا أعدت تحميل الصفحة"
+            placeholder="قول اللي بخاطرك بطريقتك… محد بيشوفه قبل لحظة الكشف"
             required
           />
           <div className="answer-meta">
-            <span><LockKeyhole aria-hidden="true" /> محجوبة عن {partnerName}</span>
+            <span><LockKeyhole aria-hidden="true" /> ما تظهر لـ {partnerName} إلا بعد ما تخلصون</span>
             <bdi>{answer.length}/300</bdi>
           </div>
           <button className="primary-button seal-button" type="submit" disabled={!answer.trim() || isPending}>
             <PenLine aria-hidden="true" />
-            {isPending ? "جارٍ إغلاق الإجابة…" : "احفظ إجابتي سراً"}
+            {isPending ? "جارٍ حفظ رسالتك…" : "أرسل رسالتي للكشف لاحقًا"}
           </button>
         </form>
       )}
@@ -89,13 +89,13 @@ export function SecretRound({
       {secret.status === "writing" && secret.mySubmitted && (
         <div className="sealed-waiting">
           <span className="sealed-icon"><LockKeyhole aria-hidden="true" /></span>
-          <p className="secret-overline">وصلت إجابتك وأُغلقت</p>
-          <h2>{secret.partnerSubmitted ? "اكتملت الإجابتان" : `بانتظار إجابة ${partnerName}`}</h2>
-          <p className="secret-question">سؤالك كان: {secret.question}</p>
+          <p className="secret-overline">رسالتك محفوظة</p>
+          <h2>{secret.partnerSubmitted ? "الرسالتان جاهزتان" : `بانتظار إجابة ${partnerName}`}</h2>
+          <p className="secret-question">رسالتك عن: {secret.question}</p>
           <blockquote>{secret.myAnswer}</blockquote>
           <div className="waiting-indicator" role="status">
             <span className="pulse-dot" />
-            {secret.partnerSubmitted ? "استعدا للكشف…" : "لا تصل إجابتك إلى الجهاز الآخر قبل الكشف."}
+            {secret.partnerSubmitted ? "اللحظة قربت…" : "رسالتك ما تنكشف للطرف الثاني للحين."}
           </div>
         </div>
       )}
@@ -103,12 +103,12 @@ export function SecretRound({
       {secret.status === "countdown" && (
         <div className="countdown-view" role="status" aria-live="polite">
           <Sparkles aria-hidden="true" className="countdown-spark" />
-          <p className="secret-overline">أُغلقت الإجابتان</p>
-          <h2>لا تستعجلا…</h2>
+          <p className="secret-overline">الرسالتان جاهزتان</p>
+          <h2>وش قال كل واحد للثاني؟</h2>
           <div className="countdown-number" key={countdown} aria-label={countdown ? `${countdown} ثوانٍ` : "الكشف الآن"}>
             {countdown || "الآن"}
           </div>
-          <p>ضعا الجوالين بينكما، واقرأا الإجابتين معاً.</p>
+          <p>خلّوا لحظة الكشف لكم أنتم الاثنين.</p>
         </div>
       )}
 
@@ -116,21 +116,21 @@ export function SecretRound({
         <div className="reveal-view">
           <div className="reveal-heading">
             <Eye aria-hidden="true" />
-            <div><p className="secret-overline">حان الكشف</p><h2>{secret.title}</h2></div>
+            <div><p className="secret-overline">وقت المصارحة</p><h2>{secret.title}</h2></div>
           </div>
           <article className="answer-reveal mine">
-            <p className="answer-author">إجابتك · {meName}</p>
+            <p className="answer-author">رسالتك · {meName}</p>
             <p className="answer-question">{secret.question}</p>
             <p className="answer-text">{secret.myAnswer}</p>
           </article>
           <article className="answer-reveal partner">
-            <p className="answer-author">إجابة {partnerName}</p>
+            <p className="answer-author">رسالة {partnerName}</p>
             <p className="answer-question">{secret.partnerQuestion}</p>
             <p className="answer-text">{secret.partnerAnswer}</p>
           </article>
-          <p className="reveal-challenge">اختارا تفصيلاً واحداً من الإجابتين ونفّذاه بما يريحكما، ثم عودا إلى القرص.</p>
+          <p className="reveal-challenge">اختارا فكرة عجبتكما من الرسالتين، وقررا سوا إذا ودكما تجربانها.</p>
           <button className="primary-button" type="button" onClick={onFinish} disabled={isPending}>
-            {isPending ? "جارٍ العودة…" : "احتفظنا بالفكرة؛ عودة إلى القرص"}
+            {isPending ? "جارٍ العودة…" : "نكمل مفاجآتنا"}
           </button>
         </div>
       )}
