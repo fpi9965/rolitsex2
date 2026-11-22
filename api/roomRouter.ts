@@ -108,6 +108,24 @@ function buildPools(history: NumberMap): NumberMap {
   return pools;
 }
 
+// Draws a fresh pool for one stage once its current pool is exhausted, so the
+// game keeps going after the players have cycled through all four stages.
+function refreshStageIfExhausted(stage: number, pools: NumberMap, used: NumberMap, history: NumberMap): boolean {
+  const key = String(stage);
+  const remaining = pools[key].filter((index) => !used[key].includes(index)).length;
+  if (remaining > 0) return false;
+  const count = masterStages[stage].length;
+  const limit = Math.min(STAGE_LIMITS[stage], count);
+  let candidates = Array.from({ length: count }, (_, i) => i).filter((i) => !history[key].includes(i));
+  if (candidates.length < limit) {
+    history[key] = [];
+    candidates = Array.from({ length: count }, (_, i) => i);
+  }
+  pools[key] = shuffle(candidates).slice(0, limit);
+  used[key] = [];
+  return true;
+}
+
 function hashToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
@@ -401,11 +419,23 @@ export const roomRouter = createRouter({
       const { room, roomPlayers, me } = await getSession(input, tx, true);
       assertTurn(room, me, input.version);
       const stage = room.stage === 4 ? 1 : room.stage + 1;
+      const pools = parseMap(room.pools);
+      const used = parseMap(room.used);
+      const history = parseMap(room.history);
+      refreshStageIfExhausted(stage, pools, used, history);
+      const changes = {
+        stage,
+        currentCard: null,
+        pools: JSON.stringify(pools),
+        used: JSON.stringify(used),
+        history: JSON.stringify(history),
+        version: room.version + 1,
+      };
       await tx
         .update(rooms)
-        .set({ stage, currentCard: null, version: room.version + 1 })
+        .set(changes)
         .where(and(eq(rooms.id, room.id), eq(rooms.version, input.version)));
-      return roomState({ ...room, stage, currentCard: null, version: room.version + 1 }, roomPlayers, me);
+      return roomState({ ...room, ...changes }, roomPlayers, me);
     });
   }),
 });
