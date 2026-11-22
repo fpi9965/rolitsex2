@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { playSound } from "./audio";
+import { playSound, playSoundFromGesture } from "./audio";
 import { Flame, LogOut, RefreshCw, Share2, Volume2, VolumeX, WifiOff } from "lucide-react";
 import type { RoomState } from "@contracts/game";
 import { CARD_HEAT, SKIP_HEAT, STAGES } from "@contracts/game";
@@ -52,7 +52,7 @@ export function GameScreen(props: GameScreenProps) {
   function chooseAtmosphere(value: "soft" | "romantic" | "bold") {
     setAtmosphere(value);
     try { localStorage.setItem("rolit-atmosphere", value); } catch { /* Storage unavailable. */ }
-    playSound("reveal");
+    void playSoundFromGesture("reveal");
   }
   const stage = STAGES.find((item) => item.id === state.stage) ?? STAGES[0];
   const cardVersion = state.card ? state.version : null;
@@ -130,6 +130,9 @@ export function GameScreen(props: GameScreenProps) {
               <button type="button" aria-pressed={atmosphere === "romantic"} onClick={() => chooseAtmosphere("romantic")}>رومانسية</button>
               <button type="button" aria-pressed={atmosphere === "bold"} onClick={() => chooseAtmosphere("bold")}>جريئة جدًا</button>
             </div>
+            <button className="sound-test-button" type="button" onClick={() => { if (props.soundMuted) props.onToggleSound(); void playSoundFromGesture("reveal"); }}>
+              {props.soundMuted ? "تشغيل الصوت وتجربته ♫" : "جرّب المؤثرات الصوتية ♫"}
+            </button>
             <small>{atmosphere === "bold" ? "وهج دافئ وأنفاس اصطناعية وإيقاع متصاعد" : atmosphere === "romantic" ? "إضاءة ناعمة وانتقالات حالمة" : "أجواء هادئة ومؤثرات خفيفة"}</small>
           </section>
           <div className="heat-panel">
@@ -141,7 +144,7 @@ export function GameScreen(props: GameScreenProps) {
               <span style={{ transform: `scaleX(${state.heat / 100})` }} />
             </div>
             <div className="heat-foot">
-              <span>{state.streak > 0 ? `سلسلة مشتعلة ×${state.streak}` : "أتما بطاقة لبدء السلسلة"}</span>
+              <span>{state.streak > 0 ? `سلسلة مشتعلة ×${state.streak}` : "أكملا بطاقة لبدء السلسلة"}</span>
               <span>{state.secret ? "القرص متوقف للهمسة" : state.secretIn === 1 ? "بطاقة حتى الهمسة" : "بطاقتان حتى الهمسة"}</span>
             </div>
           </div>
@@ -189,7 +192,7 @@ export function GameScreen(props: GameScreenProps) {
                       <span className="suspense-symbol" aria-hidden="true">✦</span>
                       <strong>{state.me.isTurn ? "لحظة… البطاقة تختار مفاجأتك" : "دور الطرف الآخر أولاً… ومفاجأتك قادمة"}</strong>
                       <p>استعدّا للكشف عن التحدي</p>
-                      <button type="button" className="secondary-button" onClick={() => setEarlyRevealVersion(cardVersion)}>اكشف البطاقة الآن</button>
+                      <button type="button" className="secondary-button" onClick={() => { setEarlyRevealVersion(cardVersion); void playSoundFromGesture("reveal"); }}>اكشف البطاقة الآن</button>
                     </div>
                   ) : (
                     <div className="suspense-content">
