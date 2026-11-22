@@ -1,4 +1,5 @@
 import type { Session } from "@contracts/game";
+import { buildInvitationUrl } from "@contracts/invitation";
 
 const SESSION_PREFIX = "rolit-v2-session-";
 const LEGACY_TOKEN_PREFIX = "rolit-token-";
@@ -46,7 +47,7 @@ export function clearSession(session: Session) {
 }
 
 export function invitationUrl(code: string): string {
-  return `${window.location.origin}${window.location.pathname}?join=${code}`;
+  return buildInvitationUrl(code, window.location, import.meta.env.VITE_PUBLIC_URL || "");
 }
 
 export function draftKey(code: string, roundId: number, playerId: number): string {
