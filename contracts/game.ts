@@ -8,6 +8,7 @@ export const STAGES = [
 ] as const;
 
 export const SECRET_COUNTDOWN_MS = 4000;
+export const CARD_DURATION_MS = 90_000;
 export const CARD_HEAT = 12;
 export const ANSWER_HEAT = 6;
 export const SKIP_HEAT = 12;
@@ -47,6 +48,6 @@ export type RoomState = {
   slots: { used: boolean }[];
   me: { id: number; name: string; gender: Gender; isTurn: boolean };
   partner: { name: string; gender: Gender } | null;
-  card: { text: string; forName: string; slot: number } | null;
+  card: { text: string; forName: string; slot: number; endsAt: number } | null;
   secret: SecretState | null;
 };

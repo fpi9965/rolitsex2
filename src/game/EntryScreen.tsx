@@ -44,7 +44,7 @@ export function EntryScreen({ roomCode, pending, error, onCreate, onJoin, onNewR
           <span className="brand-mark" aria-hidden="true"><Flame /></span>
           <p className="eyebrow">ليلتكما. بلا حسابات. بلا متفرجين.</p>
           <h1>روليت<br /><span>الإثارة</span></h1>
-          <p className="lede">بطاقة واحدة بتكليف مختلف لكل جهاز، وسؤالان سريان لا ينكشفان إلا معاً.</p>
+          <p className="lede">بطاقة واحدة بتكليف مختلف لكل جهاز، و90 ثانية للتحدي، وسؤالان سريان لا ينكشفان إلا معاً.</p>
         </header>
 
         <form className="entry-panel" onSubmit={submit}>

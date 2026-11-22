@@ -3,6 +3,7 @@ import { Flame, LogOut, RefreshCw, Share2, WifiOff } from "lucide-react";
 import type { RoomState } from "@contracts/game";
 import { CARD_HEAT, SKIP_HEAT, STAGES } from "@contracts/game";
 import { Dial } from "./Dial";
+import { CardTimer } from "./CardTimer";
 import { SecretRound } from "./SecretRound";
 
 type GameScreenProps = {
@@ -126,6 +127,7 @@ export function GameScreen(props: GameScreenProps) {
 
               {state.card && (
                 <article ref={cardRef} className="question-card" aria-live="polite">
+                  <CardTimer endsAt={state.card.endsAt} serverTime={state.serverTime} />
                   <p className="card-owner">بطاقة {state.card.forName} · {state.me.isTurn ? "تكليفك أنت" : "تكليفك مع صاحب الدور"}</p>
                   <p className="question-text">{state.card.text}</p>
                   <p className="card-tease">لكل جهاز نص مختلف؛ نفّذا ما يظهر لكل منكما بما يريحكما، ثم سجّلا النتيجة من جهاز صاحب الدور.</p>
