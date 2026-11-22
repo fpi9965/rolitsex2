@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Flame, Link2, ShieldCheck, Users } from "lucide-react";
 import type { Gender } from "@contracts/cards";
 import { trpc } from "@/providers/trpc";
@@ -14,19 +14,17 @@ type EntryScreenProps = {
 
 export function EntryScreen({ roomCode, pending, error, onCreate, onJoin, onNewRoom }: EntryScreenProps) {
   const [name, setName] = useState("");
-  const [gender, setGender] = useState<Gender>("مذكر");
+  const [preferredGender, setGender] = useState<Gender>("مذكر");
   const preview = trpc.room.preview.useQuery(
     { code: roomCode || "AAAAAA" },
     { enabled: Boolean(roomCode), retry: false, staleTime: 5000 },
   );
   const roomFull = (preview.data?.playerCount ?? 0) >= 2;
-  const genderTaken = preview.data?.takenGenders.includes(gender) ?? false;
-
-  useEffect(() => {
-    if (!roomFull && preview.data?.takenGenders.includes(gender)) {
-      setGender(gender === "مذكر" ? "مؤنث" : "مذكر");
-    }
-  }, [gender, preview.data, roomFull]);
+  const takenGenders = preview.data?.takenGenders ?? [];
+  const gender = !roomFull && takenGenders.includes(preferredGender)
+    ? preferredGender === "مذكر" ? "مؤنث" : "مذكر"
+    : preferredGender;
+  const genderTaken = takenGenders.includes(gender);
 
   function submit(event: FormEvent) {
     event.preventDefault();

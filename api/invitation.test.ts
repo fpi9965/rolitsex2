@@ -36,6 +36,11 @@ describe("روابط الدعوة", () => {
     );
   });
 
+  it("يحافظ على معاملات رابط النشر ويستبدل رمز الدعوة القديم", () => {
+    expect(buildInvitationUrl("ABC234", previewLocation, "https://example.com/play?lang=ar&join=OLD234#top"))
+      .toBe("https://example.com/play/?lang=ar&join=ABC234");
+  });
+
   it("يحافظ على روابط الاختبار المحلية", () => {
     expect(buildInvitationUrl("ABC234", {
       hostname: "localhost",

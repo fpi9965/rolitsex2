@@ -33,4 +33,9 @@ describe("اقتران بطاقتين مستقلتين للجهازين", () => 
     expect(partnerIndex).not.toBeNull();
     expect(partnerIndex).not.toBe(0);
   });
+  it("يفضّل بطاقة لم تُعرض خارج مجموعة السحب على بطاقة مستخدمة", () => {
+    const cards = masterStages[1];
+    const used = cards.map((_, index) => index).filter((index) => index !== 2);
+    expect(choosePartnerCardIndex(1, 0, [0, 1], used, "مذكر", "مؤنث")).toBe(2);
+  });
 });

@@ -3,7 +3,6 @@ import {
   int,
   mysqlEnum,
   mysqlTable,
-  serial,
   text,
   timestamp,
   uniqueIndex,
@@ -11,7 +10,7 @@ import {
 } from "drizzle-orm/mysql-core";
 
 export const rooms = mysqlTable("rooms", {
-  id: serial("id").primaryKey(),
+  id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
   code: varchar("code", { length: 8 }).notNull().unique(),
   status: mysqlEnum("status", ["waiting", "active"]).notNull().default("waiting"),
   stage: int("stage").notNull().default(1),
@@ -38,7 +37,7 @@ export const rooms = mysqlTable("rooms", {
 export const players = mysqlTable(
   "players",
   {
-    id: serial("id").primaryKey(),
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
     roomId: bigint("room_id", { mode: "number", unsigned: true })
       .notNull()
       .references(() => rooms.id, { onDelete: "cascade" }),

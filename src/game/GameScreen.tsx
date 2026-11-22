@@ -112,6 +112,7 @@ export function GameScreen(props: GameScreenProps) {
 
           {state.secret ? (
             <SecretRound
+              key={state.secret.id}
               secret={state.secret}
               roomCode={state.code}
               meId={state.me.id}

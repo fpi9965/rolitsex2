@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Eye, LockKeyhole, PenLine, Sparkles } from "lucide-react";
 import type { SecretState } from "@contracts/game";
 import { draftKey } from "./session";
+import { useServerTime } from "./useServerTime";
 
 type SecretRoundProps = {
   secret: SecretState;
@@ -30,12 +31,7 @@ export function SecretRound({
 }: SecretRoundProps) {
   const storageKey = draftKey(roomCode, secret.id, meId);
   const [answer, setAnswer] = useState(() => secret.myAnswer ?? localStorage.getItem(storageKey) ?? "");
-  const [now, setNow] = useState(Date.now());
-  const clockOffset = useRef(0);
-
-  useEffect(() => {
-    setAnswer(secret.myAnswer ?? localStorage.getItem(storageKey) ?? "");
-  }, [secret.id, secret.myAnswer, storageKey]);
+  const now = useServerTime(serverTime, 150, secret.status === "countdown");
 
   useEffect(() => {
     if (secret.mySubmitted) {
@@ -47,28 +43,13 @@ export function SecretRound({
     }
   }, [answer, secret.mySubmitted, storageKey]);
 
-  useEffect(() => {
-    clockOffset.current = serverTime - Date.now();
-  }, [serverTime]);
-
-  useEffect(() => {
-    if (secret.status !== "countdown") return;
-    setNow(Date.now());
-    const timer = window.setInterval(() => setNow(Date.now()), 150);
-    return () => window.clearInterval(timer);
-  }, [secret.status, secret.revealAt]);
-
-  useEffect(() => {
-    if (secret.status === "revealed") localStorage.removeItem(storageKey);
-  }, [secret.status, storageKey]);
-
   function submit(event: FormEvent) {
     event.preventDefault();
     const trimmed = answer.trim();
     if (trimmed && !isPending) onSubmit(trimmed);
   }
 
-  const remainingMs = secret.revealAt ? secret.revealAt - (now + clockOffset.current) : 0;
+  const remainingMs = secret.revealAt ? secret.revealAt - now : 0;
   const countdown = Math.max(0, Math.ceil(remainingMs / 1000));
 
   return (

@@ -25,7 +25,7 @@ const genderSchema = z.enum(["مذكر", "مؤنث"]);
 const codeSchema = z.string().trim().toUpperCase().regex(/^[A-Z2-9]{6}$/, "رمز الغرفة غير صحيح");
 const nameSchema = z.string().trim().min(1, "اكتب اسمك").max(20, "الاسم طويل");
 const sessionSchema = z.object({ code: codeSchema, token: z.string().length(64) });
-// الإصدار اختياري للتوافق مع النسخ السابقة، لكنه لا يُستخدم لرفض عملية صحيحة بسبب تأخر الشبكة.
+// الإصدار اختياري لدعم العملاء الأقدم.
 const actionSchema = sessionSchema.extend({ version: z.number().int().nonnegative().optional() });
 const answerSchema = actionSchema.extend({
   answer: z.string().trim().min(1, "اكتب إجابتك أولاً").max(300, "الإجابة طويلة؛ اختصرها إلى 300 حرف"),
@@ -255,6 +255,12 @@ function assertTurn(room: Room, me: Player) {
   }
 }
 
+function assertCurrentVersion(room: Room, version?: number) {
+  if (version !== undefined && version !== room.version) {
+    throw new TRPCError({ code: "CONFLICT", message: "تغيّرت حالة الغرفة. انتظر التحديث وحاول مرة أخرى" });
+  }
+}
+
 function nextStageData(room: Room) {
   const stage = room.stage === 4 ? 1 : room.stage + 1;
   const key = String(stage);
@@ -370,6 +376,7 @@ export const roomRouter = createRouter({
   done: publicQuery.input(actionSchema).mutation(async ({ input }) => {
     return getDb().transaction(async (tx) => {
       const { room, roomPlayers, me } = await getSession(input, tx, true);
+      assertCurrentVersion(room, input.version);
       assertTurn(room, me);
       if (room.currentCard === null) {
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "لا توجد بطاقة لإتمامها" });
@@ -403,6 +410,7 @@ export const roomRouter = createRouter({
   skip: publicQuery.input(actionSchema).mutation(async ({ input }) => {
     return getDb().transaction(async (tx) => {
       const { room, roomPlayers, me } = await getSession(input, tx, true);
+      assertCurrentVersion(room, input.version);
       assertTurn(room, me);
       if (room.currentCard === null) {
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "لا توجد بطاقة لتخطّيها" });
@@ -414,6 +422,7 @@ export const roomRouter = createRouter({
       const activeIndices = getActiveCardIndices(room, roomPlayers);
       for (const index of activeIndices) {
         if (!used[stageKey].includes(index)) used[stageKey].push(index);
+        if (!history[stageKey].includes(index)) history[stageKey].push(index);
       }
       const consumedFromPool = activeIndices.filter((index) => pools[stageKey].includes(index)).length;
       const replacements = masterStages[room.stage]
@@ -424,6 +433,7 @@ export const roomRouter = createRouter({
         currentCard: null,
         pools: JSON.stringify(pools),
         used: JSON.stringify(used),
+        history: JSON.stringify(history),
         heat: Math.max(0, room.heat - SKIP_HEAT),
         streak: 0,
         version: room.version + 1,
@@ -461,6 +471,7 @@ export const roomRouter = createRouter({
   finishSecret: publicQuery.input(actionSchema).mutation(async ({ input }) => {
     return getDb().transaction(async (tx) => {
       const { room, roomPlayers, me } = await getSession(input, tx, true);
+      assertCurrentVersion(room, input.version);
       assertActive(room);
       if (room.secretStatus === "none") return toRoomState(room, roomPlayers, me);
       if (room.secretStatus !== "countdown" || !room.secretRevealAt || Date.now() < room.secretRevealAt.getTime()) {
@@ -481,6 +492,7 @@ export const roomRouter = createRouter({
   nextStage: publicQuery.input(actionSchema).mutation(async ({ input }) => {
     return getDb().transaction(async (tx) => {
       const { room, roomPlayers, me } = await getSession(input, tx, true);
+      assertCurrentVersion(room, input.version);
       assertTurn(room, me);
       if (room.currentCard !== null) {
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "أتمّ البطاقة أو تخطَّها قبل تغيير المرحلة" });

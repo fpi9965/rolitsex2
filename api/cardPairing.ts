@@ -23,7 +23,8 @@ export function choosePartnerCardIndex(
   };
   const unused = pool.filter((index) => !used.includes(index) && isIndependent(index));
   const fallback = cards.map((_, index) => index).filter(isIndependent);
-  const candidates = unused.length ? unused : fallback;
+  const unusedFallback = fallback.filter((index) => !used.includes(index));
+  const candidates = unused.length ? unused : unusedFallback.length ? unusedFallback : fallback;
 
   if (!candidates.length) return null;
   return candidates[primaryIndex % candidates.length];

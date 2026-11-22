@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Timer } from "lucide-react";
 import { CARD_DURATION_MS } from "@contracts/game";
+import { useServerTime } from "./useServerTime";
 
 type CardTimerProps = {
   endsAt: number;
@@ -16,25 +17,14 @@ function formatTime(totalSeconds: number) {
 }
 
 export function CardTimer({ endsAt, serverTime, onTick, onExpire }: CardTimerProps) {
-  const [now, setNow] = useState(Date.now());
-  const clockOffset = useRef(0);
+  const now = useServerTime(serverTime, 250);
   const previousSeconds = useRef<number | null>(null);
-
-  useEffect(() => {
-    clockOffset.current = serverTime - Date.now();
-    setNow(Date.now());
-  }, [serverTime]);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 250);
-    return () => window.clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     previousSeconds.current = null;
   }, [endsAt]);
 
-  const remainingMs = Math.max(0, endsAt - (now + clockOffset.current));
+  const remainingMs = Math.max(0, endsAt - now);
   const seconds = Math.ceil(remainingMs / 1000);
   const expired = remainingMs === 0;
   const urgent = !expired && seconds <= 10;
