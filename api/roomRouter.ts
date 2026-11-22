@@ -13,7 +13,6 @@ import {
 } from "@contracts/game";
 import { secretPrompts } from "@contracts/secret";
 import { players, rooms, type Player, type Room } from "@db/schema";
-import { choosePartnerCardIndex } from "./cardPairing";
 import { createRouter, publicQuery } from "./middleware";
 import { getDb } from "./queries/connection";
 
@@ -162,27 +161,8 @@ function prepareSecretRound(room: Room, completedCards: number) {
   };
 }
 
-function getPartnerCardIndex(room: Room, roomPlayers: Player[], turnPlayer: Player): number | null {
-  if (room.currentCard === null) return null;
-  const partner = roomPlayers.find((player) => player.id !== turnPlayer.id);
-  if (!partner) return null;
-  const pools = parseIndexMap(room.pools);
-  const used = parseIndexMap(room.used);
-  const stageKey = String(room.stage);
-  return choosePartnerCardIndex(
-    room.stage,
-    room.currentCard,
-    pools[stageKey],
-    used[stageKey],
-    turnPlayer.gender as Gender,
-    partner.gender as Gender,
-  );
-}
-
-function getActiveCardIndices(room: Room, roomPlayers: Player[]): number[] {
+function getActiveCardIndices(room: Room): number[] {
   if (room.currentCard === null) return [];
-  const turnPlayer = roomPlayers.find((player) => player.id === room.turnPlayerId);
-  if (!turnPlayer) return [room.currentCard];
   return [room.currentCard];
 }
 
@@ -383,7 +363,7 @@ export const roomRouter = createRouter({
       const used = parseIndexMap(room.used);
       const history = parseIndexMap(room.history);
       const stageKey = String(room.stage);
-      for (const index of getActiveCardIndices(room, roomPlayers)) {
+      for (const index of getActiveCardIndices(room)) {
         if (!used[stageKey].includes(index)) used[stageKey].push(index);
         if (!history[stageKey].includes(index)) history[stageKey].push(index);
       }
@@ -418,7 +398,7 @@ export const roomRouter = createRouter({
       const used = parseIndexMap(room.used);
       const history = parseIndexMap(room.history);
       const stageKey = String(room.stage);
-      const activeIndices = getActiveCardIndices(room, roomPlayers);
+      const activeIndices = getActiveCardIndices(room);
       for (const index of activeIndices) {
         if (!used[stageKey].includes(index)) used[stageKey].push(index);
         if (!history[stageKey].includes(index)) history[stageKey].push(index);
