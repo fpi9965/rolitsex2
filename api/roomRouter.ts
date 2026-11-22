@@ -5,6 +5,7 @@ import { z } from "zod";
 import { masterStages, type Gender } from "@contracts/cards";
 import {
   ANSWER_HEAT,
+  CARD_DURATION_MS,
   CARD_HEAT,
   SECRET_COUNTDOWN_MS,
   SKIP_HEAT,
@@ -203,6 +204,7 @@ function toRoomState(room: Room, roomPlayers: Player[], me: Player): RoomState {
       text: card[me.gender as Gender],
       forName: turnPlayer.name,
       slot: pools[stageKey].indexOf(room.currentCard ?? -1),
+      endsAt: room.updatedAt.getTime() + CARD_DURATION_MS,
     } : null,
     secret,
   };
@@ -329,7 +331,8 @@ export const roomRouter = createRouter({
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "انتهت بطاقات هذه المرحلة" });
       }
       const chosen = candidates[randomInt(candidates.length)];
-      const patch = { currentCard: chosen, version: room.version + 1 };
+      // لا يمكن تعديل الغرفة أثناء عرض البطاقة؛ لذلك يمثل وقت التحديث بداية هذا التحدي.
+      const patch = { currentCard: chosen, updatedAt: new Date(), version: room.version + 1 };
       await tx.update(rooms).set(patch).where(eq(rooms.id, room.id));
       return toRoomState({ ...room, ...patch }, roomPlayers, me);
     });
