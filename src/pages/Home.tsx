@@ -26,6 +26,7 @@ export default function Home() {
   const [name, setName] = useState("");
   const [gender, setGender] = useState<Gender>("مذكر");
   const [session, setSession] = useState<Session | null>(savedSession);
+  const [entryCode, setEntryCode] = useState(initialRoomCode);
   const [copyLabel, setCopyLabel] = useState("نسخ الرابط");
   const utils = trpc.useUtils();
   const stateQuery = trpc.room.state.useQuery(
@@ -61,21 +62,27 @@ export default function Home() {
   const joinRoom = trpc.room.join.useMutation({ onSuccess: acceptSession });
   const spin = trpc.room.spin.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const done = trpc.room.done.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const skip = trpc.room.skip.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const nextStage = trpc.room.nextStage.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const submitAnswer = trpc.room.submitAnswer.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
   const finishSecret = trpc.room.finishSecret.useMutation({
     onSuccess: (data) => { if (session) utils.room.state.setData(session, data); },
+    onError: () => { void utils.room.state.invalidate(); },
   });
 
   const inviteUrl = session ? invitationUrl(session.code) : "";
@@ -106,12 +113,24 @@ export default function Home() {
 
   function submitEntry(event: FormEvent) {
     event.preventDefault();
-    if (initialRoomCode) joinRoom.mutate({ code: initialRoomCode, name, gender });
+    if (entryCode) joinRoom.mutate({ code: entryCode, name, gender });
     else createRoom.mutate({ name, gender });
   }
 
+  // Leaving a room must also forget it as the "last room" and drop ?room= from
+  // the URL; otherwise the entry form stays stuck on joining that (full or
+  // deleted) room and a new room can never be created.
   function resetEntry() {
     if (session) localStorage.removeItem(`rolit-token-${session.code}`);
+    startNewRoom();
+  }
+
+  function startNewRoom() {
+    localStorage.removeItem("rolit-last-room");
+    window.history.replaceState(null, "", window.location.pathname);
+    createRoom.reset();
+    joinRoom.reset();
+    setEntryCode("");
     setSession(null);
   }
 
@@ -129,10 +148,10 @@ export default function Home() {
           </header>
           <form className="entry-panel" onSubmit={submitEntry}>
             <div className="room-heading">
-              {initialRoomCode ? <Link2 aria-hidden="true" /> : <Users aria-hidden="true" />}
+              {entryCode ? <Link2 aria-hidden="true" /> : <Users aria-hidden="true" />}
               <div>
-                <h2>{initialRoomCode ? "الانضمام إلى الغرفة" : "إنشاء غرفة جديدة"}</h2>
-                {initialRoomCode && <p>رمز الغرفة: <bdi>{initialRoomCode}</bdi></p>}
+                <h2>{entryCode ? "الانضمام إلى الغرفة" : "إنشاء غرفة جديدة"}</h2>
+                {entryCode && <p>رمز الغرفة: <bdi>{entryCode}</bdi></p>}
               </div>
             </div>
             <label htmlFor="player-name">اسمك</label>
@@ -167,8 +186,11 @@ export default function Home() {
             <button className="primary-button" type="submit" disabled={createRoom.isPending || joinRoom.isPending}>
               {createRoom.isPending || joinRoom.isPending
                 ? "جارٍ الدخول…"
-                : initialRoomCode ? "دخول الغرفة" : "إنشاء الغرفة وإظهار رابط الدعوة"}
+                : entryCode ? "دخول الغرفة" : "إنشاء الغرفة وإظهار رابط الدعوة"}
             </button>
+            {entryCode && (
+              <button className="text-button" type="button" onClick={startNewRoom}>إنشاء غرفة جديدة بدلاً من ذلك</button>
+            )}
             <p className="privacy-note">لا تحتاجان إلى تسجيل حساب. احتفظا بالرابط ورمز الغرفة للعودة من الجهاز نفسه.</p>
           </form>
         </section>
@@ -260,6 +282,7 @@ export default function Home() {
 
             {state.secret ? (
               <SecretRound
+                key={`${state.stage}-${state.secret.title}`}
                 secret={state.secret}
                 meName={state.me.name}
                 partnerName={state.partner?.name ?? "الطرف الآخر"}

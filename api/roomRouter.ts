@@ -108,6 +108,24 @@ function buildPools(history: NumberMap): NumberMap {
   return pools;
 }
 
+// Draws a fresh pool for one stage once its current pool is exhausted, so the
+// game keeps going after the players have cycled through all four stages.
+function refreshStageIfExhausted(stage: number, pools: NumberMap, used: NumberMap, history: NumberMap): boolean {
+  const key = String(stage);
+  const remaining = pools[key].filter((index) => !used[key].includes(index)).length;
+  if (remaining > 0) return false;
+  const count = masterStages[stage].length;
+  const limit = Math.min(STAGE_LIMITS[stage], count);
+  let candidates = Array.from({ length: count }, (_, i) => i).filter((i) => !history[key].includes(i));
+  if (candidates.length < limit) {
+    history[key] = [];
+    candidates = Array.from({ length: count }, (_, i) => i);
+  }
+  pools[key] = shuffle(candidates).slice(0, limit);
+  used[key] = [];
+  return true;
+}
+
 function hashToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
@@ -353,7 +371,13 @@ export const roomRouter = createRouter({
   submitAnswer: publicQuery.input(answerSchema).mutation(async ({ input }) => {
     return getDb().transaction(async (tx) => {
       const { room, roomPlayers, me } = await getSession(input, tx, true);
-      assertActiveVersion(room, input.version);
+      // Each player writes only their own answer under a row lock, so the room
+      // version is not checked here: when both answered within one poll
+      // interval, the second answer was rejected as a conflict and the round
+      // never reached the reveal.
+      if (room.status !== "active") {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "بانتظار انضمام الطرف الآخر" });
+      }
       if (room.secretStatus !== "writing") {
         throw new TRPCError({ code: "CONFLICT", message: "لا يمكن إرسال إجابة في هذه اللحظة" });
       }
@@ -380,7 +404,9 @@ export const roomRouter = createRouter({
   finishSecret: publicQuery.input(actionSchema).mutation(async ({ input }) => {
     return getDb().transaction(async (tx) => {
       const { room, roomPlayers, me } = await getSession(input, tx, true);
-      assertActiveVersion(room, input.version);
+      // Either player may close the round; if the other already did, just
+      // return the current state instead of a conflict error.
+      if (room.secretStatus === "none") return roomState(room, roomPlayers, me);
       if (room.secretStatus !== "countdown" || !room.secretRevealAt || Date.now() < room.secretRevealAt.getTime()) {
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "انتظرا لحظة الكشف أولاً" });
       }
@@ -401,11 +427,23 @@ export const roomRouter = createRouter({
       const { room, roomPlayers, me } = await getSession(input, tx, true);
       assertTurn(room, me, input.version);
       const stage = room.stage === 4 ? 1 : room.stage + 1;
+      const pools = parseMap(room.pools);
+      const used = parseMap(room.used);
+      const history = parseMap(room.history);
+      refreshStageIfExhausted(stage, pools, used, history);
+      const changes = {
+        stage,
+        currentCard: null,
+        pools: JSON.stringify(pools),
+        used: JSON.stringify(used),
+        history: JSON.stringify(history),
+        version: room.version + 1,
+      };
       await tx
         .update(rooms)
-        .set({ stage, currentCard: null, version: room.version + 1 })
+        .set(changes)
         .where(and(eq(rooms.id, room.id), eq(rooms.version, input.version)));
-      return roomState({ ...room, stage, currentCard: null, version: room.version + 1 }, roomPlayers, me);
+      return roomState({ ...room, ...changes }, roomPlayers, me);
     });
   }),
 });
