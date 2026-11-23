@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { playSound, playSoundFromGesture } from "./audio";
+import { isAmbientEnabled, playSound, playSoundFromGesture, setAudioAtmosphere, toggleAmbient } from "./audio";
 import { Flame, LogOut, RefreshCw, Share2, Volume2, VolumeX, WifiOff } from "lucide-react";
 import type { RoomState } from "@contracts/game";
 import { CARD_HEAT, SKIP_HEAT, STAGES } from "@contracts/game";
@@ -49,11 +49,13 @@ export function GameScreen(props: GameScreenProps) {
       return "bold";
     }
   });
+  const [ambientOn, setAmbientOn] = useState(isAmbientEnabled);
   function chooseAtmosphere(value: "soft" | "romantic" | "bold") {
     setAtmosphere(value);
-    try { localStorage.setItem("rolit-atmosphere", value); } catch { /* Storage unavailable. */ }
+    setAudioAtmosphere(value);
     void playSoundFromGesture("reveal");
   }
+  useEffect(() => { setAudioAtmosphere(atmosphere); }, [atmosphere]);
   const stage = STAGES.find((item) => item.id === state.stage) ?? STAGES[0];
   const cardVersion = state.card ? state.version : null;
   const [revealedVersion, setRevealedVersion] = useState<number | null>(null);
@@ -130,6 +132,9 @@ export function GameScreen(props: GameScreenProps) {
               <button type="button" aria-pressed={atmosphere === "romantic"} onClick={() => chooseAtmosphere("romantic")}>رومانسية</button>
               <button type="button" aria-pressed={atmosphere === "bold"} onClick={() => chooseAtmosphere("bold")}>جريئة جدًا</button>
             </div>
+            <button className="sound-test-button" type="button" aria-pressed={ambientOn} onClick={() => { void toggleAmbient().then(setAmbientOn); }}>
+              {ambientOn ? "إيقاف الخلفية الصوتية ◼" : "تشغيل خلفية صوتية هادئة ♫"}
+            </button>
             <button className="sound-test-button" type="button" onClick={() => { if (props.soundMuted) props.onToggleSound(); void playSoundFromGesture("reveal"); }}>
               {props.soundMuted ? "تشغيل الصوت وتجربته ♫" : "جرّب المؤثرات الصوتية ♫"}
             </button>
