@@ -12,6 +12,7 @@ import {
   type RoomState,
 } from "@contracts/game";
 import { secretPrompts } from "@contracts/secret";
+import { overlapsUsedCard, overlapsUsedSecret } from "@contracts/questionSimilarity";
 import { players, rooms, type Player, type Room } from "@db/schema";
 import { createRouter, publicQuery } from "./middleware";
 import { getDb } from "./queries/connection";
@@ -81,12 +82,9 @@ function makeStagePool(stage: number, history: IndexMap): number[] {
   const count = masterStages[stage].length;
   const limit = Math.min(STAGE_LIMITS[stage], count);
   let candidates = Array.from({ length: count }, (_, index) => index).filter(
-    (index) => !history[key].includes(index),
+    (index) => !history[key].includes(index) && !overlapsUsedCard(stage, index, history),
   );
-  if (candidates.length < limit) {
-    history[key] = [];
-    candidates = Array.from({ length: count }, (_, index) => index);
-  }
+  // Never recycle a question inside the same room, even when the stage runs low.
   const fresh = shuffle(candidates.filter((index) => index >= NEW_CARD_START[stage]));
   const classic = shuffle(candidates.filter((index) => index < NEW_CARD_START[stage]));
   const selected = fresh.splice(0, Math.min(fresh.length, Math.ceil(limit / 2)));
@@ -145,11 +143,9 @@ function prepareSecretRound(room: Room, completedCards: number) {
   const history = parseIndexMap(room.secretHistory);
   const prompts = secretPrompts[room.stage];
   let used = history[stageKey];
-  let candidates = prompts.map((_, index) => index).filter((index) => !used.includes(index));
-  if (!candidates.length) {
-    used = [];
-    candidates = prompts.map((_, index) => index);
-  }
+  const candidates = prompts.map((_, index) => index).filter((index) => !used.includes(index) && !overlapsUsedSecret(room.stage, index, history));
+  // An exhausted secret deck stays exhausted until a new room is created.
+  if (!candidates.length) return {};
   const prompt = candidates[randomInt(candidates.length)];
   history[stageKey] = [...used, prompt];
   return {
@@ -249,7 +245,7 @@ function nextStageData(room: Room) {
   const hasRemaining = pools[key].some((index) => !used[key].includes(index));
   if (!hasRemaining) {
     pools[key] = makeStagePool(stage, history);
-    used[key] = [];
+    // Keep used indices for the whole room; a new pool must not reset them.
   }
   return { stage, currentCard: null, pools: JSON.stringify(pools), used: JSON.stringify(used), history: JSON.stringify(history) };
 }
@@ -340,7 +336,8 @@ export const roomRouter = createRouter({
       const pools = parseIndexMap(room.pools);
       const used = parseIndexMap(room.used);
       const stageKey = String(room.stage);
-      const candidates = pools[stageKey].filter((index) => !used[stageKey].includes(index));
+      const history = parseIndexMap(room.history);
+      const candidates = pools[stageKey].filter((index) => !used[stageKey].includes(index) && !overlapsUsedCard(room.stage, index, history));
       if (!candidates.length) {
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "انتهت بطاقات هذه المرحلة" });
       }
@@ -406,7 +403,7 @@ export const roomRouter = createRouter({
       const consumedFromPool = activeIndices.filter((index) => pools[stageKey].includes(index)).length;
       const replacements = masterStages[room.stage]
         .map((_, index) => index)
-        .filter((index) => !pools[stageKey].includes(index) && !history[stageKey].includes(index));
+        .filter((index) => !pools[stageKey].includes(index) && !history[stageKey].includes(index) && !overlapsUsedCard(room.stage, index, history));
       for (const index of shuffle(replacements).slice(0, consumedFromPool)) pools[stageKey].push(index);
       const patch = {
         currentCard: null,
