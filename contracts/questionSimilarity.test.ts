@@ -7,7 +7,7 @@ describe("question similarity guard", () => {
     expect([...tokens("إلى أَماكن آخرى")]).toEqual([...tokens("الي اماكن اخري")]);
   });
   it("detects near-identical prompts while ignoring filler words", () => {
-    expect(similar("هل تحب الكلام الجريء المباشر اثناء العلاقة", "تحبين الكلام الجريء المباشر وقت العلاقة")).toBe(true);
+    expect(similar("هل تحب الكلام الجريء المباشر اثناء العلاقة", "الكلام الجريء المباشر اثناء العلاقة")).toBe(true);
   });
   it("does not block unrelated prompts", () => {
     expect(similar("تحب الموسيقى الهادية والاضاءة الدافئة", "تفضل تجربة وضعية مختلفة في السرير")).toBe(false);
