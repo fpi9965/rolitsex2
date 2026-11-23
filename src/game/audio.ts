@@ -10,6 +10,13 @@ export type SoundEffect =
 
 const MUTE_KEY = "rolit-v2-muted";
 const MIN_GAIN = 0.0001;
+export type Atmosphere = "soft" | "romantic" | "bold";
+const ATMOSPHERE_KEY = "rolit-atmosphere";
+let atmosphere: Atmosphere = "bold";
+let ambientEnabled = false;
+let ambientOscillators: OscillatorNode[] = [];
+let ambientGain: GainNode | null = null;
+let ambientLfo: OscillatorNode | null = null;
 
 type AudioContextWindow = Window & typeof globalThis & {
   webkitAudioContext?: typeof AudioContext;
@@ -43,6 +50,7 @@ export function setSoundMuted(value: boolean) {
   if (context && master) {
     master.gain.setValueAtTime(value ? 0 : 0.55, context.currentTime);
   }
+  updateAmbientLevel();
 }
 
 function ensureContext(): AudioContext | null {
@@ -68,6 +76,61 @@ function ensureContext(): AudioContext | null {
   }
 }
 
+/** Ambient layer is synthetic and opt-in; it never loads recordings or plays on page load. */
+export function setAudioAtmosphere(value: Atmosphere) {
+  atmosphere = value;
+  try { localStorage.setItem(ATMOSPHERE_KEY, value); } catch { /* Private browsing. */ }
+  updateAmbientLevel();
+}
+
+function updateAmbientLevel() {
+  if (!context || !ambientGain) return;
+  const level = muted || !ambientEnabled ? 0 : atmosphere === "soft" ? 0.007 : atmosphere === "romantic" ? 0.014 : 0.023;
+  ambientGain.gain.setTargetAtTime(level, context.currentTime, 0.18);
+}
+
+function startAmbientGraph(audio: AudioContext) {
+  if (ambientGain) return;
+  const output = audio.createGain();
+  output.gain.value = 0;
+  output.connect(audio.destination);
+  ambientGain = output;
+  for (const frequency of [82.41, 123.47, 164.81]) {
+    const oscillator = audio.createOscillator();
+    oscillator.type = "sine";
+    oscillator.frequency.value = frequency;
+    oscillator.connect(output);
+    oscillator.start();
+    ambientOscillators.push(oscillator);
+  }
+  const lfo = audio.createOscillator();
+  const depth = audio.createGain();
+  lfo.frequency.value = 0.12;
+  depth.gain.value = 0.004;
+  lfo.connect(depth);
+  depth.connect(output.gain);
+  lfo.start();
+  ambientLfo = lfo;
+}
+
+/** Must be triggered by the sound control button, not by a polling update. */
+export async function toggleAmbient(): Promise<boolean> {
+  ambientEnabled = !ambientEnabled;
+  if (ambientEnabled) {
+    if (muted) setSoundMuted(false);
+    if (!(await unlockAudio())) {
+      ambientEnabled = false;
+      return false;
+    }
+    const audio = ensureContext();
+    if (audio) startAmbientGraph(audio);
+  }
+  updateAmbientLevel();
+  return ambientEnabled;
+}
+
+export function isAmbientEnabled() { return ambientEnabled; }
+
 /** يستدعى من تفاعل مباشر حتى يسمح المتصفح بتشغيل الصوت. */
 export async function unlockAudio(): Promise<boolean> {
   if (muted) return false;
@@ -89,7 +152,11 @@ export function playSound(effect: SoundEffect) {
   const cooldown = effect === "card" || effect === "reveal" ? 700 : 80;
   if (now - previous < cooldown) return;
   lastPlayedAt.set(effect, now);
-  scheduleEffect(effect, context, master);
+  const scale = atmosphere === "soft" ? 0.48 : atmosphere === "romantic" ? 0.72 : 1;
+  const effectGain = context.createGain();
+  effectGain.gain.value = scale;
+  effectGain.connect(master);
+  scheduleEffect(effect, context, effectGain);
 }
 
 /** للأزرار التي يضغطها اللاعب مباشرة. */
