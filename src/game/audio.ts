@@ -14,9 +14,7 @@ export type Atmosphere = "soft" | "romantic" | "bold";
 const ATMOSPHERE_KEY = "rolit-atmosphere";
 let atmosphere: Atmosphere = "bold";
 let ambientEnabled = false;
-let ambientOscillators: OscillatorNode[] = [];
 let ambientGain: GainNode | null = null;
-let ambientLfo: OscillatorNode | null = null;
 
 type AudioContextWindow = Window & typeof globalThis & {
   webkitAudioContext?: typeof AudioContext;
@@ -101,7 +99,6 @@ function startAmbientGraph(audio: AudioContext) {
     oscillator.frequency.value = frequency;
     oscillator.connect(output);
     oscillator.start();
-    ambientOscillators.push(oscillator);
   }
   const lfo = audio.createOscillator();
   const depth = audio.createGain();
@@ -110,7 +107,6 @@ function startAmbientGraph(audio: AudioContext) {
   lfo.connect(depth);
   depth.connect(output.gain);
   lfo.start();
-  ambientLfo = lfo;
 }
 
 /** Must be triggered by the sound control button, not by a polling update. */
