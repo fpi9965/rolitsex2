@@ -1,7 +1,8 @@
+import { importedStages } from "./importedCards";
 export type Gender = "مذكر" | "مؤنث";
 export type CardPair = Record<Gender, string>;
 
-export const masterStages: Record<number, CardPair[]> = {
+const originalStages: Record<number, CardPair[]> = {
   1: [
     {مذكر:"ما أكثر رغبة تتمنى أن تعبّر عنها لشريكتك بصراحة هذه الليلة؟",مؤنث:"ما أكثر رغبة تتمنين التعبير عنها لشريكك بصراحة هذه الليلة؟"},
     {مذكر:"هل تفضّل أن تبدأ اللحظة الرومانسية بمبادرة منك أم بمفاجأة منها؟",مؤنث:"هل تفضّلين أن تبدأ اللحظة الرومانسية بمبادرة منكِ أم بمفاجأة منه؟"},
@@ -203,3 +204,7 @@ export const masterStages: Record<number, CardPair[]> = {
     {مذكر:"اقترح وضعية تكون هي فوقك وتتحكم في عمق الإيلاج وسرعته، واسألها إن كانت ترغب في تجربتها الليلة.",مؤنث:"إذا رغبتِ في الإيلاج، اقترحي الاستلقاء على الجنب واتفقا على عمق مريح وإشارة للتوقف فوراً."},
   ]
 };
+
+export const masterStages: Record<number, CardPair[]> = Object.fromEntries(
+  Object.entries(originalStages).map(([stage, cards]) => [Number(stage), [...cards, ...(importedStages[Number(stage)] ?? [])]]),
+);
