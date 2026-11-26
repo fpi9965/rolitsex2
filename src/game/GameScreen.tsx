@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { playSound } from "./audio";
 import { Flame, LogOut, RefreshCw, Share2, Volume2, VolumeX, WifiOff } from "lucide-react";
 import type { RoomState } from "@contracts/game";
 import { CARD_HEAT, SKIP_HEAT, STAGES } from "@contracts/game";
@@ -42,6 +43,19 @@ export function GameScreen(props: GameScreenProps) {
   const cardRef = useRef<HTMLElement>(null);
   const stage = STAGES.find((item) => item.id === state.stage) ?? STAGES[0];
   const cardVersion = state.card ? state.version : null;
+  const [revealedVersion, setRevealedVersion] = useState<number | null>(null);
+  const [earlyRevealVersion, setEarlyRevealVersion] = useState<number | null>(null);
+  const cardVisible = cardVersion !== null && (revealedVersion === cardVersion || earlyRevealVersion === cardVersion);
+  const revealDelay = state.me.isTurn ? 2500 : 6000;
+
+  useEffect(() => {
+    if (cardVersion === null) return;
+    const timeout = window.setTimeout(() => {
+      setRevealedVersion(cardVersion);
+      playSound("reveal");
+    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : revealDelay);
+    return () => window.clearTimeout(timeout);
+  }, [cardVersion, revealDelay]);
 
   useEffect(() => {
     if (cardVersion === null) return;
@@ -141,16 +155,27 @@ export function GameScreen(props: GameScreenProps) {
               </div>
 
               {state.card && (
-                <article ref={cardRef} className="question-card" aria-live="polite">
+                <article ref={cardRef} className={`question-card suspense-card${cardVisible ? " suspense-revealed" : " suspense-hidden"}`} aria-live="polite">
                   <CardTimer
                     endsAt={state.card.endsAt}
                     serverTime={state.serverTime}
                     onTick={props.onTimerTick}
                     onExpire={props.onTimerExpire}
                   />
-                  <p className="card-owner">بطاقة {state.card.forName} · {state.me.isTurn ? "تكليفك أنت" : "تكليفك مع صاحب الدور"}</p>
+                  {!cardVisible ? (
+                    <div className="suspense-cover" role="status">
+                      <span className="suspense-symbol" aria-hidden="true">✦</span>
+                      <strong>{state.me.isTurn ? "لحظة… البطاقة تختار مفاجأتك" : "دور الطرف الآخر أولاً… ومفاجأتك قادمة"}</strong>
+                      <p>استعدّا للكشف عن التحدي</p>
+                      <button type="button" className="secondary-button" onClick={() => setEarlyRevealVersion(cardVersion)}>اكشف البطاقة الآن</button>
+                    </div>
+                  ) : (
+                    <div className="suspense-content">
+                  <p className="card-owner">بطاقة {state.card.forName} · دورك الخاص</p>
                   <p className="question-text">{state.card.text}</p>
-                  <p className="card-tease">لكل جهاز نص مختلف؛ نفّذا ما يظهر لكل منكما بما يريحكما، ثم سجّلا النتيجة من جهاز صاحب الدور.</p>
+                  <p className="card-tease">هذه بطاقتك وحدك الآن. بعد إنهائها يأتي دور الطرف الآخر بمفاجأة مختلفة. يمكنكما التخطي متى شئتما.</p>
+                    </div>
+                  )}
                 </article>
               )}
 
